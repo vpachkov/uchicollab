@@ -1,5 +1,6 @@
-import React, { Component, ReactNode, useEffect, useReducer, useRef, useState } from 'react'
+import React, { Component } from 'react'
 import { User } from "../components/User";
+<<<<<<< HEAD
 import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { BigButton, BigButtonWithIcon } from "../components/Buttons";
@@ -9,8 +10,26 @@ import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faClock, faCoins, faUser, faPlus } from '@fortawesome/free-solid-svg-icons'
+=======
+import {
+    AbstractBetweenSpacingBlock,
+    AbstractBlock,
+    Block,
+    BlockTitle,
+    CommentBlock,
+    CommentText,
+    SquareBlock
+} from "../components/Blocks";
+import { ProgressBar } from "../components/ProgressBar";
+import { Col, Row } from "react-bootstrap";
+import { Post, profileService } from "../config";
+import { Cookies, withCookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 
-export class PHome extends Component {
+import 'bootstrap/dist/css/bootstrap.min.css';
+>>>>>>> b89b673... sessions in ui
+
+class PHome extends Component {
     renderProgress = [
         {
             "name": "Математика",
@@ -28,10 +47,28 @@ export class PHome extends Component {
             "color": "#f4f400",
         }
     ]
-    review="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative "
+    review = "Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative "
     user = {
         name: "Russ Cox",
         profilePic: "https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png",
+    }
+
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+
+    constructor(props) {
+        super(props);
+
+        const {cookies} = props;
+        this.state = {
+            session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e'
+        };
+    }
+
+    componentDidMount() {
+        this.loadComments()
+        // Post(1,1,1,1)
     }
 
     render() {
@@ -65,36 +102,26 @@ export class PHome extends Component {
                     <BigButtonWithIcon icon={faPlus} title="Create"/>
                     <Row>
                         <Col sm={12} sm={12}>
-                            <Block color="white" id = "svg1">
-                            <Row>
-                                <Col xs={12} lg={6}>
-                                    <AbstractBlock color="white">
-                                        <BlockTitle color="rgb(69, 68, 79)" text="bold">Текущая задача</BlockTitle>
-                                        <ProgressBar content={this.renderProgress}/>
-                                        <BlockSpacing size="20px"/>
-                                        <BlockLine color="rgb(133, 133, 138)"><FontAwesomeIcon color="rgb(133, 133, 138)" icon={faStar} /> Ты работаешь отлично! Продолжай в том же духе!</BlockLine>
-                                        <BlockLine color="rgb(133, 133, 138)"><FontAwesomeIcon color="rgb(133, 133, 138)" icon={faClock} /> 6 дней</BlockLine>
-                                        <BlockLine color="rgb(133, 133, 138)"><FontAwesomeIcon color="rgb(133, 133, 138)" icon={faCoins} /> 20</BlockLine>
-                                    </AbstractBlock>
-                                </Col>
-                                <Col xs={12} lg={6}>
-                                    <AbstractBlock color="white">
-                                        <BlockTitle color="rgb(69, 68, 79)" text="bold">Аналитика</BlockTitle>
-                                        <AbstractBetweenSpacingBlock>
-                                            <SquareBlock color="white"><SquareBlockImage color="rgb(250, 225, 213)"><FontAwesomeIcon color="rgb(225, 113, 60)" icon={faStar} /></SquareBlockImage><SquareBlockText color="rgb(133, 133, 138)">125</SquareBlockText></SquareBlock>
-                                            <SquareBlock color="white"><SquareBlockImage color="rgb(250, 225, 213)"><FontAwesomeIcon color="rgb(225, 113, 60)" icon={faStar} /></SquareBlockImage><SquareBlockText color="rgb(133, 133, 138)">125</SquareBlockText></SquareBlock>
-                                            <SquareBlock color="white"><SquareBlockImage color="rgb(250, 225, 213)"><FontAwesomeIcon color="rgb(225, 113, 60)" icon={faStar} /></SquareBlockImage><SquareBlockText color="rgb(133, 133, 138)">125</SquareBlockText></SquareBlock>
-                                            <SquareBlock color="white"><SquareBlockImage color="rgb(250, 225, 213)"><FontAwesomeIcon color="rgb(225, 113, 60)" icon={faStar} /></SquareBlockImage><SquareBlockText color="rgb(133, 133, 138)">125</SquareBlockText></SquareBlock>
-                                        </AbstractBetweenSpacingBlock>
-                                        <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные темы</BlockTitle>
+                            <Block color="white">
+                                <Row>
+                                    <Col xs={12} md={6}>
                                         <AbstractBlock color="white">
-                                            <KeywordBlock>Математика</KeywordBlock>
-                                            <KeywordBlock>Русский язык</KeywordBlock>
-                                            <KeywordBlock>Информатика</KeywordBlock>
+                                            <BlockTitle color="black" text="bold">Аналитика</BlockTitle>
+                                            <AbstractBetweenSpacingBlock>
+                                                <SquareBlock color="white"></SquareBlock>
+                                                <SquareBlock color="white"></SquareBlock>
+                                                <SquareBlock color="white"></SquareBlock>
+                                                <SquareBlock color="white"></SquareBlock>
+                                            </AbstractBetweenSpacingBlock>
                                         </AbstractBlock>
-                                    </AbstractBlock>
-                                </Col>
-                            </Row>
+                                    </Col>
+                                    <Col xs={12} md={6}>
+                                        <AbstractBlock color="white">
+                                            <BlockTitle color="black" text="bold">Текущая задача</BlockTitle>
+                                            <ProgressBar content={this.renderProgress}/>
+                                        </AbstractBlock>
+                                    </Col>
+                                </Row>
                             </Block>
                         </Col>
                         <Col sm={12} md={4}>
@@ -121,13 +148,18 @@ export class PHome extends Component {
                         </Col>
                         <Col sm={12} md={4}>
                             <Block color="white">
-                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Последние отзывы</BlockTitle>
-                                <CommentBlock color="#eeeeee" textColor="rgb(69, 68, 79)" raiting={3} user={this.user}>
-                                    <CommentText text={this.review} max={60}/>
-                                </CommentBlock>
-                                <CommentBlock color="#eeeeee" textColor="rgb(69, 68, 79)" raiting={3} user={this.user}>
-                                    <CommentText text={this.review} max={60}/>
-                                </CommentBlock>
+                                <BlockTitle color="black" text="bold">Последние отзывы</BlockTitle>
+                                {
+                                    this.state.comments === undefined ? null :
+                                        this.state.comments.map(comment => {
+                                            return (
+                                                <CommentBlock color="#e3e3e3" textColor="black" raiting={comment.score}
+                                                              user={this.user}>
+                                                    <CommentText color="black" text={comment.text} max={60}/>
+                                                </CommentBlock>
+                                            )
+                                        })
+                                }
                             </Block>
                         </Col>
                     </Row>
@@ -136,4 +168,15 @@ export class PHome extends Component {
             </div>
         )
     }
+
+    loadComments() {
+        Post(
+            profileService + "comments", {
+                number: 5
+            }, (response) => {
+                this.setState({comments: response.data.comments})
+            })
+    }
 }
+
+export default withCookies(PHome);

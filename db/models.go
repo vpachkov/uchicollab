@@ -28,7 +28,20 @@ func (s Session) Expired() bool {
 	return time.Now().After(s.DestroyTime)
 }
 
+type Comment struct {
+	ID int
+
+	BelongsToUserID int
+	GotFromUserid   int
+
+	Text  string
+	Score uint8
+
+	Commentator *User `gorm:"foreignkey:GotFromUserid"`
+}
+
 type User struct {
-	ID   int
-	Name string
+	ID       int
+	Name     string
+	Comments []Comment `gorm:"ForeignKey:BelongsToUserID"`
 }
