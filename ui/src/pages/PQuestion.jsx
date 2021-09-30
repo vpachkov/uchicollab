@@ -9,7 +9,7 @@ import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
 import { Post, profileService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
@@ -50,7 +50,7 @@ class PQuestion extends Component {
 
             answers: [{
                 id: 1,
-                text: "Answer 1",
+                text: "The answer is good, but not complete, this will not work properly if you will not add the focus modifier, such as textarea:focus { border: none; overflow: auto; outline: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; resize: none; } Then it will work",
                 best: true,
                 likes: 130,
                 date: "28 may 2020",
@@ -59,7 +59,7 @@ class PQuestion extends Component {
                 profilePic: "https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png",
             }, {
                 id: 2,
-                text: "Answer 2",
+                text: "Tried your jsbin and that works, but not for me in my code. I wonder if it has something to do with Twitter Bootstrap maybe? When I put !important after every line a lot of styling was removed but there is still a small, light border in the top, on the left and on the right (the bottom is white). Strange",
                 best: false,
                 likes: 10,
                 date: "28 may 2020",
@@ -78,10 +78,6 @@ class PQuestion extends Component {
 
     componentDidMount() {
         // this.loadComments()
-    }
-
-    canUserUpvoteQuestion = () => {
-        return true
     }
 
     // How much money current user has donated
@@ -114,7 +110,7 @@ class PQuestion extends Component {
     }
 
     onLikeAnswer = (answer) => {
-        var likes_amount = this.amountOfDonateToQuestion() / 10 + 1
+        var likes_amount = this.amountOfDonateToQuestion() + 1
         var la = this.state.likedAnswers
         if (this.isLikedAnswer(answer)) {
             var index = la.indexOf(answer.id)
@@ -135,8 +131,8 @@ class PQuestion extends Component {
         // FIXME get amount from form
         var amount = 10
         var answers = this.state.answers
-        var currnet_power = this.amountOfDonateToQuestion() / 10
-        var new_power = (amount + this.amountOfDonateToQuestion()) / 10
+        var currnet_power = this.amountOfDonateToQuestion()
+        var new_power = (amount + this.amountOfDonateToQuestion())
         // Checked all liked and update like count
         for (var i = 0; i < answers.length; i++) {
             if (this.isLikedAnswer(answers[i])) {
@@ -146,15 +142,15 @@ class PQuestion extends Component {
 
         var qss = this.state.question
         qss.cost += amount
-        
+
         var dons = this.state.donatedToQuestion
         for (var i = 0; i < dons.length; i++) {
             if (dons[i].userid == this.state.userid) {
                 dons[i].amount += amount
             }
         }
-        
-        this.setState({donatedToQuestion: dons, question: qss})
+
+        this.setState({ donatedToQuestion: dons, question: qss })
     }
 
     renderAnswer = (answer) => {
@@ -164,14 +160,24 @@ class PQuestion extends Component {
             bc = "green"
         }
         return (
-            <Row>
+            <Row style={{ marginTop: "16px" }}>
                 <MiniQuestion borderColor={bc}>
-                    <Span fontWeight="bold" color={this.state.maincolor}>{answer.likes} <FontAwesomeIcon color="#ee0000" icon={this.isLikedAnswer(answer) ? faHeart : fasHeart} onClick={() => { this.onLikeAnswer(answer) }} /></Span>
+                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#00ee00" icon={faCheck} /> Awarded answer</Span> : null}
                     <QuestionBody max={-1} text={answer.text} />
-                    <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic} authorid={answer.authorid} />
+                    <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
+                        <div style={{ width: "100%" }}><Span fontWeight="regular" color={this.state.maincolor}>{answer.likes} <FontAwesomeIcon color="#ee0000" icon={this.isLikedAnswer(answer) ? faHeart : fasHeart} onClick={() => { this.onLikeAnswer(answer) }} /></Span></div>
+                        <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic} authorid={answer.authorid} />
+
+                    </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
             </Row>
+
         )
+    }
+
+    questionIsActive = () => {
+        // FIXME
+        return true
     }
 
     getSubjectTextColor = () => {
@@ -183,15 +189,29 @@ class PQuestion extends Component {
     }
 
     renderDonate = () => {
+        if (!this.questionIsActive()) {
+            return (
+                <div></div>
+            )
+        }
         return (
             <div>
-                <div>You have donated {this.amountOfDonateToQuestion()}</div>
-                <BlockTitle color="rgb(69, 68, 79)" text="bold">Donate</BlockTitle>
-                <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
+                <BlockTitle color="rgb(69, 68, 79)" text="bold">Поднять стоимость</BlockTitle>
+                <BlockLine color="rgb(0, 0, 0)">Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}</BlockLine>
+                <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы эксперты ответили быстрее. </BlockLine>
                 <input className="inputBox" type="number" rows="4" placeholder="Стоимость"></input>
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
-                    <Button title="Donate" onClick={() => {this.onDonate()}}/>
+                    <Button title="Внести голоса" onClick={() => { this.onDonate() }} />
                 </div>
+            </div>
+        )
+    }
+
+    renderInformation = () => {
+        return (
+            <div>
+                <BlockTitle color="rgb(69, 68, 79)" text="bold">Информация</BlockTitle>
+                <BlockLine color="rgb(0, 0, 0)">Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}</BlockLine>
             </div>
         )
     }
@@ -200,6 +220,7 @@ class PQuestion extends Component {
         return (
             <div>
                 {this.renderDonate()}
+                {this.renderInformation()}
             </div>
         )
     }
@@ -267,12 +288,6 @@ class PQuestion extends Component {
                 <Container>
                     <main>
                         <ButtonHandler>
-                            {
-                                this.canUserUpvoteQuestion() ?
-                                    <BigButtonWithIcon onClick={() => {
-                                        history.push('/create')
-                                    }} icon={faCoins} title="Upvote question" /> : null
-                            }
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
                             }} icon={faArrowAltCircleLeft} title="Назад" />

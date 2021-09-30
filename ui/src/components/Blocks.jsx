@@ -114,7 +114,7 @@ export class CommentText extends Component {
 export class AbstractAroundSpacingBlock extends Component {
     render() {
         return (
-            <div className="aroundSpacingBlock">
+            <div className="aroundSpacingBlock" style={this.props.style}>
                 {this.props.children}
             </div>
         )
@@ -124,7 +124,7 @@ export class AbstractAroundSpacingBlock extends Component {
 export class AbstractBetweenSpacingBlock extends Component {
     render() {
         return (
-            <div className="betweenSpacingBlock">
+            <div className="betweenSpacingBlock" style={this.props.style}>
                 {this.props.children}
             </div>
         )
