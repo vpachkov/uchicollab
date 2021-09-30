@@ -6,6 +6,7 @@ import (
 	"uchicollab/db"
 	"uchicollab/services/authorization"
 	"uchicollab/services/profile"
+	"uchicollab/services/questions"
 	"uchicollab/workers"
 )
 
@@ -23,14 +24,33 @@ func main() {
 	vas.Comments = append(vas.Comments, comm, comm2)
 	dbi.Updates(vas)
 
+	tag1 := &db.QuestionTag{Title: "Из учебника"}
+	tag2 := &db.QuestionTag{Title: "Со звездочкой"}
+	tag3 := &db.QuestionTag{Title: "С олимпиады"}
+	dbi.Create(tag1)
+	dbi.Create(tag2)
+	dbi.Create(tag3)
+
+	subject1 := &db.QuestionSubject{Title: "Алгебра"}
+	subject2 := &db.QuestionSubject{Title: "Геометрия"}
+	subject3 := &db.QuestionSubject{Title: "Русский Язык"}
+	subject4 := &db.QuestionSubject{Title: "Английский Язык"}
+	subject5 := &db.QuestionSubject{Title: "Литература"}
+	dbi.Create(subject1)
+	dbi.Create(subject2)
+	dbi.Create(subject3)
+	dbi.Create(subject4)
+	dbi.Create(subject5)
+
 	// setup workers
 	sc := workers.SessionCollector{}
 	workers.StartWorker(sc)
 
-	// setup routing
+	// setup microservices routing
 	mux := http.NewServeMux()
 	authorization.SetupRoutes(mux)
 	profile.SetupRoutes(mux)
+	questions.SetupRoutes(mux)
 
 	// setup statics
 	fs := http.FileServer(http.Dir("static"))

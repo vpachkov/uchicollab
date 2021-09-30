@@ -47,3 +47,28 @@ type User struct {
 	Name         string
 	Comments     []Comment `gorm:"ForeignKey:BelongsToUserID"`
 }
+
+type Question struct {
+	ID int
+
+	OpenerID int
+	Opener   *User `gorm:"foreignkey:OpenerID"`
+
+	Title       string
+	Description string
+	OpenedTime  time.Time
+	PointCost   int
+
+	Tags []QuestionTag `gorm:"many2many:question_tag;"`
+}
+
+type QuestionTag struct {
+	ID        int
+	Title     string
+	Questions []Question `gorm:"many2many:question_tag;"`
+}
+
+type QuestionSubject struct {
+	ID    int
+	Title string
+}

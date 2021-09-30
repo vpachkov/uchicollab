@@ -14,9 +14,12 @@ func Init() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	if err := db.AutoMigrate(&User{}, &Session{}, &Comment{}); err != nil {
+
+	if err := db.AutoMigrate(
+		&User{}, &Session{}, &Comment{}, &QuestionTag{}, &QuestionSubject{}, &Question{}); err != nil {
 		panic(err)
 	}
+
 	dataBase = db
 }
 
