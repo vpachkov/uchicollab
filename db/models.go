@@ -41,7 +41,9 @@ type Comment struct {
 }
 
 type User struct {
-	ID       int
-	Name     string
-	Comments []Comment `gorm:"ForeignKey:BelongsToUserID"`
+	ID           int
+	Login        string
+	PasswordHash string
+	Name         string
+	Comments     []Comment `gorm:"ForeignKey:BelongsToUserID"`
 }

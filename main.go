@@ -13,8 +13,8 @@ func main() {
 	// setup database
 	db.Init()
 	dbi := db.Get()
-	vas := &db.User{Name: "vas"}
-	dich := &db.User{Name: "dich"}
+	vas := &db.User{Name: "Русс Молочков", Login: "russcox", PasswordHash: "fafa"}
+	dich := &db.User{Name: "Никита Коровкин", Login: "nimelekhin", PasswordHash: "fafa"}
 	sess := &db.Session{User: vas}
 	dbi.Create(dich)
 	dbi.Create(sess)
@@ -31,6 +31,10 @@ func main() {
 	mux := http.NewServeMux()
 	authorization.SetupRoutes(mux)
 	profile.SetupRoutes(mux)
+
+	// setup statics
+	fs := http.FileServer(http.Dir("static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// start the server
 	log.Println("Starting...")

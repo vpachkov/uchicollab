@@ -24,3 +24,19 @@ func handleComments(request CommentsRequest) (response CommentsResponse, status 
 	status = http.StatusOK
 	return
 }
+
+func handleUserInfo(request SessionableRequest) (response UserInfoResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	response.Name = session.User.Name
+	response.Login = session.User.Login
+	response.ImagePath = session.User.Login + ".png"
+
+	status = http.StatusOK
+	return
+}
