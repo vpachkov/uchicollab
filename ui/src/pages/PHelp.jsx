@@ -17,6 +17,7 @@ import Select from 'react-select';
 import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
 import { Switch } from 'react-switch-input';
+import { Tags } from '../components/Tags'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -46,25 +47,8 @@ class PHelp extends Component {
             maincolor: "rgb(62, 134, 247)",
             session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             selectedSubjectOption: null,
-            tags: []
         };
     }
-
-    handleTagAdd = (selectedOption) => {
-        var tags = this.state.tags
-        tags.push(selectedOption.value)
-        console.log(tags)
-        this.setState({ tags: tags });
-    };
-
-    handleTagRemove = (selectedOption) => {
-        var tags = this.state.tags
-        var index = tags.indexOf(selectedOption);
-        if (index !== -1) {
-            tags.splice(index, 1);
-        }
-        this.setState({ tags: tags });
-    };
 
     componentDidMount() {
         // this.loadComments()
@@ -76,26 +60,15 @@ class PHelp extends Component {
 
     renderFilters() {
         const selectedSubjectOption = this.state.selectedSubjectOption;
+
         return (
             <div>
                 <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
-                <Select
-                    className="textSelector"
-                    value={selectedSubjectOption}
-                    onChange={this.handleTagAdd}
-                    options={this.options}
-                    placeholder="Поиск тега"
-                />
-                <AbstractBlock color="white">
-                    {
-                        this.state.tags === undefined ? null :
-                            this.state.tags.map(tag => {
-                                return (
-                                    <KeywordBlock><span style={{ marginRight: "4px" }}>{tag}</span><FontAwesomeIcon color="#aaaaaa" icon={faTimes} style={{ fontSize: ".8em" }} onClick={() => { this.handleTagRemove(tag) }} /></KeywordBlock>
-                                )
-                            })
-                    }
-                </AbstractBlock>
+                    <Tags
+                        onChange={ (tags) => {
+                            this.setState({ tags: tags })
+                        }}
+                    />
                 <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
                 <Row>
                     <Col><input className="inputBox" type="number" placeholder="от"></input></Col>

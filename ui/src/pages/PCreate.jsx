@@ -17,6 +17,7 @@ import {ProfileLogo} from "../components/ProfileLogo";
 import history from "../history";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Tags} from "../components/Tags";
 
 class PCreate extends Component {
     options = [
@@ -46,8 +47,6 @@ class PCreate extends Component {
             maincolor: "rgb(62, 134, 247)",
             session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             selectedSubjectOption: null,
-            selectedTagsOption: null,
-            tags: new Set(),
         };
     }
 
@@ -58,29 +57,12 @@ class PCreate extends Component {
         });
     };
 
-    handleTagAdd = (selectedOption) => {
-        const tags = this.state.tags
-        tags.add(selectedOption.value)
-        this.setState({tags: tags});
-    };
-
-    handleTagRemove = (selectedOption) => {
-        const tags = this.state.tags
-        tags.delete(selectedOption)
-        this.setState({tags: tags})
-    };
-
-    componentDidMount() {
-        this.loadTags()
-    }
-
     submit() {
 
     }
 
     renderTextInput() {
         const selectedSubjectOption = this.state.selectedSubjectOption;
-        const selectedTagsOption = this.state.selectedTagsOption;
 
         return (
             <div>
@@ -91,26 +73,11 @@ class PCreate extends Component {
                     options={this.options}
                     placeholder="Выберите предмет"
                 />
-                <Select
-                    className="textSelector"
-                    value={selectedTagsOption}
-                    onChange={this.handleTagAdd}
-                    options={this.state.loadedTags}
-                    placeholder="Поиск тега"
+                <Tags
+                    onChange={ (tags) => {
+                        this.setState({ tags: tags })
+                    }}
                 />
-                <AbstractBlock color="white">
-                    {
-                        this.state.tags === undefined ? null :
-                            [...this.state.tags].map(tag => {
-                                return (
-                                    <KeywordBlock><span style={{marginRight: "4px"}}>{tag}</span><FontAwesomeIcon
-                                        color="#aaaaaa" icon={faTimes} style={{fontSize: ".8em"}} onClick={() => {
-                                        this.handleTagRemove(tag)
-                                    }}/></KeywordBlock>
-                                )
-                            })
-                    }
-                </AbstractBlock>
                 <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
                 <textarea className="textBox" rows="4" placeholder="Название"></textarea>
                 <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
@@ -125,9 +92,6 @@ class PCreate extends Component {
     }
 
     render() {
-        if (this.state.loadedTags === undefined) {
-            return null
-        }
         return (
             <div>
                 <header>
