@@ -170,3 +170,13 @@ export class KeywordBlock extends Component {
         )
     }
 }
+
+export class AuthorBlock extends Component {
+    render() {
+        return (
+            <div className="commentAuthorBlock">
+                <span style={{ marginRight: "8px" }}>{this.props.date ? this.props.date + "," : ""}</span> <ProfileLogo height="16px" width="16px" src={this.props.profilePic} /><span><a href='/user/{this.props.authorid}'>{this.props.author}</a></span>
+            </div>
+        )
+    }
+}

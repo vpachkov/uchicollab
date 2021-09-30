@@ -89,6 +89,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: right;
+  color: #45444f;
+  font-size: 0.7em;
 }
 
 .progressbarHandler {

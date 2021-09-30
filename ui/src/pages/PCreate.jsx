@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { User } from "../components/User";
-import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
+import { AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
@@ -185,9 +185,7 @@ class PCreate extends Component {
                                             <Col xs={8} lg={10}>
                                                 <QuestionTitle>Рещение задачи по ТСАУ</QuestionTitle>
                                                 <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
-                                                <div className="commentAuthorBlock">
-                                                    <span style={{ marginRight: "8px" }}>Asked by Russ Cox</span><ProfileLogo height="16px" width="16px" src="https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png" />
-                                                </div>
+                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0}/>
                                             </Col>
                                         </Row>
                                     </MiniQuestion>
