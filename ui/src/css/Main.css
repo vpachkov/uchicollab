@@ -1,0 +1,43 @@
+.block {
+  border-radius: 26px;
+  padding: 32px;
+  margin: 0px 0px 16px 0px;
+}
+
+.blockTitle {
+  font-size: 1.4em;
+  margin: 0px 0px 16px 0px;
+}
+
+.commentBlock {
+  padding: 16px;
+  margin: 8px 0px 0px 0px;
+  border-radius: 16px 16px 4px 16px;
+}
+
+.commentAuthorBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+}
+
+.progressbarHandler {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.progressbarHandler .circularProgressbarHandler {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.progressbarHandler .circularProgressbarHandler .text {
+  margin-top: 6px;
+  color: white;
+}
+
+/*# sourceMappingURL=Main.css.map */
