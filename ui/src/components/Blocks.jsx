@@ -3,6 +3,7 @@ import '../css/Main.css';
 import { ProfileLogo } from "./ProfileLogo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
+import {Subjects, SubjectColor} from "../constants";
 
 export class Block extends Component {
     render() {
@@ -131,6 +132,16 @@ export class AbstractBetweenSpacingBlock extends Component {
     }
 }
 
+export class HeaderSquareBlock extends Component {
+    render() {
+        return (
+            <div className="headerSquareBlock" style={{backgroundColor: this.props.color}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
 export class SquareBlock extends Component {
     render() {
         return (
@@ -162,6 +173,8 @@ export class SquareBlockText extends Component {
 }
 
 export class KeywordBlock extends Component {
+    
+    
     render() {
         return (
             <div className="keywordBlock" style={{backgroundColor: this.props.backgroundColor, color: this.props.color}}>

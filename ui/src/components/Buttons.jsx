@@ -19,8 +19,8 @@ export class BigButtonWithIcon extends Component {
         return (
             <div onClick={() => {
                 this.props.onClick()
-            }} className="bigButton" style={{backgroundColor: this.props.color}}>
-                <FontAwesomeIcon color="rgb(133, 133, 138)" icon={this.props.icon}/> <span style={{marginLeft: "4px"}}>{this.props.title}</span>
+            }} className="bigButton" style={{color: this.props.color, backgroundColor: this.props.backgroundColor}}>
+                <FontAwesomeIcon icon={this.props.icon}/> <span style={{marginLeft: "4px"}}>{this.props.title}</span>
             </div>
         )
     }

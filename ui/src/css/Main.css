@@ -66,6 +66,39 @@
   font-weight: bold;
 }
 
+.headerSquareBlock {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  padding: 8px;
+  transition: 0.3s;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-right: 12px;
+  cursor: pointer;
+}
+.headerSquareBlock:hover {
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+.headerSquareBlock .squareBlockText {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1em;
+  font-weight: bold;
+  background-color: white;
+  padding: 0px 8px;
+  border-radius: 20px;
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.15);
+}
+.headerSquareBlock .squareBlockImage {
+  font-size: 1.4em;
+}
+
 .keywordBlock {
   font-size: 0.9em;
   display: inline-block;

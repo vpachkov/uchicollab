@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { User } from "../components/User";
-import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
+import { HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
@@ -24,6 +24,13 @@ import {utc} from 'moment'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {SubjectColor, Subjects} from "../constants";
 import {parse} from "@fortawesome/fontawesome-svg-core";
+
+const customStyles = {
+    menu: (provided, state) => ({
+      ...provided,
+      color: "rgb(69, 68, 79)",
+    }),
+  }
 
 class PHelp extends Component {
     constructor(props) {
@@ -50,6 +57,7 @@ class PHelp extends Component {
         return (
             <div>
                 <Select
+                    styles={customStyles}
                     className="textSelector"
                     value={ selectedSubjectOption }
                     onChange={ (selectedOption) => {
@@ -60,6 +68,15 @@ class PHelp extends Component {
                     } }
                     options={ Subjects }
                     placeholder="Выберите предмет"
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 8,
+                        colors: {
+                            ...theme.colors,
+                            primary25: '#ddd6f3',
+                            primary: '#ddd6f3',
+                        },
+                    })}
                 />
                 <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                 <Tags
@@ -117,8 +134,15 @@ class PHelp extends Component {
                                 </div>
                             </div>
                             <div>
-                                <Span color={this.state.maincolor}>399 <FontAwesomeIcon icon={faCoins} /></Span>
-                                <Span color={this.state.maincolor}>Russ Cox <FontAwesomeIcon icon={faUser} /></Span>
+                                <HeaderSquareBlock color="white"><SquareBlockImage
+                                                        ><FontAwesomeIcon
+                                                        color="rgb(223, 223, 228)"
+                                                        icon={faCoins}/></SquareBlockImage><SquareBlockText
+                                                        color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
+                                <HeaderSquareBlock color="white"><SquareBlockImage
+                                                        ><FontAwesomeIcon
+                                                        color="rgb(223, 223, 228)"
+                                                        icon={faUser}/></SquareBlockImage></HeaderSquareBlock>
                             </div>
                         </AbstractBetweenSpacingBlock>
                     </Container>

@@ -1,5 +1,6 @@
 header {
   padding: 24px 0px 32px 0px;
+  background: #ddd6f3;
 }
 
 .bigHeader {
@@ -7,7 +8,7 @@ header {
 }
 
 .coloredBackground {
-  background: linear-gradient(to left, #e66465, #9198e5);
+  background: linear-gradient(to left, #ddd6f3, #faaca8);
 }
 
 .wave {

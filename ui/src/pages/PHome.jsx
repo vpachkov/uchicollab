@@ -15,9 +15,11 @@ import {
     Span,
     SquareBlock,
     SquareBlockImage,
-    SquareBlockText
+    SquareBlockText,
+    HeaderSquareBlock
 } from "../components/Blocks";
 import {ProgressBar} from "../components/ProgressBar";
+import {SubjectColor} from "../constants";
 import {BigButtonWithIcon, InlineBigButton, ButtonHandler} from "../components/Buttons";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col, Container, Row} from "react-bootstrap";
@@ -51,17 +53,17 @@ class PHome extends Component {
         {
             "name": "Математика",
             "percentage": 66,
-            "color": "#f400f4",
+            "color": SubjectColor.algebra,
         },
         {
             "name": "Русский Язык",
             "percentage": 32,
-            "color": "#00f4f4",
+            "color": SubjectColor.russian,
         },
         {
             "name": "Информатика",
             "percentage": 32,
-            "color": "#f4f400",
+            "color": SubjectColor.informatics,
         }
     ]
     review = "Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative "
@@ -99,8 +101,15 @@ class PHome extends Component {
                                 <User user={this.state.user}/>
                             </div>
                             <div>
-                                <Span color="white">399 <FontAwesomeIcon color="white" icon={faCoins}/></Span>
-                                <Span color="white"><FontAwesomeIcon color="white" icon={faUser}/></Span>
+                                <HeaderSquareBlock color="white"><SquareBlockImage
+                                                        ><FontAwesomeIcon
+                                                        color="rgb(223, 223, 228)"
+                                                        icon={faCoins}/></SquareBlockImage><SquareBlockText
+                                                        color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
+                                <HeaderSquareBlock color="white"><SquareBlockImage
+                                                        ><FontAwesomeIcon
+                                                        color="rgb(223, 223, 228)"
+                                                        icon={faUser}/></SquareBlockImage></HeaderSquareBlock>
                             </div>
                         </AbstractBetweenSpacingBlock>
                     </Container>
@@ -120,7 +129,7 @@ class PHome extends Component {
                         <ButtonHandler>
                             <BigButtonWithIcon onClick={() => {
                                 history.push('/create')
-                            }} icon={faPlus} title="Задать новый вопрос"/>
+                            }} color="#551a8b" backgroundColor="#ddd6f3" icon={faPlus} title="новый вопрос"/>
                             <InlineBigButton onClick={() => {
                                 history.push('/help')
                             }} title="Помощь"/>

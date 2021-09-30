@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { User } from "../components/User";
-import { AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
+import { HeaderSquareBlock, AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
@@ -25,7 +25,7 @@ class PCreate extends Component {
         super(props);
 
         this.state = {
-            maincolor: "rgb(62, 134, 247)",
+            maincolor: "#551a8b",
             selectedSubjectOption: null,
         };
     }
@@ -81,8 +81,15 @@ class PCreate extends Component {
                                 </div>
                             </div>
                             <div>
-                                <Span color={this.state.maincolor}>399 <FontAwesomeIcon icon={faCoins} /></Span>
-                                <Span color={this.state.maincolor}>Russ Cox <FontAwesomeIcon icon={faUser} /></Span>
+                                <HeaderSquareBlock color="white"><SquareBlockImage
+                                                        ><FontAwesomeIcon
+                                                        color="rgb(223, 223, 228)"
+                                                        icon={faCoins}/></SquareBlockImage><SquareBlockText
+                                                        color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
+                                <HeaderSquareBlock color="white"><SquareBlockImage
+                                                        ><FontAwesomeIcon
+                                                        color="rgb(223, 223, 228)"
+                                                        icon={faUser}/></SquareBlockImage></HeaderSquareBlock>
                             </div>
                         </AbstractBetweenSpacingBlock>
                     </Container>
@@ -99,7 +106,7 @@ class PCreate extends Component {
                 >
                     <defs>
                         <linearGradient id="gradient" gradientTransform="rotate(90)">
-                            <stop offset="0%" stopColor="rgb(161, 178, 190)" />
+                            <stop offset="0%" stopColor="#f4cfdf" />
                             <stop offset="60%" stopColor="#f4f5f6" />
                         </linearGradient>
                     </defs>
