@@ -9,6 +9,29 @@
   margin: 0px 0px 16px 0px;
 }
 
+.aroundSpacingBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.betweenSpacingBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.squareBlock {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  box-shadow: 0 40px 70px rgba(0, 0, 0, 0.12);
+}
+
 .commentBlock {
   padding: 16px;
   margin: 8px 0px 0px 0px;
@@ -17,6 +40,7 @@
 
 .commentAuthorBlock {
   display: flex;
+  width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: right;

@@ -14,6 +14,17 @@ export class Block extends Component {
     }
 }
 
+export class AbstractBlock extends Component {
+    render() {
+        return (
+            <div>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+
 export class BlockTitle extends Component {
     render() {
         return (
@@ -57,6 +68,36 @@ export class CommentText extends Component {
         return (
             <div>
                 {rt}
+            </div>
+        )
+    }
+}
+
+export class AbstractAroundSpacingBlock extends Component {
+    render() {
+        return (
+            <div className="aroundSpacingBlock">
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class AbstractBetweenSpacingBlock extends Component {
+    render() {
+        return (
+            <div className="betweenSpacingBlock">
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class SquareBlock extends Component {
+    render() {
+        return (
+            <div className="squareBlock" style={{backgroundColor: this.props.color}}>
+                {this.props.children}
             </div>
         )
     }

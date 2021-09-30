@@ -8,7 +8,7 @@ export class User extends Component {
                 <div className="greetingName">
                     Привет,
                 </div>
-                <ProfileLogo height="32px" width="32px" src={this.props.user.profilePic}/>
+                <ProfileLogo height="56px" width="56px" src={this.props.user.profilePic}/>
                 <div className="greetingName">
                     {this.props.user.name}
                 </div>

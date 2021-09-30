@@ -9,24 +9,24 @@ export class ProgressBar extends Component {
         this.props.content.map((item, index) => {
             bars.push(
                 <div className="circularProgressbarHandler">
-                    <div style={{ width: 150, height: 150, display: 'inline-block' }}>
+                    <div style={{ width: 80, height: 80, display: 'inline-block' }}>
                         <CircularProgressbar value={item.percentage} text={`${item.percentage}%`} styles={{
                             root: {},
                             path: {
                                 stroke: item.color,
                             },
                             trail: {
-                                stroke: '#fff',
+                                stroke: '#eee',
                                 strokeLinecap: 'butt',
                                 transform: 'rotate(0.25turn)',
                                 transformOrigin: 'center center',
                             },
                             text: {
-                                fill: '#fff',
+                                fill: '#000',
                                 fontSize: '16px',
                             },
                             background: {
-                                fill: '#fff',
+                                fill: '#000',
                             },
                         }} />
                     </div>

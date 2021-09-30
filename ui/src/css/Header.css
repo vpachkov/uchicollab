@@ -9,7 +9,7 @@ header {
 }
 .greetingNameHandler .greetingName {
   display: inline;
-  font-size: 2em;
+  font-size: 3em;
   font-weight: bold;
   margin: 0px 8px 0px 8px;
 }
