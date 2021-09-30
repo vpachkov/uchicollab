@@ -8,8 +8,10 @@ import (
 )
 
 func main() {
-	db.Hi()
-	println("hi main")
+	// setup database
+	db.Init()
+	dbi := db.Get()
+	dbi.Create(&db.User{Name: "vas"})
 
 	// setup workers
 	sc := workers.SessionCollector{}
