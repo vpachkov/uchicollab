@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PHome from "./pages/PHome";
 import PCreate from "./pages/PCreate";
 import PHelp from "./pages/PHelp";
+import PQuestion from "./pages/PQuestion";
 import { Router, Route, Switch } from "react-router-dom";
 import { useHistory, withRouter } from "react-router-dom";
 
@@ -18,6 +19,8 @@ function App() {
                 <Route exact path="/create" render={(props) => <PCreate/>}>
                 </Route>
                 <Route exact path="/help" render={(props) => <PHelp/>}>
+                </Route>
+                <Route exact path="/question" render={(props) => <PQuestion/>}>
                 </Route>
             </Switch>
         </Router>

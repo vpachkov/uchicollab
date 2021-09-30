@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export class MiniQuestion extends Component {
     render() {
         return (
-            <div className="miniQuestion">
+            <div className="miniQuestion" style={{borderColor: this.props.borderColor === undefined ? "lightgray" : this.props.borderColor}}>
                 {this.props.children}
             </div>
         )

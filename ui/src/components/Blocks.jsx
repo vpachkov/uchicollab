@@ -58,7 +58,7 @@ export class BlockLine extends Component {
 export class Span extends Component {
     render() {
         return (
-            <div className="spanInBlock" style={{color: this.props.color, fontWeight: this.props.text}}>
+            <div className="spanInBlock" style={{color: this.props.color, fontWeight: this.props.fontWeight}}>
                 {this.props.children}
             </div>
         )
@@ -164,7 +164,7 @@ export class SquareBlockText extends Component {
 export class KeywordBlock extends Component {
     render() {
         return (
-            <div className="keywordBlock" style={{backgroundColor: this.props.color}}>
+            <div className="keywordBlock" style={{backgroundColor: this.props.backgroundColor, color: this.props.color}}>
                 {this.props.children}
             </div>
         )
