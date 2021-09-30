@@ -35,6 +35,44 @@ export class BlockTitle extends Component {
     }
 }
 
+export class BlockText extends Component {
+    render() {
+        return (
+            <div className="blockText" style={{color: this.props.color, fontWeight: this.props.text}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class BlockLine extends Component {
+    render() {
+        return (
+            <div className="blockLine" style={{color: this.props.color, fontWeight: this.props.text}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class Span extends Component {
+    render() {
+        return (
+            <div className="spanInBlock" style={{color: this.props.color, fontWeight: this.props.text}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class BlockSpacing extends Component {
+    render() {
+        return (
+            <div style={{width: "100%", height: this.props.size}}></div>
+        )
+    }
+}
+
 export class CommentBlock extends Component {
     render() {
         var stars = []
@@ -46,7 +84,7 @@ export class CommentBlock extends Component {
             }
         }
         return (
-            <div>
+            <div style={{color: this.props.textColor}}>
                 <div className="commentBlock" style={{backgroundColor: this.props.color, color: this.props.textColor}}>
                     {this.props.children}
                     {stars}
@@ -97,6 +135,36 @@ export class SquareBlock extends Component {
     render() {
         return (
             <div className="squareBlock" style={{backgroundColor: this.props.color}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class SquareBlockImage extends Component {
+    render() {
+        return (
+            <div className="squareBlockImage" style={{backgroundColor: this.props.color}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class SquareBlockText extends Component {
+    render() {
+        return (
+            <div className="squareBlockText" style={{color: this.props.color}}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class KeywordBlock extends Component {
+    render() {
+        return (
+            <div className="keywordBlock" style={{backgroundColor: this.props.color}}>
                 {this.props.children}
             </div>
         )

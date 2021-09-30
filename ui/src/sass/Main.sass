@@ -2,12 +2,25 @@
 
 .block
     border-radius: 26px
-    padding: 32px
+    padding: 8px 32px 32px 32px
     margin: 0px 0px 16px 0px
 
-.blockTitle
-    font-size: 1.4em
-    margin: 0px 0px 16px 0px
+    .blockTitle
+        font-size: 1.4em
+        margin: 24px 0px 12px 0px
+    
+    .blockText
+        margin: 12px 0px 6px 0px
+        padding: 0px
+    
+    .blockLine
+        margin: 6px 0px 4px 0px
+        padding: 0px
+    
+.spanInBlock
+    display: inline-block
+    padding: 8px
+
 
 .aroundSpacingBlock
     width: 100%
@@ -24,10 +37,43 @@
     justify-content: space-between
 
 .squareBlock
-    width: 80px
-    height: 80px
+    width: 92px
+    height: 92px
     border-radius: 8px
     box-shadow: 0 40px 70px rgba(0,0,0,0.12)
+    padding: 8px
+    transition: .3s
+
+    &:hover
+        box-shadow: 0 40px 80px rgba(0,0,0,0.15)
+        transform: scale(1.05)
+        transition: .3s
+
+    .squareBlockImage
+        width: 48px
+        height: 48px
+        border-radius: 6px
+        display: flex
+        flex-direction: row
+        align-items: center
+        justify-content: center
+    
+    .squareBlockText
+        margin-top: 6px
+        margin-right: 4px
+        font-size: .9em
+        font-weight: bold
+
+
+.keywordBlock
+    font-size: .9em
+    display: inline
+    padding: 8px
+    margin: 12px 12px 12px 0px
+    border-radius: 8px
+    background-color: #eeeeee
+    color: $textColor
+    font-weight: 600
 
 .commentBlock
     padding: 16px
@@ -56,4 +102,4 @@
 
         .text
             margin-top: 6px
-            color: white
+            color: black
