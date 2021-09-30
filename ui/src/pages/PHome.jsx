@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 import React, { Component } from 'react'
 import { User } from "../components/User";
-<<<<<<< HEAD
-import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
-import { ProgressBar } from "../components/ProgressBar";
-import { BigButton, BigButtonWithIcon } from "../components/Buttons";
-=======
 import React, {Component} from 'react'
 import {User} from "../components/User";
 import {
@@ -25,15 +19,9 @@ import {
 } from "../components/Blocks";
 import {ProgressBar} from "../components/ProgressBar";
 import {BigButtonWithIcon} from "../components/Buttons";
->>>>>>> b9c203f... profile and pictures
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col, Container, Row} from "react-bootstrap";
 import Wave from 'react-wavify'
-<<<<<<< HEAD
-import { Container } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faPlus } from '@fortawesome/free-solid-svg-icons'
-=======
 import {
     AbstractBetweenSpacingBlock,
     AbstractBlock,
@@ -50,14 +38,13 @@ import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
->>>>>>> b89b673... sessions in ui
-=======
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faClock, faCoins, faPlus, faStar, faUser} from '@fortawesome/free-solid-svg-icons'
 import {Post, profileService, staticData} from "../config";
 import {Cookies, withCookies} from 'react-cookie';
 import {instanceOf} from 'prop-types';
->>>>>>> b9c203f... profile and pictures
+import history from "../history";
+
 
 class PHome extends Component {
     renderProgress = [
@@ -130,7 +117,9 @@ class PHome extends Component {
                 />
                 <Container>
                     <main>
-                        <BigButtonWithIcon icon={faPlus} title="Create"/>
+                        <BigButtonWithIcon onClick={() => {
+                            history.push('/create')
+                        }} icon={faPlus} title="Задать новый вопрос"/>
                         <Row>
                             <Col sm={12} sm={12}>
                                 <Block color="white">
@@ -218,7 +207,10 @@ class PHome extends Component {
                                                 return (
                                                     <CommentBlock color="#eeeeee" textColor="rgb(69, 68, 79)"
                                                                   raiting={comment.score}
-                                                                  user={{name: comment.name, profilePic:staticData+comment.imagepath}}>
+                                                                  user={{
+                                                                      name: comment.name,
+                                                                      profilePic: staticData + comment.imagepath
+                                                                  }}>
                                                         <CommentText text={comment.text} max={60}/>
                                                     </CommentBlock>
                                                 )
@@ -247,7 +239,7 @@ class PHome extends Component {
             this.setState({
                 user: {
                     name: response.data.name,
-                    profilePic: staticData+response.data.imagepath,
+                    profilePic: staticData + response.data.imagepath,
                 }
             })
         })

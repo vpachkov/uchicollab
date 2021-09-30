@@ -1,20 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
 import './css/Body.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PHome from "./pages/PHome";
 import PCreate from "./pages/PCreate";
-import { Container } from "react-bootstrap";
-import { CookiesProvider } from 'react-cookie';
+import { Router, Route, Switch } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
+
+import history from './history'
 
 function App() {
     return ( <
-        CookiesProvider >
+        Router history = { history } >
         <
-        PCreate / >
+        Switch >
         <
-        /CookiesProvider>
+        Route exact path = "/"
+        render = {
+            (props) => < PHome / > } >
+        <
+        /Route> <
+        Route exact path = "/create"
+        render = {
+            (props) => < PCreate / > } >
+        <
+        /Route> <
+        /Switch> <
+        /Router>
     );
 }
 
-export default App;
+export default withRouter(App);
