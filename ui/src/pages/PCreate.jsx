@@ -18,44 +18,17 @@ import history from "../history";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Tags} from "../components/Tags";
+import {SubjectColor, Subjects} from "../constants";
 
 class PCreate extends Component {
-    options = [
-        {value: 'algebra', label: 'Алгебра'},
-        {value: 'geometry', label: 'Геометрия'},
-        {value: 'russian', label: 'Русский язык'},
-        {value: 'english', label: 'Английский язык'},
-    ];
-
-    // TODO: MOVE OUT FROM HERE
-    colors = {
-        algebra: "#ACB6E5",
-        geometry: "#AC00E5",
-        russian: "#00B6E5",
-        english: "#00B655",
-    };
-
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    };
-
     constructor(props) {
         super(props);
 
-        const {cookies} = props;
         this.state = {
             maincolor: "rgb(62, 134, 247)",
-            session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             selectedSubjectOption: null,
         };
     }
-
-    handleSubjectChange = (selectedOption) => {
-        this.setState({
-            selectedSubjectOption: selectedOption,
-            maincolor: this.colors[selectedOption.value]
-        });
-    };
 
     submit() {
 
@@ -69,8 +42,13 @@ class PCreate extends Component {
                 <Select
                     className="textSelector"
                     value={selectedSubjectOption}
-                    onChange={this.handleSubjectChange}
-                    options={this.options}
+                    onChange={ (selectedOption) => {
+                        this.setState({
+                            selectedSubjectOption: selectedOption,
+                            maincolor: SubjectColor[selectedOption.value]
+                        });
+                    } }
+                    options={ Subjects }
                     placeholder="Выберите предмет"
                 />
                 <Tags
@@ -164,16 +142,6 @@ class PCreate extends Component {
                     </main>
                 </Container>
             </div>
-        )
-    }
-
-    loadTags() {
-        Post(
-            questionsService + "tags", {}, (response) => {
-                this.setState({
-                    loadedTags: response.data.tags
-                })
-            }
         )
     }
 }

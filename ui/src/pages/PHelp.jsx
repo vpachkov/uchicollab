@@ -20,32 +20,14 @@ import { Switch } from 'react-switch-input';
 import { Tags } from '../components/Tags'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {SubjectColor, Subjects} from "../constants";
 
 class PHelp extends Component {
-    options = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' },
-    ];
-
-    // TODO: MOVE OUT FROM HERE
-    colors = {
-        chocolate: "#ACB6E5",
-        strawberry: "#AC00E5",
-        vanilla: "#00B6E5",
-    };
-
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    };
-
     constructor(props) {
         super(props);
 
-        const { cookies } = props;
         this.state = {
             maincolor: "rgb(62, 134, 247)",
-            session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             selectedSubjectOption: null,
         };
     }
@@ -63,12 +45,24 @@ class PHelp extends Component {
 
         return (
             <div>
+                <Select
+                    className="textSelector"
+                    value={ selectedSubjectOption }
+                    onChange={ (selectedOption) => {
+                        this.setState({
+                            selectedSubjectOption: selectedOption,
+                            maincolor: SubjectColor[selectedOption.value]
+                        });
+                    } }
+                    options={ Subjects }
+                    placeholder="Выберите предмет"
+                />
                 <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
-                    <Tags
-                        onChange={ (tags) => {
-                            this.setState({ tags: tags })
-                        }}
-                    />
+                <Tags
+                    onChange={ (tags) => {
+                        this.setState({ tags: tags })
+                    }}
+                />
                 <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
                 <Row>
                     <Col><input className="inputBox" type="number" placeholder="от"></input></Col>
@@ -83,7 +77,12 @@ class PHelp extends Component {
                     onChange={() => { }}
                 />
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
-                    <InlineButton title="сбросить" /><Button title="применить" />
+                    <InlineButton title="сбросить" />
+                    <Button
+                        onClick={ ()=> {
+
+                        }}
+                        title="применить" />
                 </div>
             </div>
         )
