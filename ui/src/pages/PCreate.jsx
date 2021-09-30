@@ -5,32 +5,33 @@ import { ProgressBar } from "../components/ProgressBar";
 import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Row, Col } from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 import Wave from 'react-wavify'
-import { Container } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faPlus, faArrowAltCircleLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { Post, profileService } from "../config";
-import { Cookies, withCookies } from 'react-cookie';
-import { instanceOf } from 'prop-types';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faArrowAltCircleLeft, faCoins, faTimes, faUser} from '@fortawesome/free-solid-svg-icons'
+import {Post, profileService, questionsService} from "../config";
+import {Cookies, withCookies} from 'react-cookie';
+import {instanceOf} from 'prop-types';
 import Select from 'react-select';
-import { ProfileLogo } from "../components/ProfileLogo";
+import {ProfileLogo} from "../components/ProfileLogo";
 import history from "../history";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class PCreate extends Component {
     options = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' },
+        {value: 'algebra', label: 'Алгебра'},
+        {value: 'geometry', label: 'Геометрия'},
+        {value: 'russian', label: 'Русский язык'},
+        {value: 'english', label: 'Английский язык'},
     ];
 
     // TODO: MOVE OUT FROM HERE
     colors = {
-        chocolate: "#ACB6E5",
-        strawberry: "#AC00E5",
-        vanilla: "#00B6E5",
+        algebra: "#ACB6E5",
+        geometry: "#AC00E5",
+        russian: "#00B6E5",
+        english: "#00B655",
     };
 
     static propTypes = {
@@ -40,38 +41,37 @@ class PCreate extends Component {
     constructor(props) {
         super(props);
 
-        const { cookies } = props;
+        const {cookies} = props;
         this.state = {
             maincolor: "rgb(62, 134, 247)",
             session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             selectedSubjectOption: null,
             selectedTagsOption: null,
-            tags: [],
+            tags: new Set(),
         };
     }
 
     handleSubjectChange = (selectedOption) => {
-        this.setState({ selectedSubjectOption: selectedOption, maincolor: this.colors[selectedOption.value] });
+        this.setState({
+            selectedSubjectOption: selectedOption,
+            maincolor: this.colors[selectedOption.value]
+        });
     };
 
     handleTagAdd = (selectedOption) => {
-        var tags = this.state.tags
-        tags.push(selectedOption.value)
-        console.log(tags)
-        this.setState({ tags: tags });
+        const tags = this.state.tags
+        tags.add(selectedOption.value)
+        this.setState({tags: tags});
     };
 
     handleTagRemove = (selectedOption) => {
-        var tags = this.state.tags
-        var index = tags.indexOf(selectedOption);
-        if (index !== -1) {
-            tags.splice(index, 1);
-        }
-        this.setState({ tags: tags });
+        const tags = this.state.tags
+        tags.delete(selectedOption)
+        this.setState({tags: tags})
     };
 
     componentDidMount() {
-        // this.loadComments()
+        this.loadTags()
     }
 
     submit() {
@@ -91,38 +91,43 @@ class PCreate extends Component {
                     options={this.options}
                     placeholder="Выберите предмет"
                 />
+                <Select
+                    className="textSelector"
+                    value={selectedTagsOption}
+                    onChange={this.handleTagAdd}
+                    options={this.state.loadedTags}
+                    placeholder="Поиск тега"
+                />
+                <AbstractBlock color="white">
+                    {
+                        this.state.tags === undefined ? null :
+                            [...this.state.tags].map(tag => {
+                                return (
+                                    <KeywordBlock><span style={{marginRight: "4px"}}>{tag}</span><FontAwesomeIcon
+                                        color="#aaaaaa" icon={faTimes} style={{fontSize: ".8em"}} onClick={() => {
+                                        this.handleTagRemove(tag)
+                                    }}/></KeywordBlock>
+                                )
+                            })
+                    }
+                </AbstractBlock>
                 <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
                 <textarea className="textBox" rows="4" placeholder="Название"></textarea>
                 <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
                 <input className="inputBox" type="number" rows="4" placeholder="Стоимость"></input>
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input className="inputBox" type="date" rows="4"></input>
-                <BlockLine color="rgb(133, 133, 138)">Добавьте тэги</BlockLine>
-                <Select
-                    className="textSelector"
-                    value={selectedTagsOption}
-                    onChange={this.handleTagAdd}
-                    options={this.options}
-                    placeholder="Поиск тега"
-                />
-                <AbstractBlock color="white">
-                    {
-                        this.state.tags === undefined ? null :
-                            this.state.tags.map(tag => {
-                                return (
-                                    <KeywordBlock><span style={{ marginRight: "4px" }}>{tag}</span><FontAwesomeIcon color="#aaaaaa" icon={faTimes} style={{ fontSize: ".8em" }} onClick={() => { this.handleTagRemove(tag) }} /></KeywordBlock>
-                                )
-                            })
-                    }
-                </AbstractBlock>
-                <div style={{ textAlign: "right", marginTop: "16px" }}>
-                    <Button title="Проверьте Ваш вопрос" />
+                <div style={{textAlign: "right", marginTop: "16px"}}>
+                    <Button title="Проверьте Ваш вопрос"/>
                 </div>
             </div>
         )
     }
 
     render() {
+        if (this.state.loadedTags === undefined) {
+            return null
+        }
         return (
             <div>
                 <header>
@@ -198,13 +203,14 @@ class PCreate extends Component {
         )
     }
 
-    loadComments() {
+    loadTags() {
         Post(
-            profileService + "comments", {
-            number: 5
-        }, (response) => {
-            this.setState({ comments: response.data.comments })
-        })
+            questionsService + "tags", {}, (response) => {
+                this.setState({
+                    loadedTags: response.data.tags
+                })
+            }
+        )
     }
 }
 

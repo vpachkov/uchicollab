@@ -6,8 +6,8 @@ type TopQuestionRequest struct {
 }
 
 type QuestionTag struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
+	Value string    `json:"value"`
+	Label string `json:"label"`
 }
 type QuestionTagsResponse struct {
 	Tags []QuestionTag `json:"tags"`

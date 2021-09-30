@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 export var serverAPI = "http://" + window.location.hostname + ":8080/api/"
 export var authorizationService = serverAPI + "Authorization."
 export var profileService = serverAPI + "Profile."
+export var questionsService = serverAPI + "Questions."
 
 export var staticData = "http://" + window.location.hostname + ":8080/static/"
 

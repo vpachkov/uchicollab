@@ -63,8 +63,7 @@ type Question struct {
 }
 
 type QuestionTag struct {
-	ID        int
-	Title     string
+	ID     string
 	Questions []Question `gorm:"many2many:question_tag;"`
 }
 

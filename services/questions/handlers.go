@@ -17,7 +17,7 @@ func handleTags(request services.SessionableRequest) (response QuestionTagsRespo
 	var tags []db.QuestionTag
 	dbi.Order("ID").Find(&tags)
 	for _, tag := range tags {
-		response.Tags = append(response.Tags, QuestionTag{ID: tag.ID, Title: tag.Title})
+		response.Tags = append(response.Tags, QuestionTag{Value: tag.ID, Label: tag.ID})
 	}
 	status = http.StatusOK
 	return

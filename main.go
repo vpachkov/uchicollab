@@ -24,12 +24,17 @@ func main() {
 	vas.Comments = append(vas.Comments, comm, comm2)
 	dbi.Updates(vas)
 
-	tag1 := &db.QuestionTag{Title: "Из учебника"}
-	tag2 := &db.QuestionTag{Title: "Со звездочкой"}
-	tag3 := &db.QuestionTag{Title: "С олимпиады"}
-	dbi.Create(tag1)
-	dbi.Create(tag2)
-	dbi.Create(tag3)
+	var tag db.QuestionTag
+	dbi.First(&tag)
+	if tag.ID == "" {
+		tag1 := &db.QuestionTag{ID: "Из учебника"}
+		tag2 := &db.QuestionTag{ID: "Со звездочкой"}
+		tag3 := &db.QuestionTag{ID: "С олимпиады"}
+
+		dbi.Create(tag1)
+		dbi.Create(tag2)
+		dbi.Create(tag3)
+	}
 
 	subject1 := &db.QuestionSubject{Title: "Алгебра"}
 	subject2 := &db.QuestionSubject{Title: "Геометрия"}
