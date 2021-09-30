@@ -2,24 +2,25 @@ import React, { Component } from 'react'
 import { User } from "../components/User";
 import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
-import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
+import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faPlus, faBackward, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faCoins, faUser, faTimes, faBackward } from '@fortawesome/free-solid-svg-icons'
 import { Post, profileService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import Select from 'react-select';
 import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
+import { Switch } from 'react-switch-input';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class PCreate extends Component {
+class PHelp extends Component {
     options = [
         { value: 'chocolate', label: 'Chocolate' },
         { value: 'strawberry', label: 'Strawberry' },
@@ -45,14 +46,9 @@ class PCreate extends Component {
             maincolor: "rgb(62, 134, 247)",
             session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             selectedSubjectOption: null,
-            selectedTagsOption: null,
-            tags: [],
+            tags: []
         };
     }
-
-    handleSubjectChange = (selectedOption) => {
-        this.setState({ selectedSubjectOption: selectedOption, maincolor: this.colors[selectedOption.value] });
-    };
 
     handleTagAdd = (selectedOption) => {
         var tags = this.state.tags
@@ -78,29 +74,14 @@ class PCreate extends Component {
 
     }
 
-    renderTextInput() {
+    renderFilters() {
         const selectedSubjectOption = this.state.selectedSubjectOption;
-        const selectedTagsOption = this.state.selectedTagsOption;
-
         return (
             <div>
+                <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                 <Select
                     className="textSelector"
                     value={selectedSubjectOption}
-                    onChange={this.handleSubjectChange}
-                    options={this.options}
-                    placeholder="Выберите предмет"
-                />
-                <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
-                <textarea className="textBox" rows="4" placeholder="Название"></textarea>
-                <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
-                <input className="inputBox" type="number" rows="4" placeholder="Стоимость"></input>
-                <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
-                <input className="inputBox" type="date" rows="4"></input>
-                <BlockLine color="rgb(133, 133, 138)">Добавьте тэги</BlockLine>
-                <Select
-                    className="textSelector"
-                    value={selectedTagsOption}
                     onChange={this.handleTagAdd}
                     options={this.options}
                     placeholder="Поиск тега"
@@ -115,8 +96,21 @@ class PCreate extends Component {
                             })
                     }
                 </AbstractBlock>
+                <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
+                <Row>
+                    <Col><input className="inputBox" type="number" placeholder="от"></input></Col>
+                    <Col><input className="inputBox" type="number" placeholder="до"></input></Col>
+                </Row>
+                <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
+                <input className="inputBox" type="date" rows="4"></input>
+                <Switch
+                    name={"themeTwo"}
+                    theme={"one"}
+                    labelRight="Исключить отвеченные"
+                    onChange={() => { }}
+                />
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
-                    <Button title="Проверьте Ваш вопрос" />
+                    <InlineButton title="сбросить" /><Button title="применить" />
                 </div>
             </div>
         )
@@ -130,7 +124,7 @@ class PCreate extends Component {
                         <AbstractBetweenSpacingBlock>
                             <div>
                                 <div className="greetingName" style={{ color: this.state.maincolor }}>
-                                    С чем тебе помочь?
+                                    Помощь
                                 </div>
                             </div>
                             <div>
@@ -170,13 +164,13 @@ class PCreate extends Component {
                         <Row>
                             <Col xs={12} md={4}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Сформулировать вопрос</BlockTitle>
-                                    {this.renderTextInput()}
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Фильтры</BlockTitle>
+                                    {this.renderFilters()}
                                 </Block>
                             </Col>
                             <Col xs={12} md={8}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Вопросы</BlockTitle>
                                     <MiniQuestion>
                                         <Row>
                                             <Col xs={4} lg={2}>
@@ -210,4 +204,4 @@ class PCreate extends Component {
     }
 }
 
-export default withCookies(PCreate);
+export default withCookies(PHelp);

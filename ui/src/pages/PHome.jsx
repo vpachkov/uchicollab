@@ -18,7 +18,7 @@ import {
     SquareBlockText
 } from "../components/Blocks";
 import {ProgressBar} from "../components/ProgressBar";
-import {BigButtonWithIcon} from "../components/Buttons";
+import {BigButtonWithIcon, InlineBigButton, ButtonHandler} from "../components/Buttons";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col, Container, Row} from "react-bootstrap";
 import Wave from 'react-wavify'
@@ -104,22 +104,27 @@ class PHome extends Component {
                             </div>
                         </AbstractBetweenSpacingBlock>
                     </Container>
+                    {/* Rerender wave on width change to get the right amount of points */}
                 </header>
-                {/* Rerender wave on width change to get the right amount of points */}
                 <Wave className="wave" fill='#f4f5f6'
-                      paused={false}
-                      options={{
-                          height: 8,
-                          amplitude: 20,
-                          speed: 0.10,
-                          points: 10
-                      }}
-                />
+                        paused={false}
+                        options={{
+                            height: 8,
+                            amplitude: 20,
+                            speed: 0.10,
+                            points: 10
+                        }}
+                    />
                 <Container>
                     <main>
-                        <BigButtonWithIcon onClick={() => {
-                            history.push('/create')
-                        }} icon={faPlus} title="Задать новый вопрос"/>
+                        <ButtonHandler>
+                            <BigButtonWithIcon onClick={() => {
+                                history.push('/create')
+                            }} icon={faPlus} title="Задать новый вопрос"/>
+                            <InlineBigButton onClick={() => {
+                                history.push('/help')
+                            }} title="Помощь"/>
+                        </ButtonHandler>
                         <Row>
                             <Col sm={12} sm={12}>
                                 <Block color="white">
