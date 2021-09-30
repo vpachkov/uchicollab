@@ -9,7 +9,7 @@ import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faPlus, faBackward, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faCoins, faUser, faPlus, faArrowAltCircleLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Post, profileService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
@@ -152,7 +152,7 @@ class PCreate extends Component {
                 >
                     <defs>
                         <linearGradient id="gradient" gradientTransform="rotate(90)">
-                            <stop offset="0%" stopColor={this.state.maincolor} />
+                            <stop offset="0%" stopColor="rgb(161, 178, 190)" />
                             <stop offset="60%" stopColor="#f4f5f6" />
                         </linearGradient>
                     </defs>
@@ -162,7 +162,7 @@ class PCreate extends Component {
                         <ButtonHandler>
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
-                            }} icon={faBackward} title="Назад" />
+                            }} icon={faArrowAltCircleLeft} title="Назад" />
                             <InlineBigButton onClick={() => {
                                 history.push('/')
                             }} title="Главная" />

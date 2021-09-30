@@ -92,7 +92,7 @@ class PHome extends Component {
         }
         return (
             <div>
-                <header className="coloredBackground">
+                <header className="coloredBackground bigHeader">
                     <Container>
                         <AbstractBetweenSpacingBlock>
                             <div>
