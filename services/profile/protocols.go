@@ -10,8 +10,10 @@ type CommentsRequest struct {
 }
 
 type Comment struct {
-	Text  string `json:"text"`
-	Score int    `json:"score"`
+	Text      string `json:"text"`
+	Score     int    `json:"score"`
+	Name      string `json:"name"`
+	ImagePath string `json:"imagepath"`
 }
 
 type CommentsResponse struct {

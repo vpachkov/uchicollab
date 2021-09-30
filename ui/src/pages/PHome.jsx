@@ -218,7 +218,7 @@ class PHome extends Component {
                                                 return (
                                                     <CommentBlock color="#eeeeee" textColor="rgb(69, 68, 79)"
                                                                   raiting={comment.score}
-                                                                  user={this.state.user}>
+                                                                  user={{name: comment.name, profilePic:staticData+comment.imagepath}}>
                                                         <CommentText text={comment.text} max={60}/>
                                                     </CommentBlock>
                                                 )
