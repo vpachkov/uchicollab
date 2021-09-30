@@ -11,7 +11,9 @@ func main() {
 	// setup database
 	db.Init()
 	dbi := db.Get()
-	dbi.Create(&db.User{Name: "vas"})
+	vas := &db.User{Name: "vas"}
+	sess := &db.Session{User: vas}
+	dbi.Create(sess)
 
 	// setup workers
 	sc := workers.SessionCollector{}

@@ -8,15 +8,15 @@ type BaseWorker interface {
 }
 
 func StartWorker(worker BaseWorker) {
-	ticker := time.NewTicker(worker.GetDuration() * time.Millisecond)
+	ticker := time.NewTicker(worker.GetDuration())
 	quit := make(chan struct{})
 
 	go func() {
 		for {
 			select {
-			case <- ticker.C:
+			case <-ticker.C:
 				worker.Callback()
-			case <- quit:
+			case <-quit:
 				ticker.Stop()
 				return
 			}

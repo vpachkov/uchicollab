@@ -1,13 +1,27 @@
 package workers
 
-import "time"
+import (
+	"log"
+	"time"
+	"uchicollab/db"
+)
 
 type SessionCollector struct{}
 
 func (SessionCollector) Callback() {
-	println("callback")
+	log.Println("Session collector callback")
+
+	dbi := db.Get()
+	var sessions []db.Session
+	dbi.Preload("Sessions").Find(&sessions)
+	for _, session := range sessions {
+		if session.Expired() {
+			log.Printf("Session %v has expired\n", session.ID)
+			dbi.Delete(session)
+		}
+	}
 }
 
 func (SessionCollector) GetDuration() time.Duration {
-	return 500
+	return 15 * time.Minute
 }
