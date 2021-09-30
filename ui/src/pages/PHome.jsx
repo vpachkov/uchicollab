@@ -74,7 +74,7 @@ class PHome extends Component {
     render() {
         return (
             <div>
-                <header>
+                <header className="coloredBackground">
                     <Container>
                         <AbstractBetweenSpacingBlock>
                             <div>
