@@ -96,6 +96,7 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 		}
 
 		response.Questions = append(response.Questions, BriefQuestion{
+			ID:               question.ID,
 			Answers:          5,
 			Title:            question.Title,
 			Description:      question.Description,

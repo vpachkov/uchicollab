@@ -20,7 +20,9 @@ function App() {
                 </Route>
                 <Route exact path="/help" render={(props) => <PHelp/>}>
                 </Route>
-                <Route exact path="/question" render={(props) => <PQuestion/>}>
+                <Route
+                    exact path="/question/:id"
+                    render={(props) => <PQuestion  {...props}/>}>
                 </Route>
             </Switch>
         </Router>

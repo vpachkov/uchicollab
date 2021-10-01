@@ -36,6 +36,7 @@ type BriefQuestionsRequest struct {
 }
 
 type BriefQuestion struct {
+	ID               int    `json:"id"`
 	Answers          int    `json:"answers"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`

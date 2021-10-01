@@ -188,7 +188,9 @@ class PHelp extends Component {
                                         this.state.questions === undefined || this.state.questions === null ? null :
                                             this.state.questions.map(question => {
                                                 return (
-                                                    <MiniQuestion>
+                                                    <MiniQuestion onClick={()=>{
+                                                        history.push(`/question/${ question.id }`)
+                                                    }}>
                                                         <Row>
                                                             <Col xs={4} lg={2}>
                                                                 <QuestionLable>Ответов { question.answers }</QuestionLable>
