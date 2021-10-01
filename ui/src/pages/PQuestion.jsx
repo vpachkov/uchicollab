@@ -12,7 +12,7 @@ import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck, faComments, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
-import {Post, profileService, questionsService, staticData} from "../config";
+import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import Select from 'react-select';
@@ -133,6 +133,10 @@ class PQuestion extends Component {
     }
 
     onDonate = () => {
+        if (this.state.question !== undefined) {
+            return;
+        }
+
         Post(questionsService + "upvote", {
             questionid: this.state.question.id,
             coins: this.state.donateCoins,
@@ -189,7 +193,7 @@ class PQuestion extends Component {
                                 <FontAwesomeIcon
                                     style={{ marginLeft: "4px", cursor: "pointer" }}
                                     color="#FAA0A0"
-                                    icon={ this.isLikedAnswer(answer) ? faHeart : fasHeart }
+                                    icon={this.isLikedAnswer(answer) ? faHeart : fasHeart}
                                     onClick={() => { this.onLikeAnswer(answer) }}
                                 />
                             </Span>
@@ -226,20 +230,20 @@ class PQuestion extends Component {
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Поднять стоимость</BlockTitle>
                 <BlockLine color="rgb(0, 0, 0)">
-                    Ваши голоса за вопрос: { this.amountOfDonateToQuestion() }
+                    Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}
                 </BlockLine>
                 <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы эксперты ответили быстрее. </BlockLine>
                 <input
-                    onChange={ (event) => {
+                    onChange={(event) => {
                         this.setState({
                             donateCoins: parseInt(event.target.value)
                         })
-                    } }
+                    }}
                     className="inputBox"
                     type="number"
                     rows="4"
                     placeholder="Стоимость"
-                    value={ this.state.donateCoins }
+                    value={this.state.donateCoins}
                 />
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
                     <Button title="Внести голоса" onClick={() => { this.onDonate() }} />
@@ -293,34 +297,19 @@ class PQuestion extends Component {
                         isLoading={this.state.isChatLoading}
                         loadMore={this.chatLoadMore()}
                     >
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock isMine={true} text="Hello" />
-                        <MessageBlock text="Hello" />
-                        <MessageBlock isMine={true} text="Hello" />
-                        <MessageBlock isMine={true} text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        <MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
                     </InfiniteScrollReverse>
                     <input className="chatInput" placeholder="Ваше сообщение"></input>
                     <div className="sendInput"><FontAwesomeIcon icon={faPaperPlane} /></div>
@@ -419,12 +408,12 @@ class PQuestion extends Component {
     loadDetailedQuestion() {
         Post(
             questionsService + "detailedquestion", {
-                id: parseInt(this.props.match.params.id)
-            }, (response) => {
-                this.setState({
-                    question: response.data
-                })
-            }
+            id: parseInt(this.props.match.params.id)
+        }, (response) => {
+            this.setState({
+                question: response.data
+            })
+        }
         )
     }
 

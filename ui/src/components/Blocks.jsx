@@ -4,6 +4,7 @@ import { ProfileLogo } from "./ProfileLogo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { Subjects, SubjectColor } from "../constants";
+import { Row, Col } from "react-bootstrap";
 
 export class Block extends Component {
     render() {
@@ -120,9 +121,12 @@ export class MessageBlock extends Component {
         var borderBR = this.props.isMine === true ? "4px" : "12px"
 
         return (
-            <div style={{ color: this.props.textColor }}>
-                <div className="messageBlock" style={{ backgroundColor: bg, float: fl, borderTopLeftRadius: borderTL, borderBottomRightRadius: borderBR }}>
-                    {this.props.text}
+            <div style={{ color: this.props.textColor, textAlign: fl }}>
+                <div>
+                    <div className="messageBlock" style={{ backgroundColor: bg, borderTopLeftRadius: borderTL, borderBottomRightRadius: borderBR }}>
+                        {this.props.text}
+                    </div>
+                    <div style={{ fontSize: ".7em", color: "lightgray" }}>{this.props.time} от <ProfileLogo height="8px" width="8px" src={this.props.profilePic} /> {this.props.author}</div>
                 </div>
             </div>
         )
