@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { User } from "../components/User";
 import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
-import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
+import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton, InlineButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
@@ -29,7 +29,7 @@ class PLogin extends Component {
 
         const { cookies } = props;
         this.state = {
-            
+
         };
     }
 
@@ -43,8 +43,34 @@ class PLogin extends Component {
 
     render() {
         return (
-            <div>
-                Hey
+            <div className="loginPage">
+                <Wave className="loginWave" fill='#f4f5f6'
+                    paused={false}
+                    options={{
+                        height: 8,
+                        amplitude: 20,
+                        speed: 0.10,
+                        points: 10
+                    }}
+                />
+                <Col className="zindex1" xs={10} sm={8} md={6} lg={4}>
+                    <Block color="white">
+                        <BlockTitle color="rgb(69, 68, 79)" text="bold">Войти</BlockTitle>
+                        <BlockLine color="rgb(133, 133, 138)">Логин</BlockLine>
+                        <input className="inputBox" rows="4" placeholder="Ваш логин"></input>
+                        <BlockLine color="rgb(133, 133, 138)">Пароль</BlockLine>
+                        <input className="inputBox" type="password" rows="4"></input>
+                        <BlockLine color="rgb(133, 133, 138)"></BlockLine>
+                        <div style={{ textAlign: "right", marginTop: "16px" }}>
+                            <InlineButton onClick={() => {
+                                history.push('/register')
+                            }} title="Регистрация" />
+                            <Button onClick={() => {
+                                console.log("Enter")
+                            }} title="Войти" />
+                        </div>
+                    </Block>
+                </Col>
             </div>
         )
     }

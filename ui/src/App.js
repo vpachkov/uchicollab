@@ -11,6 +11,7 @@ import { useHistory, withRouter } from "react-router-dom";
 import history from './history'
 import PProfile from './pages/PProfile';
 import PLogin from './pages/PLogin';
+import PRegister from './pages/PRegister';
 
 function App() {
     return (
@@ -23,6 +24,8 @@ function App() {
                 <Route exact path="/help" render={(props) => <PHelp/>}>
                 </Route>
                 <Route exact path="/login" render={(props) => <PLogin/>}>
+                </Route>
+                <Route exact path="/register" render={(props) => <PRegister/>}>
                 </Route>
                 <Route
                     exact path="/question/:id"

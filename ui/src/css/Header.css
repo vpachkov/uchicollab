@@ -65,4 +65,31 @@ header {
   border-radius: 50%;
 }
 
+.loginPage {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #f8ceec;
+  background-image: linear-gradient(to left, #f8ceec, #a88beb);
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.loginWave {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 0;
+}
+
+.zindex1 {
+  z-index: 1;
+}
+
 /*# sourceMappingURL=Header.css.map */
