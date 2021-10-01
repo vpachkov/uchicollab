@@ -3,7 +3,7 @@ import { User } from "../components/User";
 import { HeaderSquareBlock, AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { CustomSelect, Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
-import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
+import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable, BriefQuestion } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import Wave from 'react-wavify'
@@ -38,6 +38,21 @@ class PCreate extends Component {
                 answers: 0,
                 bestAnswersRate: 0,
                 subscribedTages: ["Math", "Russian"],
+            },
+
+            question: {
+                id: 0,
+                title: "Uncaught (in promise): FirebaseError",
+                subject: "Алгебра",
+                description: "I'm getting the error below. My problem is NOT with the actual error but the fact that it is saying that the error was Uncaught. If you take a look at my auth.service.ts and sign-in.component.ts files I am catching the error. I'm getting the error below. My problem is NOT with the actual error but the fact that it is saying that the error was Uncaught. If you take a look at my auth.service.ts and sign-in.component.ts files I am catching the error.",
+                tags: ["Book", "School program"],
+                date: "28 may 2020",
+                until: "28-10-2021",
+                cost: 335,
+
+                author: "Russ Cox",
+                authorid: 0,
+                profilePic: "https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png",
             },
         };
     }
@@ -100,15 +115,7 @@ class PCreate extends Component {
                             <Col xs={12} md={8}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
-                                    <MiniQuestion>
-                                        <Row>
-                                            <Col>
-                                                <QuestionTitle>Рещение задачи по ТСАУ</QuestionTitle>
-                                                <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
-                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0} />
-                                            </Col>
-                                        </Row>
-                                    </MiniQuestion>
+                                    <BriefQuestion question={this.state.question} />
                                 </Block>
                             </Col>
                         </Row>

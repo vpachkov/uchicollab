@@ -351,7 +351,7 @@ class PQuestion extends Component {
                                 <BigButtonWithIcon onClick={() => {
                                     disableBodyScroll(document.querySelector('#mainScroll'))
                                     this.setState({ chatWithUser: "all" })
-                                }} backgroundColor="#ffe2e1" icon={faComments} title="Общий чат" />
+                                }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат" />
                                 <InlineBigButtonWithIcon onClick={() => {
                                     history.goBack()
                                 }} icon={faArrowAltCircleLeft} title="Назад" />
