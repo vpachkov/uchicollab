@@ -55,8 +55,6 @@ header
     display: inline
     border-radius: 50%
 
-
-
 .loginPage
     position: fixed
     bottom: 0px
@@ -80,3 +78,83 @@ header
 
 .zindex1
     z-index: 1
+
+.tintHandler
+    position: fixed
+    top: 0px
+    left: 0px
+    width: 100%
+    height: 100%
+    background-color: rgba(0, 0, 0, .3)
+    z-index: 1
+
+.popupChatHandler
+    position: fixed
+    bottom: 32px
+    right: 32px
+    width: calc(100% - 64px)
+    height: calc(100% - 64px)
+    max-width: 420px
+    max-height: 700px
+    background-color: $backgroundColor
+    border-radius: 16px
+    padding-bottom: 36px
+    z-index: 2
+
+    .chatClose
+        position: absolute
+        display: flex
+        flex-direction: row
+        align-items: center
+        justify-content: center
+        width: 30px
+        height: 30px
+        font-size: .7em
+        top: 4px
+        right: 4px
+        border-radius: 50%
+        cursor: pointer
+
+    .chatInput
+        width: calc(100% - 36px)
+        padding: 6px 0px 6px 12px
+        border-radius: 0px 0px 0px 16px
+        border: none
+        background-color: rgb(207, 214, 222)
+        color: $textColor
+        overflow: auto
+        outline: none
+        -webkit-box-shadow: none
+        -moz-box-shadow: none
+        box-shadow: none
+        resize: none
+        transition: .1s
+    
+    .chatInputHandler
+        display: inline-flex
+        height: 36px
+
+    .sendInput
+        display: inline-flex
+        height: 36px
+        width: 36px
+        font-size: .8em
+        border-radius: 0px 0px 16px 0px 
+        border: none
+        background-color: rgb(207, 214, 222)
+        color: $textColor
+        flex-direction: row
+        align-items: center
+        justify-content: center
+        cursor: pointer
+
+    .chatHandler
+        height: 100%
+        width: 100%
+        overflow-y: scroll
+        display: flex
+        flex-direction: column
+        padding: 16px
+
+    .sendLine
+        width: 100%

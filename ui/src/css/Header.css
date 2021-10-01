@@ -92,4 +92,86 @@ header {
   z-index: 1;
 }
 
+.tintHandler {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.popupChatHandler {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: calc(100% - 64px);
+  height: calc(100% - 64px);
+  max-width: 420px;
+  max-height: 700px;
+  background-color: #f4f5f6;
+  border-radius: 16px;
+  padding-bottom: 36px;
+  z-index: 2;
+}
+.popupChatHandler .chatClose {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 0.7em;
+  top: 4px;
+  right: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.popupChatHandler .chatInput {
+  width: calc(100% - 36px);
+  padding: 6px 0px 6px 12px;
+  border-radius: 0px 0px 0px 16px;
+  border: none;
+  background-color: #cfd6de;
+  color: #45444f;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+  transition: 0.1s;
+}
+.popupChatHandler .chatInputHandler {
+  display: inline-flex;
+  height: 36px;
+}
+.popupChatHandler .sendInput {
+  display: inline-flex;
+  height: 36px;
+  width: 36px;
+  font-size: 0.8em;
+  border-radius: 0px 0px 16px 0px;
+  border: none;
+  background-color: #cfd6de;
+  color: #45444f;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.popupChatHandler .chatHandler {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+.popupChatHandler .sendLine {
+  width: 100%;
+}
+
 /*# sourceMappingURL=Header.css.map */

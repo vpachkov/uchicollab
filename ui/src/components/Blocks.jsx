@@ -112,6 +112,23 @@ export class CommentText extends Component {
     }
 }
 
+export class MessageBlock extends Component {
+    render() {
+        var bg = this.props.isMine === true ? "rgb(194,226,230)" : "rgb(203,216,226)"
+        var fl = this.props.isMine === true ? "right" : "lift"
+        var borderTL = this.props.isMine === true ? "12px" : "4px"
+        var borderBR = this.props.isMine === true ? "4px" : "12px"
+
+        return (
+            <div style={{ color: this.props.textColor }}>
+                <div className="messageBlock" style={{ backgroundColor: bg, float: fl, borderTopLeftRadius: borderTL, borderBottomRightRadius: borderBR }}>
+                    {this.props.text}
+                </div>
+            </div>
+        )
+    }
+}
+
 export class AbstractAroundSpacingBlock extends Component {
     render() {
         return (

@@ -116,6 +116,15 @@
   border-radius: 16px 16px 4px 16px;
 }
 
+.messageBlock {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 8px 0px 0px 0px;
+  border-radius: 16px 16px 4px 16px;
+  width: auto;
+  background-color: green;
+}
+
 .commentAuthorBlock {
   display: flex;
   width: 100%;

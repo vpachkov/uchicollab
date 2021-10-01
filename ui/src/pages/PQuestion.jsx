@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { User } from "../components/User";
-import { AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
+import { MessageBlock, AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
@@ -10,7 +10,7 @@ import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck, faComments } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck, faComments, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
 import { Post, profileService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
@@ -21,6 +21,8 @@ import history from "../history";
 import { Switch } from 'react-switch-input';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import InfiniteScrollReverse from "react-infinite-scroll-reverse";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 class PQuestion extends Component {
     static propTypes = {
@@ -32,6 +34,9 @@ class PQuestion extends Component {
 
         const { cookies } = props;
         this.state = {
+            isChatLoading: true,
+            chatWithUser: undefined,
+
             user: {
                 name: "Russ Cox",
                 profilePic: undefined,
@@ -165,6 +170,10 @@ class PQuestion extends Component {
         this.setState({ donatedToQuestion: dons, question: qss })
     }
 
+    openChat = () => {
+
+    }
+
     renderAnswer = (answer) => {
         // FIXME: NEW GRAY COLOR
         var bc = "lightgray"
@@ -241,6 +250,69 @@ class PQuestion extends Component {
         )
     }
 
+    chatHasMore = () => {
+        return false
+    }
+
+    chatLoadMore = () => {
+
+    }
+
+    renderChatPopup = () => {
+        var tinycolor = require("tinycolor2");
+        return (
+            <div>
+                <div className="tintHandler" onClick={() => {
+                    enableBodyScroll(document.querySelector('#mainScroll'))
+                    this.setState({ chatWithUser: undefined })
+                }} />
+                <div className="popupChatHandler">
+                    <div className="chatClose" style={{ backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString() }} onClick={() => {
+                        enableBodyScroll(document.querySelector('#mainScroll'))
+                        this.setState({ chatWithUser: undefined })
+                    }}><FontAwesomeIcon icon={faTimes} /></div>
+                    <InfiniteScrollReverse
+                        className="chatHandler"
+                        hasMore={this.chatHasMore()}
+                        isLoading={this.state.isChatLoading}
+                        loadMore={this.chatLoadMore()}
+                    >
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock isMine={true} text="Hello" />
+                        <MessageBlock text="Hello" />
+                        <MessageBlock isMine={true} text="Hello" />
+                        <MessageBlock isMine={true} text="Hello" />
+                    </InfiniteScrollReverse>
+                    <input className="chatInput" placeholder="Ваше сообщение"></input>
+                    <div className="sendInput"><FontAwesomeIcon icon={faPaperPlane} /></div>
+                </div>
+            </div>
+        )
+    }
+
     renderQuestion = (question) => {
         return (
             <Block color="white">
@@ -270,41 +342,45 @@ class PQuestion extends Component {
     render() {
         return (
             <div>
-                <Header prefix="Вопрос от" user={this.state.user} />
-                <Container>
-                    <main>
-                        <Navigation>
-                            <BigButtonWithIcon onClick={() => {
-                                history.push('/chat/CHAT_ID_HERE')
-                            }} backgroundColor="#ffe2e1" icon={faComments} title="Общий чат" />
-                            <InlineBigButtonWithIcon onClick={() => {
-                                history.goBack()
-                            }} icon={faArrowAltCircleLeft} title="Назад" />
-                        </Navigation>
-                        <Row>
-                            <Col xs={12} md={4}>
-                                <Block color="white">
-                                    {this.renderSideBar()}
-                                </Block>
-                            </Col>
-                            <Col xs={12} md={8}>
-                                {this.renderQuestion(this.state.question)}
+                {this.state.chatWithUser === undefined ? null : this.renderChatPopup()}
+                <div id="mainScroll">
+                    <Header prefix="Вопрос от" user={this.state.user} />
+                    <Container>
+                        <main>
+                            <Navigation>
+                                <BigButtonWithIcon onClick={() => {
+                                    disableBodyScroll(document.querySelector('#mainScroll'))
+                                    this.setState({ chatWithUser: "all" })
+                                }} backgroundColor="#ffe2e1" icon={faComments} title="Общий чат" />
+                                <InlineBigButtonWithIcon onClick={() => {
+                                    history.goBack()
+                                }} icon={faArrowAltCircleLeft} title="Назад" />
+                            </Navigation>
+                            <Row>
+                                <Col xs={12} md={4}>
+                                    <Block color="white">
+                                        {this.renderSideBar()}
+                                    </Block>
+                                </Col>
+                                <Col xs={12} md={8}>
+                                    {this.renderQuestion(this.state.question)}
 
-                                <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
-                                    {
-                                        this.state.answers === undefined ? null :
-                                            this.state.answers.map(answer => {
-                                                return (
-                                                    this.renderAnswer(answer)
-                                                )
-                                            })
-                                    }
-                                </Block>
-                            </Col>
-                        </Row>
-                    </main>
-                </Container>
+                                    <Block color="white">
+                                        <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
+                                        {
+                                            this.state.answers === undefined ? null :
+                                                this.state.answers.map(answer => {
+                                                    return (
+                                                        this.renderAnswer(answer)
+                                                    )
+                                                })
+                                        }
+                                    </Block>
+                                </Col>
+                            </Row>
+                        </main>
+                    </Container>
+                </div>
             </div>
         )
     }
