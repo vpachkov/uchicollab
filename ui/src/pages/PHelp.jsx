@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { User } from "../components/User";
-import { HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
+import { AuthorBlock, HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
@@ -9,8 +9,8 @@ import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons'
-import {Post, profileService, questionsService, staticData} from "../config";
+import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire, faComment } from '@fortawesome/free-solid-svg-icons'
+import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import Select from 'react-select';
@@ -19,18 +19,18 @@ import history from "../history";
 import { Switch } from 'react-switch-input';
 import { Tags } from '../components/Tags'
 
-import {utc} from 'moment'
+import { utc } from 'moment'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {SubjectColor, Subjects} from "../constants";
-import {parse} from "@fortawesome/fontawesome-svg-core";
+import { SubjectColor, Subjects } from "../constants";
+import { parse } from "@fortawesome/fontawesome-svg-core";
 
 const customStyles = {
     menu: (provided, state) => ({
-      ...provided,
-      color: "rgb(69, 68, 79)",
+        ...provided,
+        color: "rgb(69, 68, 79)",
     }),
-  }
+}
 
 class PHelp extends Component {
     constructor(props) {
@@ -59,14 +59,14 @@ class PHelp extends Component {
                 <Select
                     styles={customStyles}
                     className="textSelector"
-                    value={ selectedSubjectOption }
-                    onChange={ (selectedOption) => {
+                    value={selectedSubjectOption}
+                    onChange={(selectedOption) => {
                         this.setState({
                             selectedSubjectOption: selectedOption,
                             maincolor: SubjectColor[selectedOption.value]
                         }, this.loadBriefQuestions)
-                    } }
-                    options={ Subjects }
+                    }}
+                    options={Subjects}
                     placeholder="Выберите предмет"
                     theme={(theme) => ({
                         ...theme,
@@ -80,7 +80,7 @@ class PHelp extends Component {
                 />
                 <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                 <Tags
-                    onChange={ (tags) => {
+                    onChange={(tags) => {
                         this.setState({ tags: tags }, this.loadBriefQuestions)
                     }}
                 />
@@ -88,7 +88,7 @@ class PHelp extends Component {
                 <Row>
                     <Col>
                         <input
-                            onChange={ (event) => {
+                            onChange={(event) => {
                                 this.setState({ costFrom: parseInt(event.target.value) }, this.loadBriefQuestions)
                             }}
                             className="inputBox" type="number" placeholder="от"
@@ -96,7 +96,7 @@ class PHelp extends Component {
                     </Col>
                     <Col>
                         <input
-                            onChange={ (event) => {
+                            onChange={(event) => {
                                 this.setState({ costTo: parseInt(event.target.value) }, this.loadBriefQuestions)
                             }}
                             className="inputBox" type="number" placeholder="до"
@@ -105,7 +105,7 @@ class PHelp extends Component {
                 </Row>
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input
-                    onChange={ (event) => {
+                    onChange={(event) => {
                         this.setState({
                             deadline: + new Date(event.target.value)
                         }, this.loadBriefQuestions)
@@ -135,14 +135,14 @@ class PHelp extends Component {
                             </div>
                             <div>
                                 <HeaderSquareBlock color="white"><SquareBlockImage
-                                                        ><FontAwesomeIcon
-                                                        color="rgb(223, 223, 228)"
-                                                        icon={faCoins}/></SquareBlockImage><SquareBlockText
-                                                        color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
+                                ><FontAwesomeIcon
+                                        color="rgb(223, 223, 228)"
+                                        icon={faCoins} /></SquareBlockImage><SquareBlockText
+                                            color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
                                 <HeaderSquareBlock color="white"><SquareBlockImage
-                                                        ><FontAwesomeIcon
-                                                        color="rgb(223, 223, 228)"
-                                                        icon={faUser}/></SquareBlockImage></HeaderSquareBlock>
+                                ><FontAwesomeIcon
+                                        color="rgb(223, 223, 228)"
+                                        icon={faUser} /></SquareBlockImage></HeaderSquareBlock>
                             </div>
                         </AbstractBetweenSpacingBlock>
                     </Container>
@@ -178,7 +178,7 @@ class PHelp extends Component {
                             <Col xs={12} md={4}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Фильтры</BlockTitle>
-                                    { this.renderFilters() }
+                                    {this.renderFilters()}
                                 </Block>
                             </Col>
                             <Col xs={12} md={8}>
@@ -188,20 +188,17 @@ class PHelp extends Component {
                                         this.state.questions === undefined || this.state.questions === null ? null :
                                             this.state.questions.map(question => {
                                                 return (
-                                                    <MiniQuestion onClick={()=>{
-                                                        history.push(`/question/${ question.id }`)
+                                                    <MiniQuestion onClick={() => {
+                                                        history.push(`/question/${question.id}`)
                                                     }}>
                                                         <Row>
-                                                            <Col xs={4} lg={2}>
-                                                                <QuestionLable>Ответов { question.answers }</QuestionLable>
-                                                            </Col>
-                                                            <Col xs={8} lg={10}>
-                                                                <QuestionTitle>{ question.title }</QuestionTitle>
-                                                                <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
-                                                                <div className="commentAuthorBlock">
-                                                                    <span style={{ marginRight: "8px" }}>Asked by { question.askedbyname } </span>
-                                                                    <ProfileLogo height="16px" width="16px" src={ staticData + question.askedbyimagepath } />
-                                                                </div>
+                                                            <Col>
+                                                                <QuestionTitle>{question.title}</QuestionTitle>
+                                                                <QuestionBody max={128} text={question.description} />
+                                                                <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
+                                                                    <div style={{ width: "100%" }}><Span fontWeight="regular" color={this.state.maincolor}>{question.answers} <FontAwesomeIcon color="" icon={faComment} /></Span></div>
+                                                                    <AuthorBlock author={question.askedbyname} date={"TODO BRIEF DATE HERE"} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
+                                                                </AbstractBetweenSpacingBlock>
                                                             </Col>
                                                         </Row>
                                                     </MiniQuestion>
