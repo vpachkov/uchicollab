@@ -6,7 +6,7 @@ export class User extends Component {
         return (
             <div>
             <div className="greetingMsg">
-                Привет,
+                {this.props.prefix}
             </div>
             <div className="greetingNameHandler">
                 <ProfileLogo height="56px" width="56px" src={this.props.user.profilePic}/>

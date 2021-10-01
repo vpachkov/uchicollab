@@ -9,6 +9,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import { useHistory, withRouter } from "react-router-dom";
 
 import history from './history'
+import PProfile from './pages/PProfile';
 
 function App() {
     return (
@@ -23,6 +24,10 @@ function App() {
                 <Route
                     exact path="/question/:id"
                     render={(props) => <PQuestion  {...props}/>}>
+                </Route>
+                <Route
+                    exact path="/user/:login"
+                    render={(props) => <PProfile  {...props}/>}>
                 </Route>
             </Switch>
         </Router>

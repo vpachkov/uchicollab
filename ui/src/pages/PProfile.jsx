@@ -22,19 +22,15 @@ import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
 import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components/Buttons";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Container, Row} from "react-bootstrap";
-import Wave from 'react-wavify'
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faClock, faCoins, faPlus, faStar, faUser, faHeart, faQuestion, faComment, faFire} from '@fortawesome/free-solid-svg-icons'
-import {Post, profileService, staticData} from "../config";
-import {Cookies, withCookies} from 'react-cookie';
-import {instanceOf} from 'prop-types';
+import { Col, Container, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBook, faClock, faCoins, faComment, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
+import { Post, profileService, staticData } from "../config";
+import { Cookies, withCookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 import history from "../history";
 
-
-class PHome extends Component {
+class PProfile extends Component {
     renderProgress = [
         {
             "name": "Математика",
@@ -72,12 +68,25 @@ class PHome extends Component {
                 bestAnswersRate: 0,
                 subscribedTages: ["Math", "Russian"],
             },
+
+            userinfo: {
+                aboutUser: "Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative.",
+                education: "MIT",
+            },
         }
     }
 
     componentDidMount() {
         this.getInfo()
         this.loadComments()
+    }
+
+    isUserProfile = () => {
+        if (this.state.user === undefined) {
+            return false
+        }
+
+        return true
     }
 
     renderSubscribedTags = () => {
@@ -105,39 +114,44 @@ class PHome extends Component {
         }
         return (
             <div>
-                <Header prefix="Привет," user={this.state.user} />
+                <Header prefix="Пользователь" user={this.state.user} />
                 <Container>
                     <main>
                         <ButtonHandler>
-                            <BigButtonWithIcon onClick={() => {
-                                history.push('/create')
-                            }} color="#551a8b" backgroundColor="#ddd6f3" icon={faPlus} title="новый вопрос" />
+                            <InlineBigButton onClick={() => {
+                                history.push('/')
+                            }} title="Главная" />
                             <InlineBigButton onClick={() => {
                                 history.push('/help')
                             }} title="Помощь" />
                         </ButtonHandler>
                         <Row>
+                            {this.isUserProfile() ? <Col xs={12} lg={12}><Block color="white">
+                                <AbstractBlock color="white">
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Настройки</BlockTitle>
+                                    <AbstractBlock color="white">
+                                        {this.renderSubscribedTags()}
+                                    </AbstractBlock>
+                                </AbstractBlock>
+                            </Block></Col> : null}
                             <Col sm={12} sm={12}>
                                 <Block color="white">
                                     <Row>
                                         <Col xs={12} lg={6}>
                                             <AbstractBlock color="white">
-                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Текущая
-                                                    задача</BlockTitle>
-                                                <ProgressBar content={this.renderProgress} />
-                                                <BlockSpacing size="20px" />
-                                                <BlockLine color="rgb(133, 133, 138)"><FontAwesomeIcon
-                                                    color="rgb(133, 133, 138)" icon={faStar} /> Ты работаешь отлично!
-                                                    Продолжай в том же духе!</BlockLine>
-                                                <BlockLine color="rgb(133, 133, 138)"><FontAwesomeIcon
-                                                    color="rgb(133, 133, 138)" icon={faClock} /> 6 дней</BlockLine>
-                                                <BlockLine color="rgb(133, 133, 138)"><FontAwesomeIcon
-                                                    color="rgb(133, 133, 138)" icon={faCoins} /> 20</BlockLine>
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">О себе</BlockTitle>
+                                                <AbstractBlock color="white">
+                                                    {this.state.userinfo.aboutUser}
+                                                </AbstractBlock>
+                                                <AbstractBlock color="white">
+                                                    <KeywordBlock><span>{this.state.userinfo.education}</span></KeywordBlock>
+                                                    <KeywordBlock><span>{this.state.userinfo.education}</span></KeywordBlock>
+                                                </AbstractBlock>
                                             </AbstractBlock>
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <AbstractBlock color="white">
-                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Аналитика</BlockTitle>
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Статус</BlockTitle>
                                                 <AbstractBetweenSpacingBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(250, 225, 213)"><FontAwesomeIcon
@@ -160,10 +174,12 @@ class PHome extends Component {
                                                             icon={faFire} /></SquareBlockImage><SquareBlockText
                                                                 color="rgb(133, 133, 138)">{this.state.user.bestAnswersRate}%</SquareBlockText></SquareBlock>
                                                 </AbstractBetweenSpacingBlock>
-                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные
-                                                    темы</BlockTitle>
                                                 <AbstractBlock color="white">
-                                                    {this.renderSubscribedTags()}
+                                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные
+                                                        темы</BlockTitle>
+                                                    <AbstractBlock color="white">
+                                                        {this.renderSubscribedTags()}
+                                                    </AbstractBlock>
                                                 </AbstractBlock>
                                             </AbstractBlock>
                                         </Col>
@@ -172,7 +188,7 @@ class PHome extends Component {
                             </Col>
                             <Col sm={12} md={4}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные ответы</BlockTitle>
                                     {
                                         this.state.newQuestions === undefined || this.state.newQuestions === null ? null :
                                             this.state.newQuestions.map(question => {
@@ -244,4 +260,4 @@ class PHome extends Component {
     }
 }
 
-export default withCookies(PHome);
+export default withCookies(PProfile);

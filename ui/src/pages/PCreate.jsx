@@ -15,6 +15,7 @@ import {instanceOf} from 'prop-types';
 import Select from 'react-select';
 import {ProfileLogo} from "../components/ProfileLogo";
 import history from "../history";
+import { Header } from "../components/Header";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Tags} from "../components/Tags";
@@ -27,6 +28,17 @@ class PCreate extends Component {
         this.state = {
             maincolor: "#551a8b",
             selectedSubjectOption: null,
+
+            user: {
+                name: "Russ Cox",
+                profilePic: undefined,
+                coins: 0,
+                questions: 0,
+                likesRecieved: 0,
+                answers: 0,
+                bestAnswersRate: 0,
+                subscribedTages: ["Math", "Russian"],
+            },
         };
     }
 
@@ -72,45 +84,7 @@ class PCreate extends Component {
     render() {
         return (
             <div>
-                <header>
-                    <Container>
-                        <AbstractBetweenSpacingBlock>
-                            <div>
-                                <div className="greetingName" style={{ color: this.state.maincolor }}>
-                                    С чем тебе помочь?
-                                </div>
-                            </div>
-                            <div>
-                                <HeaderSquareBlock color="white"><SquareBlockImage
-                                                        ><FontAwesomeIcon
-                                                        color="rgb(223, 223, 228)"
-                                                        icon={faCoins}/></SquareBlockImage><SquareBlockText
-                                                        color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
-                                <HeaderSquareBlock color="white"><SquareBlockImage
-                                                        ><FontAwesomeIcon
-                                                        color="rgb(223, 223, 228)"
-                                                        icon={faUser}/></SquareBlockImage></HeaderSquareBlock>
-                            </div>
-                        </AbstractBetweenSpacingBlock>
-                    </Container>
-                </header>
-                {/* Rerender wave on width change to get the right amount of points */}
-                <Wave className="wave" fill="url(#gradient)"
-                    paused={false}
-                    options={{
-                        height: 8,
-                        amplitude: 20,
-                        speed: 0.10,
-                        points: 10
-                    }}
-                >
-                    <defs>
-                        <linearGradient id="gradient" gradientTransform="rotate(90)">
-                            <stop offset="0%" stopColor="#f4cfdf" />
-                            <stop offset="60%" stopColor="#f4f5f6" />
-                        </linearGradient>
-                    </defs>
-                </Wave>
+                <Header prefix="Создай вопрос," user={this.state.user}/>
                 <Container>
                     <main>
                         <ButtonHandler>
@@ -133,10 +107,7 @@ class PCreate extends Component {
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
                                     <MiniQuestion>
                                         <Row>
-                                            <Col xs={4} lg={2}>
-                                                <QuestionLable>Ответов 132</QuestionLable>
-                                            </Col>
-                                            <Col xs={8} lg={10}>
+                                            <Col>
                                                 <QuestionTitle>Рещение задачи по ТСАУ</QuestionTitle>
                                                 <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
                                                 <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0}/>

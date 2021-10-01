@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../sass/Question.sass","../sass/colors.sass"],"names":[],"mappings":"AAEA;EACI;EACA;EACA;;;AAEJ;EACI;EACA;EACA,OCTQ;;;ADWZ;EACI;EACA;EACA;EACA;EACA;EACA;;;AAEJ;EACI;EACA,OCrBQ","file":"Question.css"}
+{"version":3,"sourceRoot":"","sources":["../sass/Question.sass","../sass/colors.sass"],"names":[],"mappings":"AAEA;EACI;EACA;EACA;EACA;EACA;;AAEA;EACI;EACA;;;AAER;EACI;EACA;EACA,OCfQ;;;ADiBZ;EACI;EACA;EACA;EACA;EACA;EACA;;;AAEJ;EACI;EACA,OC3BQ","file":"Question.css"}

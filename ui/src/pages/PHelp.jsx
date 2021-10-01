@@ -3,7 +3,7 @@ import { User } from "../components/User";
 import { AuthorBlock, HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
-import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
+import { BriefQuestion } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
@@ -188,20 +188,7 @@ class PHelp extends Component {
                                         this.state.questions === undefined || this.state.questions === null ? null :
                                             this.state.questions.map(question => {
                                                 return (
-                                                    <MiniQuestion onClick={() => {
-                                                        history.push(`/question/${question.id}`)
-                                                    }}>
-                                                        <Row>
-                                                            <Col>
-                                                                <QuestionTitle>{question.title}</QuestionTitle>
-                                                                <QuestionBody max={128} text={question.description} />
-                                                                <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
-                                                                    <div style={{ width: "100%" }}><Span fontWeight="regular" color={this.state.maincolor}>{question.answers} <FontAwesomeIcon color="" icon={faComment} /></Span></div>
-                                                                    <AuthorBlock author={question.askedbyname} date={"TODO BRIEF DATE HERE"} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
-                                                                </AbstractBetweenSpacingBlock>
-                                                            </Col>
-                                                        </Row>
-                                                    </MiniQuestion>
+                                                    <BriefQuestion question={question} />
                                                 )
                                             })
                                     }

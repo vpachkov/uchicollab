@@ -167,7 +167,6 @@ class PQuestion extends Component {
                     <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
                         <div style={{ width: "100%" }}><Span fontWeight="regular" color={this.state.maincolor}>{answer.likes} <FontAwesomeIcon color="#ee0000" icon={this.isLikedAnswer(answer) ? faHeart : fasHeart} onClick={() => { this.onLikeAnswer(answer) }} /></Span></div>
                         <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic} authorid={answer.authorid} />
-
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
             </Row>

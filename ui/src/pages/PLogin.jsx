@@ -172,7 +172,7 @@ class PLogin extends Component {
                                             <Col xs={8} lg={10}>
                                                 <QuestionTitle>Рещение задачи по ТСАУ</QuestionTitle>
                                                 <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
-                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0}/>
+                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0} />
                                             </Col>
                                         </Row>
                                     </MiniQuestion>

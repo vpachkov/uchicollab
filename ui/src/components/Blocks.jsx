@@ -155,7 +155,7 @@ export class SquareBlock extends Component {
 export class SquareBlockImage extends Component {
     render() {
         return (
-            <div className="squareBlockImage" style={{backgroundColor: this.props.color}}>
+            <div className="squareBlockImage" style={{backgroundColor: this.props.color}} onClick={this.props.onClick}>
                 {this.props.children}
             </div>
         )
