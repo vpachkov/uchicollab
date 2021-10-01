@@ -126,3 +126,9 @@ type ChatMessage struct {
 type ChatMessagesResponse struct {
 	Messages []ChatMessage `json:"messages"`
 }
+
+type SendMessageRequest struct {
+	services.SessionableRequest
+	QuestionID int    `json:"questionid"`
+	Text       string `json:"text"`
+}

@@ -298,7 +298,7 @@ class PQuestion extends Component {
     }
 
     renderChatPopup = () => {
-        console.log(this.state.chatMessages)
+        // console.log(this.state.chatMessages)
         var tinycolor = require("tinycolor2");
         return (
             <div>
@@ -322,7 +322,6 @@ class PQuestion extends Component {
                         {
                             this.state.chatMessages === undefined ? null :
                                 this.state.chatMessages.map((message) => {
-                                    console.log('cum')
                                     return (
                                         <MessageBlock
                                             time="28/02/20 11:11"
@@ -348,8 +347,30 @@ class PQuestion extends Component {
                         {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
                         {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
                     </InfiniteScrollReverse>
-                    <input className="chatInput" placeholder="Ваше сообщение"></input>
-                    <div className="sendInput"><FontAwesomeIcon icon={faPaperPlane}/></div>
+                    <input
+                        className="chatInput"
+                        placeholder="Ваше сообщение"
+                        onChange={ (event) => {
+                            this.setState({
+                                myMessage : event.target.value,
+                            })
+                        }}
+                        value={ this.state.myMessage }
+                        // value={}
+                    />
+                    <div onClick={ () => {
+                        Post(
+                            questionsService+"sendmessage", {
+                                questionid: this.state.question.id,
+                                text: this.state.myMessage,
+                            }, () => {
+                                this.loadChatMessages()
+                                this.setState({
+                                    myMessage: ""
+                                })
+                            }
+                        )
+                    }} className="sendInput"><FontAwesomeIcon icon={faPaperPlane}/></div>
                 </div>
             </div>
         )
@@ -359,7 +380,6 @@ class PQuestion extends Component {
         if (question === undefined) {
             return null
         }
-        console.log(this.state.chatMessages)
         return (
             <Block color="white">
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">{question.title}</BlockTitle>

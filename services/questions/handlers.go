@@ -313,3 +313,28 @@ func handleChatMessages(request ChatMessagesRequest) (response ChatMessagesRespo
 	status = http.StatusOK
 	return
 }
+
+func handleSendMessage(request SendMessageRequest) (status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var question db.Question
+	dbi.
+		Preload("ChatMessages").
+		First(&question, "id = ?", request.QuestionID)
+
+	question.ChatMessages = append(question.ChatMessages, db.ChatMessage{
+		User: session.User,
+		Text: request.Text,
+		Time: time.Now(),
+	})
+
+	dbi.Updates(&question)
+
+	status = http.StatusOK
+	return
+}
