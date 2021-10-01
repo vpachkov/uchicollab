@@ -11,4 +11,5 @@ func SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/"+Service+".detailedquestion", _handleDetailedQuestion)
 	mux.HandleFunc("/api/"+Service+".upvote", _handleUpvote)
 	mux.HandleFunc("/api/"+Service+".concern", _handleConcern)
+	mux.HandleFunc("/api/"+Service+".chatmessages", _handleChatMessages)
 }

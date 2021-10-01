@@ -91,9 +91,10 @@ type Question struct {
 	DeadlineTime time.Time
 	Cost         int
 
-	Tags     []QuestionTag `gorm:"many2many:question_tag;"`
-	Answers  []Answer      `gorm:"ForeignKey:QuestionID"`
-	Upvoters []Upvoter     `gorm:"ForeignKey:QuestionID"`
+	Tags         []QuestionTag `gorm:"many2many:question_tag;"`
+	Answers      []Answer      `gorm:"ForeignKey:QuestionID"`
+	Upvoters     []Upvoter     `gorm:"ForeignKey:QuestionID"`
+	ChatMessages []ChatMessage `gorm:"ForeignKey:QuestionID"`
 }
 
 type QuestionTag struct {
@@ -104,4 +105,13 @@ type QuestionTag struct {
 type QuestionSubject struct {
 	ID    int
 	Title string
+}
+
+type ChatMessage struct {
+	ID         int
+	QuestionID int
+	UserID     int
+	User       *User `gorm:"foreignkey:UserID"`
+	Text       string
+	Time       time.Time
 }

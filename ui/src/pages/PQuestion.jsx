@@ -1,28 +1,38 @@
-import React, { Component } from 'react'
-import { User } from "../components/User";
-import { MessageBlock, AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
-import { ProgressBar } from "../components/ProgressBar";
-import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
-import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
-import { Header, Navigation } from "../components/Header";
+import React, {Component} from 'react'
+import {
+    AbstractBetweenSpacingBlock,
+    AbstractBlock,
+    AuthorBlock,
+    Block,
+    BlockLine,
+    BlockTitle,
+    KeywordBlock,
+    MessageBlock,
+    Span
+} from "../components/Blocks";
+import {BigButtonWithIcon, Button, InlineBigButtonWithIcon} from "../components/Buttons";
+import {MiniQuestion, QuestionBody} from "../components/Questions";
+import {Header, Navigation} from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Row, Col } from "react-bootstrap";
-import Wave from 'react-wavify'
-import { Container } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck, faComments, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
-import { Post, profileService, questionsService, staticData } from "../config";
-import { Cookies, withCookies } from 'react-cookie';
-import { instanceOf } from 'prop-types';
-import Select from 'react-select';
-import { ProfileLogo } from "../components/ProfileLogo";
+import {Col, Container, Row} from "react-bootstrap";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {
+    faArrowAltCircleLeft,
+    faClock,
+    faCoins,
+    faComments,
+    faGraduationCap,
+    faHeart,
+    faPaperPlane,
+    faStar,
+    faTimes
+} from '@fortawesome/free-solid-svg-icons'
+import {faHeart as fasHeart} from '@fortawesome/free-regular-svg-icons'
+import {Post, profileService, questionsService, staticData} from "../config";
+import {withCookies} from 'react-cookie';
 import history from "../history";
-import { Switch } from 'react-switch-input';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import InfiniteScrollReverse from "react-infinite-scroll-reverse";
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import {disableBodyScroll, enableBodyScroll} from 'body-scroll-lock';
 
 class PQuestion extends Component {
 
@@ -183,23 +193,29 @@ class PQuestion extends Component {
             bc = "#e7d27c"
         }
         return (
-            <Row style={{ marginTop: "16px" }}>
-                <MiniQuestion borderColor={bc} style={{ cursor: "default" }}>
-                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#e7d27c" icon={faStar} /> Лучший ответ</Span> : null}
-                    <QuestionBody max={-1} text={answer.text} />
-                    <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
-                        <div style={{ width: "100%" }}>
+            <Row style={{marginTop: "16px"}}>
+                <MiniQuestion borderColor={bc} style={{cursor: "default"}}>
+                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#e7d27c" icon={faStar}/> Лучший
+                        ответ</Span> : null}
+                    <QuestionBody max={-1} text={answer.text}/>
+                    <AbstractBetweenSpacingBlock style={{marginTop: "8px"}}>
+                        <div style={{width: "100%"}}>
                             <Span fontWeight="regular" color={this.state.maincolor}>{answer.likes}
                                 <FontAwesomeIcon
-                                    style={{ marginLeft: "4px", cursor: "pointer" }}
+                                    style={{marginLeft: "4px", cursor: "pointer"}}
                                     color="#FAA0A0"
                                     icon={this.isLikedAnswer(answer) ? faHeart : fasHeart}
-                                    onClick={() => { this.onLikeAnswer(answer) }}
+                                    onClick={() => {
+                                        this.onLikeAnswer(answer)
+                                    }}
                                 />
                             </Span>
-                            <FontAwesomeIcon style={{ marginLeft: "12px", cursor: "pointer" }} color="lightgray" icon={faComments} onClick={() => { }} />
+                            <FontAwesomeIcon style={{marginLeft: "12px", cursor: "pointer"}} color="lightgray"
+                                             icon={faComments} onClick={() => {
+                            }}/>
                         </div>
-                        <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic} authorid={answer.authorid} />
+                        <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic}
+                                     authorid={answer.authorid}/>
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
             </Row>
@@ -232,7 +248,8 @@ class PQuestion extends Component {
                 <BlockLine color="rgb(0, 0, 0)">
                     Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}
                 </BlockLine>
-                <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы эксперты ответили быстрее. </BlockLine>
+                <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы
+                    эксперты ответили быстрее. </BlockLine>
                 <input
                     onChange={(event) => {
                         this.setState({
@@ -245,8 +262,10 @@ class PQuestion extends Component {
                     placeholder="Стоимость"
                     value={this.state.donateCoins}
                 />
-                <div style={{ textAlign: "right", marginTop: "16px" }}>
-                    <Button title="Внести голоса" onClick={() => { this.onDonate() }} />
+                <div style={{textAlign: "right", marginTop: "16px"}}>
+                    <Button title="Внести голоса" onClick={() => {
+                        this.onDonate()
+                    }}/>
                 </div>
             </div>
         )
@@ -279,40 +298,58 @@ class PQuestion extends Component {
     }
 
     renderChatPopup = () => {
+        console.log(this.state.chatMessages)
         var tinycolor = require("tinycolor2");
         return (
             <div>
                 <div className="tintHandler" onClick={() => {
                     enableBodyScroll(document.querySelector('#mainScroll'))
-                    this.setState({ chatWithUser: undefined })
-                }} />
+                    this.setState({chatWithUser: undefined})
+                }}/>
                 <div className="popupChatHandler">
-                    <div className="chatClose" style={{ backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString() }} onClick={() => {
-                        enableBodyScroll(document.querySelector('#mainScroll'))
-                        this.setState({ chatWithUser: undefined })
-                    }}><FontAwesomeIcon icon={faTimes} /></div>
+                    <div className="chatClose"
+                         style={{backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString()}}
+                         onClick={() => {
+                             enableBodyScroll(document.querySelector('#mainScroll'))
+                             this.setState({chatWithUser: undefined})
+                         }}><FontAwesomeIcon icon={faTimes}/></div>
                     <InfiniteScrollReverse
                         className="chatHandler"
                         hasMore={this.chatHasMore()}
                         isLoading={this.state.isChatLoading}
                         loadMore={this.chatLoadMore()}
                     >
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
-                        <MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello" />
+                        {
+                            this.state.chatMessages === undefined ? null :
+                                this.state.chatMessages.map((message) => {
+                                    console.log('cum')
+                                    return (
+                                        <MessageBlock
+                                            time="28/02/20 11:11"
+                                            author={ message.username }
+                                            profilePic={ staticData + message.userimagepath }
+                                            text={ message.text }
+                                            isMine={ this.state.login === message.userlogin }
+                                        />
+                                    )
+                                })
+                        }
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
+                        {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
                     </InfiniteScrollReverse>
                     <input className="chatInput" placeholder="Ваше сообщение"></input>
-                    <div className="sendInput"><FontAwesomeIcon icon={faPaperPlane} /></div>
+                    <div className="sendInput"><FontAwesomeIcon icon={faPaperPlane}/></div>
                 </div>
             </div>
         )
@@ -322,14 +359,19 @@ class PQuestion extends Component {
         if (question === undefined) {
             return null
         }
+        console.log(this.state.chatMessages)
         return (
             <Block color="white">
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">{question.title}</BlockTitle>
-                <QuestionBody max={-1} text={question.text} />
+                <QuestionBody max={-1} text={question.text}/>
                 <AbstractBlock color="white">
-                    <KeywordBlock subject={question.subject}><FontAwesomeIcon icon={faGraduationCap} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>{question.subject}</span></KeywordBlock>
-                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>4 days</span></KeywordBlock>
-                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>{question.cost}</span></KeywordBlock>
+                    <KeywordBlock subject={question.subject}><FontAwesomeIcon icon={faGraduationCap}
+                                                                              style={{fontSize: ".9em"}}/><span
+                        style={{marginLeft: "4px"}}>{question.subject}</span></KeywordBlock>
+                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{fontSize: ".9em"}}/><span
+                        style={{marginLeft: "4px"}}>4 days</span></KeywordBlock>
+                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{fontSize: ".9em"}}/><span
+                        style={{marginLeft: "4px"}}>{question.cost}</span></KeywordBlock>
                 </AbstractBlock>
                 <AbstractBlock color="white">
                     <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
@@ -342,7 +384,8 @@ class PQuestion extends Component {
                             })
                     }
                 </AbstractBlock>
-                <AuthorBlock author={question.askedbyname} date={question.date} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
+                <AuthorBlock author={question.askedbyname} date={question.date}
+                             profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin}/>
             </Block>
         )
     }
@@ -350,43 +393,59 @@ class PQuestion extends Component {
     render() {
         return (
             <div>
-                <Header prefix="Вопрос от" user={this.state.user} />
-                <Container>
-                    <main>
-                        <Navigation>
-                            <BigButtonWithIcon onClick={() => {
-                                history.push('/chat/CHAT_ID_HERE')
-                            }} backgroundColor="#ffe2e1" icon={faComments} title="Общий чат" />
-                            <InlineBigButtonWithIcon onClick={() => {
-                                history.goBack()
-                            }} icon={faArrowAltCircleLeft} title="Назад" />
-                        </Navigation>
-                        <Row>
-                            <Col xs={12} md={4}>
-                                <Block color="white">
-                                    {this.renderSideBar()}
-                                </Block>
-                            </Col>
-                            <Col xs={12} md={8}>
-                                {this.renderQuestion(this.state.question)}
+                {this.state.chatWithUser === undefined ? null : this.renderChatPopup()}
+                <div id="mainScroll">
+                    <Header prefix="Вопрос от" user={this.state.user}/>
+                    <Container>
+                        <main>
+                            <Navigation>
+                                <BigButtonWithIcon onClick={() => {
+                                    disableBodyScroll(document.querySelector('#mainScroll'))
+                                    this.loadChatMessages()
+                                }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат"/>
+                                <InlineBigButtonWithIcon onClick={() => {
+                                    history.goBack()
+                                }} icon={faArrowAltCircleLeft} title="Назад"/>
+                            </Navigation>
+                            <Row>
+                                <Col xs={12} md={4}>
+                                    <Block color="white">
+                                        {this.renderSideBar()}
+                                    </Block>
+                                </Col>
+                                <Col xs={12} md={8}>
+                                    {this.renderQuestion(this.state.question)}
 
-                                <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
-                                    {
-                                        this.state.question === undefined || this.state.question.answers === undefined ? null :
-                                            this.state.question.answers.map(answer => {
-                                                return (
-                                                    this.renderAnswer(answer)
-                                                )
-                                            })
-                                    }
-                                </Block>
-                            </Col>
-                        </Row>
-                    </main>
-                </Container>
+                                    <Block color="white">
+                                        <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
+                                        {
+                                            this.state.question === undefined || this.state.question.answers === undefined ? null :
+                                                this.state.question.answers.map(answer => {
+                                                    return (
+                                                        this.renderAnswer(answer)
+                                                    )
+                                                })
+                                        }
+                                    </Block>
+                                </Col>
+                            </Row>
+                        </main>
+                    </Container>
+                </div>
             </div>
         )
+    }
+
+    loadChatMessages() {
+        Post(questionsService + "chatmessages", {
+            questionid: this.state.question.id
+        }, (response) => {
+            this.setState({
+                chatMessages: response.data.messages,
+                chatWithUser: "all",
+            })
+            console.log(response.data.messages)
+        })
     }
 
     loadLogin() {
@@ -408,22 +467,22 @@ class PQuestion extends Component {
     loadDetailedQuestion() {
         Post(
             questionsService + "detailedquestion", {
-            id: parseInt(this.props.match.params.id)
-        }, (response) => {
-            this.setState({
-                question: response.data
-            })
-        }
+                id: parseInt(this.props.match.params.id)
+            }, (response) => {
+                this.setState({
+                    question: response.data
+                })
+            }
         )
     }
 
     loadComments() {
         Post(
             profileService + "comments", {
-            number: 5
-        }, (response) => {
-            this.setState({ comments: response.data.comments })
-        })
+                number: 5
+            }, (response) => {
+                this.setState({comments: response.data.comments})
+            })
     }
 }
 

@@ -109,3 +109,20 @@ type ConcernRequest struct {
 	AnswerID   int `json:"answerid"`
 	Coins      int `json:"coins"`
 }
+
+type ChatMessagesRequest struct {
+	services.SessionableRequest
+	QuestionID int `json:"questionid"`
+}
+
+type ChatMessage struct {
+	UserName      string `json:"username"`
+	UserLogin     string `json:"userlogin"`
+	UserImagePath string `json:"userimagepath"`
+	Time          int64  `json:"usertime"`
+	Text          string `json:"text"`
+}
+
+type ChatMessagesResponse struct {
+	Messages []ChatMessage `json:"messages"`
+}

@@ -77,8 +77,17 @@ func main() {
 		upvoter1 := db.Upvoter{User: vas, Coins: 20}
 		upvoter2 := db.Upvoter{User: dich, Coins: 10}
 
-		//dbi.Create(&answer1)
-		//dbi.Create(&answer2)
+		m1 := db.ChatMessage{
+			User: vas,
+			Text: "Привет, есть вопросы?",
+			Time: time.Now(),
+		}
+
+		m2 := db.ChatMessage{
+			User: dich,
+			Text: "Прив!, неа, пока",
+			Time: time.Now(),
+		}
 
 		question1 := &db.Question{
 			Title:        "Решение задачи по Алгебре",
@@ -91,12 +100,13 @@ func main() {
 			Tags:         []db.QuestionTag{tag1, tag2},
 			Answers:      []db.Answer{answer1, answer2},
 			Upvoters:     []db.Upvoter{upvoter1, upvoter2},
+			ChatMessages: []db.ChatMessage{m1, m2},
 		}
 
 		dbi.Create(question1)
 	}
 
-	dbi.Updates(vas)
+	//dbi.Updates(vas)
 
 	// setup workers
 	sc := workers.SessionCollector{}

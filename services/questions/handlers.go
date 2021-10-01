@@ -285,3 +285,31 @@ func handleConcern(request ConcernRequest) (status int) {
 
 	return http.StatusOK
 }
+
+func handleChatMessages(request ChatMessagesRequest) (response ChatMessagesResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var question db.Question
+	dbi.
+		Preload("ChatMessages").
+		Preload("ChatMessages.User").
+		First(&question, "id = ?", request.QuestionID)
+
+	for _, message := range question.ChatMessages {
+		response.Messages = append(response.Messages, ChatMessage{
+			UserName:      message.User.Name,
+			UserLogin:     message.User.Login,
+			UserImagePath: message.User.Login + ".png",
+			Time:          message.Time.UnixNano(),
+			Text:          message.Text,
+		})
+	}
+
+	status = http.StatusOK
+	return
+}
