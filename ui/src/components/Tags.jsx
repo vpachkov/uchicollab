@@ -17,7 +17,7 @@ export class Tags extends Component {
 
     componentDidMount() {
         this.loadTags()
-        this.props.onChange(this.state.tags)
+        this.props.onChange([...this.state.tags])
     }
 
     render() {
@@ -30,7 +30,7 @@ export class Tags extends Component {
                         const tags = this.state.tags
                         tags.add(selectedOption.value)
                         this.setState({ tags: tags })
-                        this.props.onChange(tags)
+                        this.props.onChange([...this.state.tags])
                     } }
                     options={ this.state.loadedTags }
                     placeholder="Поиск тега"
@@ -50,7 +50,7 @@ export class Tags extends Component {
                                                 const tags = this.state.tags
                                                 tags.delete(tag)
                                                 this.setState({ tags: tags })
-                                                this.props.onChange(tags)
+                                                this.props.onChange([...this.state.tags])
                                             } }
                                         />
                                     </KeywordBlock>

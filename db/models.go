@@ -54,16 +54,18 @@ type Question struct {
 	OpenerID int
 	Opener   *User `gorm:"foreignkey:OpenerID"`
 
-	Title       string
-	Description string
-	OpenedTime  time.Time
-	PointCost   int
+	Title        string
+	Description  string
+	Subject      string
+	OpenedTime   time.Time
+	DeadlineTime time.Time
+	Cost         int
 
 	Tags []QuestionTag `gorm:"many2many:question_tag;"`
 }
 
 type QuestionTag struct {
-	ID     string
+	ID        string
 	Questions []Question `gorm:"many2many:question_tag;"`
 }
 
