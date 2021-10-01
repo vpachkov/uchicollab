@@ -4,12 +4,13 @@ import { AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLi
 import { ProgressBar } from "../components/ProgressBar";
 import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
+import { Header, Navigation } from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faThumbsUp, faHeart, faGraduationCap, faCheck, faComments } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
 import { Post, profileService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
@@ -31,12 +32,23 @@ class PQuestion extends Component {
 
         const { cookies } = props;
         this.state = {
+            user: {
+                name: "Russ Cox",
+                profilePic: undefined,
+                coins: 0,
+                questions: 0,
+                likesRecieved: 0,
+                answers: 0,
+                bestAnswersRate: 0,
+                subscribedTages: ["Math", "Russian"],
+            },
+
             userid: 0,
             session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
             question: {
                 id: 0,
                 title: "Uncaught (in promise): FirebaseError",
-                subject: "Math",
+                subject: "Алгебра",
                 text: "I'm getting the error below. My problem is NOT with the actual error but the fact that it is saying that the error was Uncaught. If you take a look at my auth.service.ts and sign-in.component.ts files I am catching the error. I'm getting the error below. My problem is NOT with the actual error but the fact that it is saying that the error was Uncaught. If you take a look at my auth.service.ts and sign-in.component.ts files I am catching the error.",
                 tags: ["Book", "School program"],
                 date: "28 may 2020",
@@ -157,15 +169,20 @@ class PQuestion extends Component {
         // FIXME: NEW GRAY COLOR
         var bc = "lightgray"
         if (answer.best) {
-            bc = "green"
+            bc = "#e7d27c"
         }
         return (
             <Row style={{ marginTop: "16px" }}>
-                <MiniQuestion borderColor={bc}>
-                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#00ee00" icon={faCheck} /> Awarded answer</Span> : null}
+                <MiniQuestion borderColor={bc} style={{ cursor: "default" }}>
+                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#e7d27c" icon={faStar} /> Лучший ответ</Span> : null}
                     <QuestionBody max={-1} text={answer.text} />
                     <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
-                        <div style={{ width: "100%" }}><Span fontWeight="regular" color={this.state.maincolor}>{answer.likes} <FontAwesomeIcon color="#ee0000" icon={this.isLikedAnswer(answer) ? faHeart : fasHeart} onClick={() => { this.onLikeAnswer(answer) }} /></Span></div>
+                        <div style={{ width: "100%" }}>
+                            <Span fontWeight="regular" color={this.state.maincolor}>{answer.likes}
+                                <FontAwesomeIcon style={{ marginLeft: "4px", cursor: "pointer" }} color="#FAA0A0" icon={this.isLikedAnswer(answer) ? faHeart : fasHeart} onClick={() => { this.onLikeAnswer(answer) }} />
+                            </Span>
+                            <FontAwesomeIcon style={{ marginLeft: "12px", cursor: "pointer" }} color="lightgray" icon={faComments} onClick={() => { }} />
+                        </div>
                         <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic} authorid={answer.authorid} />
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
@@ -228,13 +245,14 @@ class PQuestion extends Component {
         return (
             <Block color="white">
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">{question.title}</BlockTitle>
+                <QuestionBody max={-1} text={question.text} />
                 <AbstractBlock color="white">
-                    <KeywordBlock backgroundColor={this.getSubjectBackgroundColor()} color={this.getSubjectTextColor()}><FontAwesomeIcon icon={faGraduationCap} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>{question.subject}</span></KeywordBlock>
+                    <KeywordBlock subject={question.subject}><FontAwesomeIcon icon={faGraduationCap} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>{question.subject}</span></KeywordBlock>
                     <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>4 days</span></KeywordBlock>
                     <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{ fontSize: ".9em" }} /><span style={{ marginLeft: "4px" }}>{question.cost}</span></KeywordBlock>
                 </AbstractBlock>
-                <QuestionBody max={-1} text={question.text} />
                 <AbstractBlock color="white">
+                    <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                     {
                         question.tags === undefined ? null :
                             question.tags.map(tag => {
@@ -252,48 +270,17 @@ class PQuestion extends Component {
     render() {
         return (
             <div>
-                <header>
-                    <Container>
-                        <AbstractBetweenSpacingBlock>
-                            <div>
-                                <div className="greetingName" style={{ color: this.state.maincolor }}>
-                                    Вопрос по матемтике
-                                </div>
-                            </div>
-                            <div>
-                                <Span color={this.state.maincolor}>399 <FontAwesomeIcon icon={faCoins} /></Span>
-                                <Span color={this.state.maincolor}>Russ Cox <FontAwesomeIcon icon={faUser} /></Span>
-                            </div>
-                        </AbstractBetweenSpacingBlock>
-                    </Container>
-                </header>
-                {/* Rerender wave on width change to get the right amount of points */}
-                <Wave className="wave" fill="url(#gradient)"
-                    paused={false}
-                    options={{
-                        height: 8,
-                        amplitude: 20,
-                        speed: 0.10,
-                        points: 10
-                    }}
-                >
-                    <defs>
-                        <linearGradient id="gradient" gradientTransform="rotate(90)">
-                            <stop offset="0%" stopColor="rgb(161, 178, 190)" />
-                            <stop offset="60%" stopColor="#f4f5f6" />
-                        </linearGradient>
-                    </defs>
-                </Wave>
+                <Header prefix="Вопрос от" user={this.state.user} />
                 <Container>
                     <main>
-                        <ButtonHandler>
+                        <Navigation>
+                            <BigButtonWithIcon onClick={() => {
+                                history.push('/chat/CHAT_ID_HERE')
+                            }} backgroundColor="#ffe2e1" icon={faComments} title="Общий чат" />
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
                             }} icon={faArrowAltCircleLeft} title="Назад" />
-                            <InlineBigButton onClick={() => {
-                                history.push('/')
-                            }} title="Главная" />
-                        </ButtonHandler>
+                        </Navigation>
                         <Row>
                             <Col xs={12} md={4}>
                                 <Block color="white">

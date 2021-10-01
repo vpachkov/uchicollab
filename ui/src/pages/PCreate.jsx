@@ -2,24 +2,24 @@ import React, { Component } from 'react'
 import { User } from "../components/User";
 import { HeaderSquareBlock, AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
-import { Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
+import { CustomSelect, Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Container, Row} from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import Wave from 'react-wavify'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowAltCircleLeft, faCoins, faTimes, faUser} from '@fortawesome/free-solid-svg-icons'
-import {Post, profileService, questionsService} from "../config";
-import {Cookies, withCookies} from 'react-cookie';
-import {instanceOf} from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowAltCircleLeft, faCoins, faTimes, faUser } from '@fortawesome/free-solid-svg-icons'
+import { Post, profileService, questionsService } from "../config";
+import { Cookies, withCookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 import Select from 'react-select';
-import {ProfileLogo} from "../components/ProfileLogo";
+import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
-import { Header } from "../components/Header";
+import { Header, Navigation } from "../components/Header";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Tags} from "../components/Tags";
-import {SubjectColor, Subjects} from "../constants";
+import { Tags } from "../components/Tags";
+import { SubjectColor, Subjects } from "../constants";
 
 class PCreate extends Component {
     constructor(props) {
@@ -51,20 +51,18 @@ class PCreate extends Component {
 
         return (
             <div>
-                <Select
-                    className="textSelector"
+                <CustomSelect
                     value={selectedSubjectOption}
-                    onChange={ (selectedOption) => {
+                    onChange={(selectedOption) => {
                         this.setState({
                             selectedSubjectOption: selectedOption,
-                            maincolor: SubjectColor[selectedOption.value]
                         });
-                    } }
-                    options={ Subjects }
+                    }}
+                    options={Subjects}
                     placeholder="Выберите предмет"
                 />
                 <Tags
-                    onChange={ (tags) => {
+                    onChange={(tags) => {
                         this.setState({ tags: tags })
                     }}
                 />
@@ -74,8 +72,8 @@ class PCreate extends Component {
                 <input className="inputBox" type="number" rows="4" placeholder="Стоимость"></input>
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input className="inputBox" type="date" rows="4"></input>
-                <div style={{textAlign: "right", marginTop: "16px"}}>
-                    <Button title="Проверьте Ваш вопрос"/>
+                <div style={{ textAlign: "right", marginTop: "16px" }}>
+                    <Button title="Проверьте Ваш вопрос" />
                 </div>
             </div>
         )
@@ -84,17 +82,14 @@ class PCreate extends Component {
     render() {
         return (
             <div>
-                <Header prefix="Создай вопрос," user={this.state.user}/>
+                <Header prefix="Создай вопрос," user={this.state.user} />
                 <Container>
                     <main>
-                        <ButtonHandler>
+                        <Navigation>
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
                             }} icon={faArrowAltCircleLeft} title="Назад" />
-                            <InlineBigButton onClick={() => {
-                                history.push('/')
-                            }} title="Главная" />
-                        </ButtonHandler>
+                        </Navigation>
                         <Row>
                             <Col xs={12} md={4}>
                                 <Block color="white">
@@ -110,7 +105,7 @@ class PCreate extends Component {
                                             <Col>
                                                 <QuestionTitle>Рещение задачи по ТСАУ</QuestionTitle>
                                                 <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
-                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0}/>
+                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0} />
                                             </Col>
                                         </Row>
                                     </MiniQuestion>

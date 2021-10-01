@@ -12,8 +12,10 @@ import { Post, profileService, questionsService, staticData } from "../config";
 
 export class MiniQuestion extends Component {
     render() {
+        var style = this.props.style === undefined ? {} : this.props.style
+        style["borderColor"] = this.props.borderColor === undefined ? "lightgray" : this.props.borderColor
         return (
-            <div onClick={this.props.onClick} className="miniQuestion" style={{ borderColor: this.props.borderColor === undefined ? "lightgray" : this.props.borderColor }}>
+            <div onClick={this.props.onClick} className="miniQuestion" style={style}>
                 {this.props.children}
             </div>
         )

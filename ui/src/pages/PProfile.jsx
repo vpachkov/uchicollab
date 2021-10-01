@@ -17,7 +17,7 @@ import {
     HeaderSquareBlock
 } from "../components/Blocks";
 import { BriefQuestion } from "../components/Questions";
-import { Header } from "../components/Header";
+import { Header, Navigation } from "../components/Header";
 import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
 import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components/Buttons";
@@ -117,14 +117,7 @@ class PProfile extends Component {
                 <Header prefix="Пользователь" user={this.state.user} />
                 <Container>
                     <main>
-                        <ButtonHandler>
-                            <InlineBigButton onClick={() => {
-                                history.push('/')
-                            }} title="Главная" />
-                            <InlineBigButton onClick={() => {
-                                history.push('/help')
-                            }} title="Помощь" />
-                        </ButtonHandler>
+                        <Navigation/>
                         <Row>
                             {this.isUserProfile() ? <Col xs={12} lg={12}><Block color="white">
                                 <AbstractBlock color="white">

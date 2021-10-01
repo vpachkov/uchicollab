@@ -3,12 +3,12 @@ import '../css/Main.css';
 import { ProfileLogo } from "./ProfileLogo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
-import {Subjects, SubjectColor} from "../constants";
+import { Subjects, SubjectColor } from "../constants";
 
 export class Block extends Component {
     render() {
         return (
-            <div className="block" style={{backgroundColor: this.props.color}}>
+            <div className="block" style={{ backgroundColor: this.props.color }}>
                 {this.props.children}
             </div>
         )
@@ -29,7 +29,7 @@ export class AbstractBlock extends Component {
 export class BlockTitle extends Component {
     render() {
         return (
-            <div className="blockTitle" style={{color: this.props.color, fontWeight: this.props.text}}>
+            <div className="blockTitle" style={{ color: this.props.color, fontWeight: this.props.text }}>
                 {this.props.children}
             </div>
         )
@@ -39,7 +39,7 @@ export class BlockTitle extends Component {
 export class BlockText extends Component {
     render() {
         return (
-            <div className="blockText" style={{color: this.props.color, fontWeight: this.props.text}}>
+            <div className="blockText" style={{ color: this.props.color, fontWeight: this.props.text }}>
                 {this.props.children}
             </div>
         )
@@ -49,7 +49,7 @@ export class BlockText extends Component {
 export class BlockLine extends Component {
     render() {
         return (
-            <div className="blockLine" style={{color: this.props.color, fontWeight: this.props.text}}>
+            <div className="blockLine" style={{ color: this.props.color, fontWeight: this.props.text }}>
                 {this.props.children}
             </div>
         )
@@ -59,7 +59,7 @@ export class BlockLine extends Component {
 export class Span extends Component {
     render() {
         return (
-            <div className="spanInBlock" style={{color: this.props.color, fontWeight: this.props.fontWeight}}>
+            <div className="spanInBlock" style={{ color: this.props.color, fontWeight: this.props.fontWeight }}>
                 {this.props.children}
             </div>
         )
@@ -69,7 +69,7 @@ export class Span extends Component {
 export class BlockSpacing extends Component {
     render() {
         return (
-            <div style={{width: "100%", height: this.props.size}}></div>
+            <div style={{ width: "100%", height: this.props.size }}></div>
         )
     }
 }
@@ -81,17 +81,17 @@ export class CommentBlock extends Component {
             if (i < this.props.raiting) {
                 stars.push(<FontAwesomeIcon icon={faStar} />)
             } else {
-                stars.push(<FontAwesomeIcon icon={faStar} style={{opacity: ".3"}}/>)
+                stars.push(<FontAwesomeIcon icon={faStar} style={{ opacity: ".3" }} />)
             }
         }
         return (
-            <div style={{color: this.props.textColor}}>
-                <div className="commentBlock" style={{backgroundColor: this.props.color, color: this.props.textColor}}>
+            <div style={{ color: this.props.textColor }}>
+                <div className="commentBlock" style={{ backgroundColor: this.props.color, color: this.props.textColor }}>
                     {this.props.children}
                     {stars}
                 </div>
-                <div className="commentAuthorBlock" style={{color: this.props.textColor}}>
-                    <span style={{marginRight: "8px"}}>{this.props.user.name}</span><ProfileLogo height="16px" width="16px" src={this.props.user.profilePic}/>
+                <div className="commentAuthorBlock" style={{ color: this.props.textColor }}>
+                    <span style={{ marginRight: "8px" }}>{this.props.user.name}</span><ProfileLogo height="16px" width="16px" src={this.props.user.profilePic} />
                 </div>
             </div>
         )
@@ -135,7 +135,7 @@ export class AbstractBetweenSpacingBlock extends Component {
 export class HeaderSquareBlock extends Component {
     render() {
         return (
-            <div className="headerSquareBlock" style={{backgroundColor: this.props.color}}>
+            <div className="headerSquareBlock" style={{ backgroundColor: this.props.color }}>
                 {this.props.children}
             </div>
         )
@@ -145,7 +145,7 @@ export class HeaderSquareBlock extends Component {
 export class SquareBlock extends Component {
     render() {
         return (
-            <div className="squareBlock" style={{backgroundColor: this.props.color}}>
+            <div className="squareBlock" style={{ backgroundColor: this.props.color }}>
                 {this.props.children}
             </div>
         )
@@ -155,7 +155,7 @@ export class SquareBlock extends Component {
 export class SquareBlockImage extends Component {
     render() {
         return (
-            <div className="squareBlockImage" style={{backgroundColor: this.props.color}} onClick={this.props.onClick}>
+            <div className="squareBlockImage" style={{ backgroundColor: this.props.color }} onClick={this.props.onClick}>
                 {this.props.children}
             </div>
         )
@@ -165,7 +165,7 @@ export class SquareBlockImage extends Component {
 export class SquareBlockText extends Component {
     render() {
         return (
-            <div className="squareBlockText" style={{color: this.props.color}}>
+            <div className="squareBlockText" style={{ color: this.props.color }}>
                 {this.props.children}
             </div>
         )
@@ -173,11 +173,19 @@ export class SquareBlockText extends Component {
 }
 
 export class KeywordBlock extends Component {
-    
-    
     render() {
+        var tinycolor = require("tinycolor2");
+        var backgroundColor = this.props.backgroundColor
+        var color = this.props.color
+        for (var subj of Subjects) {
+            if (subj.label === this.props.subject) {
+                backgroundColor = tinycolor(SubjectColor[subj.value]).lighten(10).toString()
+                color = tinycolor(backgroundColor).darken(50).toString()
+            }
+        }
+
         return (
-            <div className="keywordBlock" style={{backgroundColor: this.props.backgroundColor, color: this.props.color}}>
+            <div className="keywordBlock" style={{ backgroundColor: backgroundColor, color: color }}>
                 {this.props.children}
             </div>
         )
@@ -188,7 +196,7 @@ export class AuthorBlock extends Component {
     render() {
         return (
             <div className="commentAuthorBlock">
-                <span style={{ marginRight: "8px" }}>{this.props.date ? this.props.date + "," : ""}</span> <ProfileLogo height="16px" width="16px" src={this.props.profilePic} /><span><a href={`/user/`+this.props.authorid}>{this.props.author}</a></span>
+                <span style={{ marginRight: "8px" }}>{this.props.date ? this.props.date + "," : ""}</span> <ProfileLogo height="16px" width="16px" src={this.props.profilePic} /><span><a href={`/user/` + this.props.authorid}>{this.props.author}</a></span>
             </div>
         )
     }

@@ -1,9 +1,9 @@
-import {AbstractBlock, BlockLine, KeywordBlock} from "./Blocks";
-import Select from "react-select";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import React, {Component} from "react";
-import {Post, questionsService} from "../config";
+import { AbstractBlock, BlockLine, KeywordBlock } from "./Blocks";
+import { CustomSelect, Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import React, { Component } from "react";
+import { Post, questionsService } from "../config";
 
 
 export class Tags extends Component {
@@ -23,16 +23,15 @@ export class Tags extends Component {
     render() {
         return (
             <div>
-                <Select
+                <CustomSelect
                     value=""
-                    className="textSelector"
-                    onChange={ (selectedOption) => {
+                    onChange={(selectedOption) => {
                         const tags = this.state.tags
                         tags.add(selectedOption.value)
                         this.setState({ tags: tags })
                         this.props.onChange([...this.state.tags])
-                    } }
-                    options={ this.state.loadedTags }
+                    }}
+                    options={this.state.loadedTags}
                     placeholder="Поиск тега"
                 />
                 <AbstractBlock color="white">
@@ -41,17 +40,17 @@ export class Tags extends Component {
                             [...this.state.tags].map(tag => {
                                 return (
                                     <KeywordBlock>
-                                        <span style={{ marginRight: "4px" }}>{ tag }</span>
+                                        <span style={{ marginRight: "4px" }}>{tag}</span>
                                         <FontAwesomeIcon
                                             color="#aaaaaa"
-                                            icon={ faTimes }
+                                            icon={faTimes}
                                             style={{ fontSize: ".8em" }}
-                                            onClick={ () => {
+                                            onClick={() => {
                                                 const tags = this.state.tags
                                                 tags.delete(tag)
                                                 this.setState({ tags: tags })
                                                 this.props.onChange([...this.state.tags])
-                                            } }
+                                            }}
                                         />
                                     </KeywordBlock>
                                 )

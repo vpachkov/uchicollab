@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { User } from "../components/User";
 import { AuthorBlock, HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
-import { Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
+import { CustomSelect, Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { BriefQuestion } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
@@ -13,7 +13,6 @@ import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire
 import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
-import Select from 'react-select';
 import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
 import { Switch } from 'react-switch-input';
@@ -24,19 +23,24 @@ import { utc } from 'moment'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SubjectColor, Subjects } from "../constants";
 import { parse } from "@fortawesome/fontawesome-svg-core";
-
-const customStyles = {
-    menu: (provided, state) => ({
-        ...provided,
-        color: "rgb(69, 68, 79)",
-    }),
-}
+import { Header, Navigation } from '../components/Header';
 
 class PHelp extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            user: {
+                name: "Russ Cox",
+                profilePic: undefined,
+                coins: 0,
+                questions: 0,
+                likesRecieved: 0,
+                answers: 0,
+                bestAnswersRate: 0,
+                subscribedTages: ["Math", "Russian"],
+            },
+
             maincolor: "rgb(62, 134, 247)",
             selectedSubjectOption: null,
             tags: [],
@@ -56,9 +60,7 @@ class PHelp extends Component {
 
         return (
             <div>
-                <Select
-                    styles={customStyles}
-                    className="textSelector"
+                <CustomSelect
                     value={selectedSubjectOption}
                     onChange={(selectedOption) => {
                         this.setState({
@@ -68,15 +70,6 @@ class PHelp extends Component {
                     }}
                     options={Subjects}
                     placeholder="Выберите предмет"
-                    theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 8,
-                        colors: {
-                            ...theme.colors,
-                            primary25: '#ddd6f3',
-                            primary: '#ddd6f3',
-                        },
-                    })}
                 />
                 <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                 <Tags
@@ -112,12 +105,6 @@ class PHelp extends Component {
                     }}
                     className="inputBox" type="datetime-local" rows="4"
                 />
-                <Switch
-                    name={"themeTwo"}
-                    theme={"one"}
-                    labelRight="Исключить отвеченные"
-                    onChange={() => { }}
-                />
             </div>
         )
     }
@@ -125,55 +112,14 @@ class PHelp extends Component {
     render() {
         return (
             <div>
-                <header>
-                    <Container>
-                        <AbstractBetweenSpacingBlock>
-                            <div>
-                                <div className="greetingName" style={{ color: this.state.maincolor }}>
-                                    Помощь
-                                </div>
-                            </div>
-                            <div>
-                                <HeaderSquareBlock color="white"><SquareBlockImage
-                                ><FontAwesomeIcon
-                                        color="rgb(223, 223, 228)"
-                                        icon={faCoins} /></SquareBlockImage><SquareBlockText
-                                            color="rgb(69, 68, 79)">12</SquareBlockText></HeaderSquareBlock>
-                                <HeaderSquareBlock color="white"><SquareBlockImage
-                                ><FontAwesomeIcon
-                                        color="rgb(223, 223, 228)"
-                                        icon={faUser} /></SquareBlockImage></HeaderSquareBlock>
-                            </div>
-                        </AbstractBetweenSpacingBlock>
-                    </Container>
-                </header>
-                {/* Rerender wave on width change to get the right amount of points */}
-                <Wave className="wave" fill="url(#gradient)"
-                    paused={false}
-                    options={{
-                        height: 8,
-                        amplitude: 20,
-                        speed: 0.10,
-                        points: 10
-                    }}
-                >
-                    <defs>
-                        <linearGradient id="gradient" gradientTransform="rotate(90)">
-                            <stop offset="0%" stopColor="rgb(161, 178, 190)" />
-                            <stop offset="60%" stopColor="#f4f5f6" />
-                        </linearGradient>
-                    </defs>
-                </Wave>
+                <Header prefix="Список вопросов," user={this.state.user} />
                 <Container>
                     <main>
-                        <ButtonHandler>
+                        <Navigation>
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
                             }} icon={faArrowAltCircleLeft} title="Назад" />
-                            <InlineBigButton onClick={() => {
-                                history.push('/')
-                            }} title="Главная" />
-                        </ButtonHandler>
+                        </Navigation>
                         <Row>
                             <Col xs={12} md={4}>
                                 <Block color="white">

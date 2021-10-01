@@ -29,33 +29,9 @@ class PLogin extends Component {
 
         const { cookies } = props;
         this.state = {
-            maincolor: "rgb(62, 134, 247)",
-            session: cookies.get('session') || '1c8fee65-2a98-4545-9f22-263819a52b7e',
-            selectedSubjectOption: null,
-            selectedTagsOption: null,
-            tags: [],
+            
         };
     }
-
-    handleSubjectChange = (selectedOption) => {
-        this.setState({ selectedSubjectOption: selectedOption, maincolor: this.colors[selectedOption.value] });
-    };
-
-    handleTagAdd = (selectedOption) => {
-        var tags = this.state.tags
-        tags.push(selectedOption.value)
-        console.log(tags)
-        this.setState({ tags: tags });
-    };
-
-    handleTagRemove = (selectedOption) => {
-        var tags = this.state.tags
-        var index = tags.indexOf(selectedOption);
-        if (index !== -1) {
-            tags.splice(index, 1);
-        }
-        this.setState({ tags: tags });
-    };
 
     componentDidMount() {
         // this.loadComments()
@@ -65,122 +41,10 @@ class PLogin extends Component {
 
     }
 
-    renderTextInput() {
-        const selectedSubjectOption = this.state.selectedSubjectOption;
-        const selectedTagsOption = this.state.selectedTagsOption;
-
-        return (
-            <div>
-                <Select
-                    className="textSelector"
-                    value={selectedSubjectOption}
-                    onChange={this.handleSubjectChange}
-                    options={this.options}
-                    placeholder="Выберите предмет"
-                />
-                <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
-                <textarea className="textBox" rows="4" placeholder="Название"></textarea>
-                <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
-                <input className="inputBox" type="number" rows="4" placeholder="Стоимость"></input>
-                <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
-                <input className="inputBox" type="date" rows="4"></input>
-                <BlockLine color="rgb(133, 133, 138)">Добавьте тэги</BlockLine>
-                <Select
-                    className="textSelector"
-                    value={selectedTagsOption}
-                    onChange={this.handleTagAdd}
-                    options={this.options}
-                    placeholder="Поиск тега"
-                />
-                <AbstractBlock color="white">
-                    {
-                        this.state.tags === undefined ? null :
-                            this.state.tags.map(tag => {
-                                return (
-                                    <KeywordBlock><span style={{ marginRight: "4px" }}>{tag}</span><FontAwesomeIcon color="#aaaaaa" icon={faTimes} style={{ fontSize: ".8em" }} onClick={() => { this.handleTagRemove(tag) }} /></KeywordBlock>
-                                )
-                            })
-                    }
-                </AbstractBlock>
-                <div style={{ textAlign: "right", marginTop: "16px" }}>
-                    <Button title="Проверьте Ваш вопрос" />
-                </div>
-            </div>
-        )
-    }
-
     render() {
         return (
             <div>
-                <header>
-                    <Container>
-                        <AbstractBetweenSpacingBlock>
-                            <div>
-                                <div className="greetingName" style={{ color: this.state.maincolor }}>
-                                    С чем тебе помочь?
-                                </div>
-                            </div>
-                            <div>
-                                <Span color={this.state.maincolor}>399 <FontAwesomeIcon icon={faCoins} /></Span>
-                                <Span color={this.state.maincolor}>Russ Cox <FontAwesomeIcon icon={faUser} /></Span>
-                            </div>
-                        </AbstractBetweenSpacingBlock>
-                    </Container>
-                </header>
-                {/* Rerender wave on width change to get the right amount of points */}
-                <Wave className="wave" fill="url(#gradient)"
-                    paused={false}
-                    options={{
-                        height: 8,
-                        amplitude: 20,
-                        speed: 0.10,
-                        points: 10
-                    }}
-                >
-                    <defs>
-                        <linearGradient id="gradient" gradientTransform="rotate(90)">
-                            <stop offset="0%" stopColor="rgb(161, 178, 190)" />
-                            <stop offset="60%" stopColor="#f4f5f6" />
-                        </linearGradient>
-                    </defs>
-                </Wave>
-                <Container>
-                    <main>
-                        <ButtonHandler>
-                            <InlineBigButtonWithIcon onClick={() => {
-                                history.goBack()
-                            }} icon={faArrowAltCircleLeft} title="Назад" />
-                            <InlineBigButton onClick={() => {
-                                history.push('/')
-                            }} title="Главная" />
-                        </ButtonHandler>
-                        <Row>
-                            <Col xs={12} md={4}>
-                                <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Сформулировать вопрос</BlockTitle>
-                                    {this.renderTextInput()}
-                                </Block>
-                            </Col>
-                            <Col xs={12} md={8}>
-                                <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
-                                    <MiniQuestion>
-                                        <Row>
-                                            <Col xs={4} lg={2}>
-                                                <QuestionLable>Ответов 132</QuestionLable>
-                                            </Col>
-                                            <Col xs={8} lg={10}>
-                                                <QuestionTitle>Рещение задачи по ТСАУ</QuestionTitle>
-                                                <QuestionBody max={128} text="Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative " />
-                                                <AuthorBlock author={"Русс"} date={"28"} profilePic={""} authorid={0} />
-                                            </Col>
-                                        </Row>
-                                    </MiniQuestion>
-                                </Block>
-                            </Col>
-                        </Row>
-                    </main>
-                </Container>
+                Hey
             </div>
         )
     }
@@ -195,4 +59,4 @@ class PLogin extends Component {
     }
 }
 
-export default withCookies(PCreate);
+export default withCookies(PLogin);

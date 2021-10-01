@@ -25,16 +25,14 @@
     font-size: .8em
     font-weight: bold
     text-transform: uppercase
-    background-color: white
+    background-color: #d7f4d2
     transition: .3s
     cursor: pointer
-    border: 2px solid rgb(62, 134, 247)
-    color: rgb(62, 134, 247)
+    border: 0px solid rgb(62, 134, 247)
+    color: darken(#d7f4d2, 50%)
 
     &:hover
-        box-shadow: 0 0px 20px rgba(0,0,0,0.18)
-        background-color: rgb(62, 134, 247)
-        color: white
+        background-color: darken(#d7f4d2, 6%)
         transition: .3s
 
 .textSelector
@@ -43,8 +41,8 @@
 
 .inputBox
     width: 100%
-    padding: 12px 
-    border-radius: 4px
+    padding: 6px 12px
+    border-radius: 8px
     border: 1px solid lightgray
     overflow: auto
     outline: none
@@ -52,11 +50,11 @@
     -moz-box-shadow: none
     box-shadow: none
     resize: none
-    transition: .3s
+    transition: .1s
 
     &:focus
-        border: 2px solid rgb(62, 134, 247)
-        padding: 11px
+        border: 2px solid darken(#d7f4d2, 50%)
+        padding: 5px 11px
         transition: .1s
 
 .inlineInputBox
@@ -74,7 +72,7 @@
     transition: .3s
 
     &:focus
-        border: 2px solid rgb(62, 134, 247)
+        border: 2px solid darken(#d7f4d2, 50%)
         padding: 11px
         transition: .1s
 
@@ -92,7 +90,7 @@
     transition: .1s
 
     &:focus
-        border: 2px solid rgb(62, 134, 247)
+        border: 2px solid darken(#d7f4d2, 50%)
         padding: 11px
         transition: .1s
     

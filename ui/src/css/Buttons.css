@@ -24,16 +24,14 @@
   font-size: 0.8em;
   font-weight: bold;
   text-transform: uppercase;
-  background-color: white;
+  background-color: #d7f4d2;
   transition: 0.3s;
   cursor: pointer;
-  border: 2px solid #3e86f7;
-  color: #3e86f7;
+  border: 0px solid #3e86f7;
+  color: #39a027;
 }
 .button:hover {
-  box-shadow: 0 0px 20px rgba(0, 0, 0, 0.18);
-  background-color: #3e86f7;
-  color: white;
+  background-color: #c1eeb9;
   transition: 0.3s;
 }
 
@@ -44,8 +42,8 @@
 
 .inputBox {
   width: 100%;
-  padding: 12px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: 1px solid lightgray;
   overflow: auto;
   outline: none;
@@ -53,11 +51,11 @@
   -moz-box-shadow: none;
   box-shadow: none;
   resize: none;
-  transition: 0.3s;
+  transition: 0.1s;
 }
 .inputBox:focus {
-  border: 2px solid #3e86f7;
-  padding: 11px;
+  border: 2px solid #39a027;
+  padding: 5px 11px;
   transition: 0.1s;
 }
 
@@ -76,7 +74,7 @@
   transition: 0.3s;
 }
 .inlineInputBox:focus {
-  border: 2px solid #3e86f7;
+  border: 2px solid #39a027;
   padding: 11px;
   transition: 0.1s;
 }
@@ -95,7 +93,7 @@
   transition: 0.1s;
 }
 .textBox:focus {
-  border: 2px solid #3e86f7;
+  border: 2px solid #39a027;
   padding: 11px;
   transition: 0.1s;
 }

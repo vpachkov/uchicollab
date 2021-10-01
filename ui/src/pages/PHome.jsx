@@ -17,7 +17,7 @@ import {
     HeaderSquareBlock
 } from "../components/Blocks";
 import { BriefQuestion } from "../components/Questions";
-import { Header } from "../components/Header";
+import { Header, Navigation } from "../components/Header";
 import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
 import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components/Buttons";
@@ -108,14 +108,11 @@ class PHome extends Component {
                 <Header prefix="Привет," user={this.state.user} />
                 <Container>
                     <main>
-                        <ButtonHandler>
+                        <Navigation>
                             <BigButtonWithIcon onClick={() => {
                                 history.push('/create')
-                            }} color="#551a8b" backgroundColor="#ddd6f3" icon={faPlus} title="новый вопрос" />
-                            <InlineBigButton onClick={() => {
-                                history.push('/help')
-                            }} title="Помощь" />
-                        </ButtonHandler>
+                            }} backgroundColor="#ddd6f3" icon={faPlus} title="новый вопрос" />
+                        </Navigation>
                         <Row>
                             <Col sm={12} sm={12}>
                                 <Block color="white">

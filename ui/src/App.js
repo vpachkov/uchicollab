@@ -10,6 +10,7 @@ import { useHistory, withRouter } from "react-router-dom";
 
 import history from './history'
 import PProfile from './pages/PProfile';
+import PLogin from './pages/PLogin';
 
 function App() {
     return (
@@ -20,6 +21,8 @@ function App() {
                 <Route exact path="/create" render={(props) => <PCreate/>}>
                 </Route>
                 <Route exact path="/help" render={(props) => <PHelp/>}>
+                </Route>
+                <Route exact path="/login" render={(props) => <PLogin/>}>
                 </Route>
                 <Route
                     exact path="/question/:id"
