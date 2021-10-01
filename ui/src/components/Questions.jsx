@@ -70,10 +70,7 @@ export class BriefQuestion extends Component {
                         <QuestionTitle>{question.title}</QuestionTitle>
                         <QuestionBody max={128} text={question.description} />
                         <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
-                            <div style={{ width: "100%", color: "rgb(69, 68, 79)" }}>
-                                <Span fontWeight="regular">{question.answers} <FontAwesomeIcon color="" icon={faComment} style={{ marginRight: "12px" }} /></Span>
-                                <Span fontWeight="regular">{question.cost} <FontAwesomeIcon color="" icon={faCoins} /></Span>
-                            </div>
+                            <div style={{ width: "100%" }}><Span fontWeight="regular" color="black">{question.answers} <FontAwesomeIcon color="" icon={faComment} /></Span></div>
                             <AuthorBlock author={question.askedbyname} date={"TODO BRIEF DATE HERE"} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
                         </AbstractBetweenSpacingBlock>
                     </Col>

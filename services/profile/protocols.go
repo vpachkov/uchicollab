@@ -33,3 +33,7 @@ type UserInfoResponse struct {
 	Login     string `json:"login"`
 	ImagePath string `json:"imagepath"`
 }
+
+type UserCoinsResponse struct {
+	Coin int `json:"coin"`
+}

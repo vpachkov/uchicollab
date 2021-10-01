@@ -16,7 +16,9 @@ func Init() {
 	}
 
 	if err := db.AutoMigrate(
-		&User{}, &Session{}, &Comment{}, &QuestionTag{}, &QuestionSubject{}, &Question{}); err != nil {
+		&User{}, &Session{}, &Comment{}, &QuestionTag{},
+		&QuestionSubject{}, &Donator{},
+		&Answer{}, &Question{}, &Upvoter{}); err != nil {
 		panic(err)
 	}
 

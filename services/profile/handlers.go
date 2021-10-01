@@ -46,3 +46,15 @@ func handleUserInfo(request SessionableRequest) (response UserInfoResponse, stat
 	status = http.StatusOK
 	return
 }
+
+func handleUserCoins(request SessionableRequest) (response UserCoinsResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+	response.Coin = session.User.Coins
+	status = http.StatusOK
+	return
+}

@@ -15,15 +15,27 @@ func main() {
 	// setup database
 	db.Init()
 	dbi := db.Get()
-	vas := &db.User{Name: "Русс Молочков", Login: "russcox", PasswordHash: "fafa"}
-	dich := &db.User{Name: "Никита Коровкин", Login: "nimelekhin", PasswordHash: "fafa"}
-	sess := &db.Session{User: vas}
-	dbi.Create(dich)
-	dbi.Create(sess)
+	var vass db.User
+	dbi.First(&vass)
+	if vass.ID == 0 {
+		vas := &db.User{Name: "Русс Молочков", Login: "russcox", PasswordHash: "fafa", Coins: 40}
+		dich := &db.User{Name: "Никита Коровкин", Login: "nimelekhin", PasswordHash: "fafa"}
+		sess := &db.Session{User: vas}
+		dbi.Create(dich)
+		dbi.Create(sess)
+	} else {
+		sess := &db.Session{User: &vass}
+		dbi.Create(sess)
+	}
+
+	vas := &db.User{}
+	dich := &db.User{}
+	dbi.First(&vas, "login = ?", "russcox")
+	dbi.First(&dich, "login = ?", "nimelekhin")
+
 	comm := db.Comment{Text: "very good thanks", Score: 5, Commentator: dich}
 	comm2 := db.Comment{Text: "temporary -2 thanks", Score: 2, Commentator: dich}
 	vas.Comments = append(vas.Comments, comm, comm2)
-	dbi.Updates(vas)
 
 	var tag db.QuestionTag
 	dbi.First(&tag)
@@ -45,19 +57,46 @@ func main() {
 		dbi.First(&tag1, "id = ?", "Из учебника")
 		dbi.First(&tag2, "id = ?", "Со звездочкой")
 
+		donator1 := db.Donator{User: vas, Coins: 15}
+		donator2 := db.Donator{User: dich, Coins: 10}
+
+		answer1 := db.Answer{
+			Text:     "Вообще-то есть компиляторы Itell, MS.\nА на каком железе? А для каких задач?\nУ оптимизации очень много аспектов и вот так выдавать \"общие рецепты\" довольно странное занятие.",
+			Best:     true,
+			Date:     time.Now(),
+			Author:   vas,
+			Donators: []db.Donator{donator1, donator2},
+		}
+		answer2 := db.Answer{
+			Text:   "Просто без обсуждения замеров/профилирования, специфики задачи и алгоритмов обсуждать оптимизации довольно странное занятие - разгонять неправильно выбранный алгоритм и без понимания железа в корне неверно.",
+			Best:   false,
+			Date:   time.Now(),
+			Author: vas,
+		}
+
+		upvoter1 := db.Upvoter{User: vas, Coins: 20}
+		upvoter2 := db.Upvoter{User: dich, Coins: 10}
+
+		//dbi.Create(&answer1)
+		//dbi.Create(&answer2)
+
 		question1 := &db.Question{
 			Title:        "Решение задачи по Алгебре",
-			Description:  "Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. Without much in the way of modern conveniences, like a television set or running water, he spent his time drawing, whittling, and throwing dirt clods at his cousins. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative, and surf bands; had two kids; and started his own illustration studio, Smiling Otis Studio (named after one of their very large cats). Russ creates his art the old school way using paper, pencil, gouache, and watercolor. Using traditional tools gives Russ an opportunity to explore and experiment",
+			Description:  "sin (П + х/3) = 1/2\nрешите пожалуйста и объясните как решать чтобы в следующий раз я смог это решить сам.",
 			Subject:      "Алгебра",
 			Opener:       dich,
 			OpenedTime:   time.Now(),
 			DeadlineTime: time.Now().Add(48 * time.Hour),
 			Cost:         5,
 			Tags:         []db.QuestionTag{tag1, tag2},
+			Answers:      []db.Answer{answer1, answer2},
+			Upvoters:     []db.Upvoter{upvoter1, upvoter2},
 		}
 
 		dbi.Create(question1)
 	}
+
+	dbi.Updates(vas)
 
 	// setup workers
 	sc := workers.SessionCollector{}

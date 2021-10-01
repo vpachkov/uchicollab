@@ -42,10 +42,40 @@ type Comment struct {
 
 type User struct {
 	ID           int
+	Coins        int
 	Login        string
 	PasswordHash string
 	Name         string
 	Comments     []Comment `gorm:"ForeignKey:BelongsToUserID"`
+}
+
+type Donator struct {
+	ID       int
+	AnswerID int
+	UserID   int
+	User     *User `gorm:"ForeignKey:UserID"`
+	Coins    int
+}
+
+type Answer struct {
+	ID         int
+	QuestionID int
+	Text       string
+	Best       bool
+	Date       time.Time
+
+	AuthorID int
+	Author   *User `gorm:"foreignkey:AuthorID"`
+
+	Donators []Donator `gorm:"ForeignKey:AnswerID"`
+}
+
+type Upvoter struct {
+	ID         int
+	QuestionID int
+	UserID     int
+	User       *User `gorm:"ForeignKey:UserID"`
+	Coins      int
 }
 
 type Question struct {
@@ -61,7 +91,9 @@ type Question struct {
 	DeadlineTime time.Time
 	Cost         int
 
-	Tags []QuestionTag `gorm:"many2many:question_tag;"`
+	Tags     []QuestionTag `gorm:"many2many:question_tag;"`
+	Answers  []Answer      `gorm:"ForeignKey:QuestionID"`
+	Upvoters []Upvoter     `gorm:"ForeignKey:QuestionID"`
 }
 
 type QuestionTag struct {

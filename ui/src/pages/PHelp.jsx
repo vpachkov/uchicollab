@@ -112,7 +112,7 @@ class PHelp extends Component {
     render() {
         return (
             <div>
-                <Header prefix="Список вопросов," user={this.state.user} />
+                <Header prefix="Список вопросов," user={ this.state.user } />
                 <Container>
                     <main>
                         <Navigation>
