@@ -9,6 +9,7 @@ import { AuthorBlock, HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle,
 import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire, faComment } from '@fortawesome/free-solid-svg-icons'
 import { SubjectColor, Subjects } from "../constants";
 import { Post, profileService, questionsService, staticData } from "../config";
+import { ButtonGray } from './Buttons';
 
 export class MiniQuestion extends Component {
     render() {
@@ -70,7 +71,7 @@ export class BriefQuestion extends Component {
                         <QuestionBody max={128} text={question.description} />
                         <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
                             <div style={{ width: "100%", color: "rgb(69, 68, 79)" }}>
-                                <Span fontWeight="regular">{question.answers} <FontAwesomeIcon color="" icon={faComment} style={{marginRight: "12px"}} /></Span>
+                                <Span fontWeight="regular">{question.answers} <FontAwesomeIcon color="" icon={faComment} style={{ marginRight: "12px" }} /></Span>
                                 <Span fontWeight="regular">{question.cost} <FontAwesomeIcon color="" icon={faCoins} /></Span>
                             </div>
                             <AuthorBlock author={question.askedbyname} date={"TODO BRIEF DATE HERE"} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
@@ -80,6 +81,23 @@ export class BriefQuestion extends Component {
             </MiniQuestion>
         )
     }
+}
 
+export class Notification extends Component {
+    render() {
+        var notification = this.props.notification
+
+        return (
+            <MiniQuestion>
+                <Row>
+                    <Col>
+                        <QuestionTitle>{notification.title}</QuestionTitle>
+                        <QuestionBody max={-1} text={notification.description} />
+                        <div style={{float: "right", marginTop: "8px"}}><ButtonGray title="открыть" onClick={() => {history.push(notification.action)}} /></div>
+                    </Col>
+                </Row>
+            </MiniQuestion>
+        )
+    }
 }
 

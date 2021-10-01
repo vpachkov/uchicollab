@@ -43,6 +43,18 @@ export class Button extends Component {
     }
 }
 
+export class ButtonGray extends Component {
+    render() {
+        return (
+            <div onClick={() => {
+                this.props.onClick()
+            }} className="buttonGray">
+                {this.props.title}
+            </div>
+        )
+    }
+}
+
 export class InlineBigButton extends Component {
     render() {
         return (

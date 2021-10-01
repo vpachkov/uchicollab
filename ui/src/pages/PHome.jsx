@@ -10,13 +10,11 @@ import {
     CommentBlock,
     CommentText,
     KeywordBlock,
-    Span,
     SquareBlock,
     SquareBlockImage,
     SquareBlockText,
-    HeaderSquareBlock
 } from "../components/Blocks";
-import { BriefQuestion } from "../components/Questions";
+import { Notification, BriefQuestion } from "../components/Questions";
 import { Header, Navigation } from "../components/Header";
 import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
@@ -72,6 +70,14 @@ class PHome extends Component {
                 bestAnswersRate: 0,
                 subscribedTages: ["Math", "Russian"],
             },
+
+            notifications: [
+                {
+                    title: "Создан чат",
+                    description: "Пользователь Russ Cox создал чат по вопросу №6",
+                    action: "/question/6/chat/23424"
+                }
+            ]
         }
     }
 
@@ -167,7 +173,7 @@ class PHome extends Component {
                                     </Row>
                                 </Block>
                             </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
                                     {
@@ -180,7 +186,7 @@ class PHome extends Component {
                                     }
                                 </Block>
                             </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="black" text="bold">Новые вопросы</BlockTitle>
                                     {
@@ -193,7 +199,20 @@ class PHome extends Component {
                                     }
                                 </Block>
                             </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={6}>
+                                <Block color="white">
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Уведомления</BlockTitle>
+                                    {
+                                        this.state.notifications === undefined || this.state.notifications === null ? null :
+                                            this.state.notifications.map(notification => {
+                                                return (
+                                                    <Notification notification={notification} />
+                                                )
+                                            })
+                                    }
+                                </Block>
+                            </Col>
+                            <Col sm={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Последние отзывы</BlockTitle>
                                     {
