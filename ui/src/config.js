@@ -31,20 +31,25 @@ export function Post(url, body, onResponse, onError) {
     let login = Cookies.get('login')
     let password = Cookies.get('password')
 
-    // uncomment when login is done
-    // if (login === undefined || password === undefined) {
-    //     history.push('/login')
-    // }
+    if (login === undefined || password === undefined) {
+        history.push('/login')
+    }
 
     let session = Cookies.get('session')
 
     if (session === undefined) {
         axios.post(authorizationService+"authorize", JSON.stringify({
-            login: "login", password: "password"
+            login: login, password: password
         })).then((response) => {
             Cookies.set('session', response.data.session)
             post(url, body, onResponse, onError, response.data.session)
-        }).catch(onError)
+        }).catch((error) => {
+            if (error.response !== undefined && error.response.status === 401) {
+                Cookies.remove('login')
+                Cookies.remove('password')
+                history.push('/login')
+            }
+        })
     } else {
         post(url, body, onResponse, onError, session)
     }

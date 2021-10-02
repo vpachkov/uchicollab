@@ -13,7 +13,7 @@ func (SessionCollector) Callback() {
 
 	dbi := db.Get()
 	var sessions []db.Session
-	dbi.Preload("Sessions").Find(&sessions)
+	dbi.Find(&sessions)
 	for _, session := range sessions {
 		if session.Expired() {
 			log.Printf("Session %v has expired\n", session.ID)
