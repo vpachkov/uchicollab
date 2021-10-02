@@ -326,6 +326,10 @@ func handleConcern(request ConcernRequest) (status int) {
 		Preload("Answers.Donators.User").
 		First(&question, "id = ?", request.QuestionID)
 
+	if !question.Active {
+		return http.StatusOK
+	}
+
 	for _, upvoter := range question.Upvoters {
 		if upvoter.UserID == session.User.ID {
 
