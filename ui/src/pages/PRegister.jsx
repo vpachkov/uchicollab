@@ -69,6 +69,7 @@ class PRegister extends Component {
                                 <input className="inputBox" type="password" rows="4" placeholder="Придумайте пароль"></input>
                                 <BlockLine color="rgb(133, 133, 138)">Повторить пароль*</BlockLine>
                                 <input className="inputBox" type="password" rows="4" placeholder=""></input>
+                                <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg"/>
                                 <BlockLine color="rgb(133, 133, 138)"></BlockLine>
                             </Col>
                             <Col>

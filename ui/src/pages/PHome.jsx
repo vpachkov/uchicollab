@@ -216,7 +216,7 @@ class PHome extends Component {
                                         this.state.comments === undefined ? null :
                                             this.state.comments.map(comment => {
                                                 return (
-                                                    <CommentBlock color="#eeeeee" textColor="rgb(69, 68, 79)"
+                                                    <CommentBlock textColor="rgb(69, 68, 79)"
                                                         raiting={comment.score}
                                                         user={{
                                                             name: comment.name,
