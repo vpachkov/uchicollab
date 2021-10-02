@@ -368,6 +368,24 @@ class PQuestion extends Component {
         )
     }
 
+    formatTimestamp = (timestamp) => {
+        // Create a new JavaScript Date object based on the timestamp
+        // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+        var date = new Date(timestamp);
+        // Hours part from the timestamp
+        var date2 = date.getDate()
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+
+        // Will display time in 10:30:23 format
+        var formattedTime = date2 + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+        return formattedTime
+    }
+
     renderQuestion = (question) => {
         if (question === undefined) {
             return null
@@ -396,8 +414,11 @@ class PQuestion extends Component {
                             })
                     }
                 </AbstractBlock>
-                <AuthorBlock author={question.askedbyname} date={question.date}
-                             profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin}/>
+                <AuthorBlock
+                    author={ question.askedbyname }
+                    date={ this.formatTimestamp(question.date / 1000) }
+                    profilePic={ staticData + question.askedbyimagepath }
+                    authorid={ question.askedbylogin }/>
             </Block>
         )
     }
@@ -431,7 +452,9 @@ class PQuestion extends Component {
                                     <Block color="white">
                                         <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
                                         {
-                                            this.state.question === undefined || this.state.question.answers === undefined ? null :
+                                            this.state.question === undefined ||
+                                            this.state.question.answers === undefined ||
+                                            this.state.question.answers === null ? null :
                                                 this.state.question.answers.map(answer => {
                                                     return (
                                                         this.renderAnswer(answer)

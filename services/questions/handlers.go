@@ -53,7 +53,11 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 	deadline := time.Unix(request.Deadline/1000, 0)
 
 	var questions []db.Question
-	dbi.Preload("Tags").Preload("Opener").Find(&questions).Order("cost")
+	dbi.
+		Preload("Tags").
+		Preload("Opener").
+		Preload("Answers").
+		Find(&questions).Order("cost")
 
 	for _, question := range questions {
 		if request.CostFrom > 0 {
@@ -98,7 +102,7 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 
 		response.Questions = append(response.Questions, BriefQuestion{
 			ID:               question.ID,
-			Answers:          5,
+			Answers:          len(question.Answers),
 			Title:            question.Title,
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
@@ -335,6 +339,55 @@ func handleSendMessage(request SendMessageRequest) (status int) {
 
 	dbi.Updates(&question)
 
+	status = http.StatusOK
+	return
+}
+
+func handleCreate(request CreateRequest) (response CreateResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	if session.User.Coins < request.Cost {
+		status = http.StatusForbidden
+		return
+	}
+
+	session.User.Coins -= request.Cost
+	dbi.Updates(session.User)
+
+	upvoter := db.Upvoter{
+		User:  session.User,
+		Coins: request.Cost,
+	}
+
+	question := &db.Question{
+		Opener:       session.User,
+		Title:        request.Title,
+		Subject:      request.Subject,
+		Description:  request.Text,
+		DeadlineTime: time.Unix(request.Deadline/1000, 0),
+		OpenedTime:   time.Now(),
+		Upvoters:     []db.Upvoter{upvoter},
+	}
+
+	var tags []db.QuestionTag
+	dbi.Find(&tags)
+
+	for _, requestTag := range request.Tags {
+		for _, tag := range tags {
+			if tag.ID == requestTag {
+				question.Tags = append(question.Tags, tag)
+				break
+			}
+		}
+	}
+
+	dbi.Create(question)
+	response.ID = question.ID
 	status = http.StatusOK
 	return
 }

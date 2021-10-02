@@ -132,3 +132,17 @@ type SendMessageRequest struct {
 	QuestionID int    `json:"questionid"`
 	Text       string `json:"text"`
 }
+
+type CreateRequest struct {
+	services.SessionableRequest
+	Title    string   `json:"title"`
+	Text     string   `json:"text"`
+	Cost     int      `json:"cost"`
+	Deadline int64    `json:"deadline"`
+	Subject  string   `json:"subject"`
+	Tags     []string `json:"tags"`
+}
+
+type CreateResponse struct {
+	ID int `json:"id"`
+}
