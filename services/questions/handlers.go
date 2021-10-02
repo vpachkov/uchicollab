@@ -217,6 +217,7 @@ func handleDetailedQuestion(request DetailedQuestionRequest) (response DetailedQ
 			ID:              answer.ID,
 			Text:            answer.Text,
 			Date:            answer.Date.UnixNano(),
+			ImagePath:       answer.ImagePath,
 			AuthorName:      answer.Author.Name,
 			AuthorLogin:     answer.Author.Login,
 			AuthorImagePath: answer.Author.ImagePath,
@@ -443,6 +444,39 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 	response.ID = question.ID
 
 	go search.Index(question.ID, question.Description)
+
+	status = http.StatusOK
+	return
+}
+
+func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var question db.Question
+	dbi.
+		Preload("Opener").
+		Preload("Tags").
+		Preload("Answers").
+		Preload("Upvoters").
+		Preload("Upvoters.User").
+		Preload("Answers.Author").
+		Preload("Answers.Donators").
+		Preload("Answers.Donators.User").
+		First(&question, "id = ?", request.QuestionID)
+
+	question.Answers = append(question.Answers, db.Answer{
+		Text:   request.Text,
+		Date:   time.Now(),
+		Author: session.User,
+	})
+
+	dbi.Save(&question)
+	response.AnswerID = question.Answers[len(question.Answers)-1].ID
 
 	status = http.StatusOK
 	return

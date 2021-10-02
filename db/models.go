@@ -63,8 +63,8 @@ type Answer struct {
 	ID         int
 	QuestionID int
 	Text       string
-	Best       bool
 	Date       time.Time
+	ImagePath  string
 
 	AuthorID int
 	Author   *User `gorm:"foreignkey:AuthorID"`

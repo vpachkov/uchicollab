@@ -6,7 +6,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
+
+	"github.com/google/uuid"
 
 	"uchicollab/db"
 	"uchicollab/search"
@@ -96,14 +99,12 @@ func main() {
 
 		answer1 := db.Answer{
 			Text:     "Вообще-то есть компиляторы Itell, MS.\nА на каком железе? А для каких задач?\nУ оптимизации очень много аспектов и вот так выдавать \"общие рецепты\" довольно странное занятие.",
-			Best:     true,
 			Date:     time.Now(),
 			Author:   vas,
 			Donators: []db.Donator{donator1, donator2},
 		}
 		answer2 := db.Answer{
 			Text:   "Просто без обсуждения замеров/профилирования, специфики задачи и алгоритмов обсуждать оптимизации довольно странное занятие - разгонять неправильно выбранный алгоритм и без понимания железа в корне неверно.",
-			Best:   false,
 			Date:   time.Now(),
 			Author: vas,
 		}
@@ -192,11 +193,47 @@ func main() {
 		}
 	})
 
+	mux.HandleFunc("/upload/answer", func(w http.ResponseWriter, r *http.Request) {
+		header := w.Header()
+		header.Add("Access-Control-Allow-Origin", "*")
+		header.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
+		header.Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+
+		er := r.ParseMultipartForm(0)
+		if er != nil {
+			log.Fatal(er)
+		}
+
+		file, handler, err := r.FormFile("answerImage")
+		if err != nil {
+			println("error1")
+			return
+		}
+		defer file.Close()
+
+		ext := filepath.Ext(handler.Filename)
+		imagePath := uuid.New().String() + ext
+		f, err := os.OpenFile("static/answer/"+imagePath, os.O_WRONLY|os.O_CREATE, 0666)
+
+		if err != nil {
+			return
+		}
+
+		io.Copy(f, file)
+
+		answerID, _ := strconv.Atoi(r.FormValue("answerID"))
+		var answer db.Answer
+		dbi.First(&answer, "id = ?", answerID)
+		if answer.ID != 0 {
+			answer.ImagePath = "answer/" + imagePath
+			dbi.Updates(&answer)
+		}
+	})
+
+	// start the server
 	log.Println("Search engine init...")
 	search.Init()
 	initSearchFromDB()
-
-	// start the server
 	log.Println("Starting...")
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }

@@ -12,6 +12,9 @@ export var notificationService = serverAPI + "Notification."
 export var staticData = "http://" + window.location.hostname + ":8080/static/"
 export var uploadStaticData = "http://" + window.location.hostname + ":8080/upload"
 
+export var uploadStaticProfileData = "http://" + window.location.hostname + ":8080/upload/profile"
+export var uploadStaticAnswerData = "http://" + window.location.hostname + ":8080/upload/answer"
+
 function post(url, body, onResponse, onError, session) {
     axios.post(
         url,

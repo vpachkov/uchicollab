@@ -73,6 +73,7 @@ type Answer struct {
 	Best            bool      `json:"best"`
 	Likes           int       `json:"likes"`
 	Date            int64     `json:"askedbyimagepath"`
+	ImagePath       string    `json:"imagepath"`
 	AuthorName      string    `json:"authorname"`
 	AuthorLogin     string    `json:"authorlogin"`
 	AuthorImagePath string    `json:"authorimagepath"`
@@ -152,4 +153,14 @@ type CreateRequest struct {
 
 type CreateResponse struct {
 	ID int `json:"id"`
+}
+
+type AnswerRequest struct {
+	services.SessionableRequest
+	QuestionID int    `json:"questionid"`
+	Text       string `json:"text"`
+}
+
+type AnswerResponse struct {
+	AnswerID int `json:"answerid"`
 }

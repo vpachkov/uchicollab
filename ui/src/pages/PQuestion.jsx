@@ -22,6 +22,7 @@ import {
     faClock,
     faCoins,
     faComments,
+    faImage,
     faGraduationCap,
     faHeart,
     faPaperPlane,
@@ -29,11 +30,13 @@ import {
     faTimes
 } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
-import { Post, profileService, questionsService, staticData } from "../config";
+import {Post, profileService, questionsService, staticData, uploadStaticAnswerData, uploadStaticData} from "../config";
 import { withCookies } from 'react-cookie';
 import history from "../history";
 import InfiniteScrollReverse from "react-infinite-scroll-reverse";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import axios from "axios";
+import {SubjectColor} from "../constants";
 
 class PQuestion extends Component {
 
@@ -41,6 +44,8 @@ class PQuestion extends Component {
         super(props);
 
         this.state = {
+            expandedAnswers : new Set(),
+
             isChatLoading: true,
             addingAnswer: false,
             chatWithUser: undefined,
@@ -213,16 +218,62 @@ class PQuestion extends Component {
                                     }}
                                 />
                             </Span>
-                            {this.state.login === this.state.question.askedbylogin ?
+                            { this.state.login === this.state.question.askedbylogin ?
                                 <div className="privateChat">
                                     <FontAwesomeIcon style={{ marginRight: "4px" }} icon={faComments} onClick={() => {
                                     }} />
                                     Начать чат
                                 </div> : null
                             }
+                            { answer.imagepath !== undefined &&
+                                answer.imagepath !== "" &&
+                                !this.state.expandedAnswers.has(answer.id) ?
+                                <div>
+                                    <div
+                                        className="privateChat"
+                                        onClick={ () => {
+                                            const ea =  this.state.expandedAnswers
+                                            ea.add(answer.id)
+                                            this.setState({
+                                                expandedAnswers: ea
+                                            })
+                                        } }
+                                    >
+                                        <FontAwesomeIcon
+                                            style={{ marginRight: "4px" }}
+                                            icon={ faImage }
+                                        />
+                                        Открыть вложения
+                                    </div>
+                                </div>
+                                :
+                                null
+                            }
+                            {
+                                this.state.expandedAnswers.has(answer.id) ?
+                                    <div>
+                                    <img
+                                        style={{ cursor: 'pointer' }}
+                                        src={ staticData + answer.imagepath }
+                                        onClick={ () => {
+                                            const ea =  this.state.expandedAnswers
+                                            ea.delete(answer.id)
+                                            this.setState({
+                                                expandedAnswers: ea
+                                            })
+                                        } }
+                                    />
+                                    </div>
+                                    :
+                                    null
+                            }
                         </div>
-                        <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic}
-                            authorid={answer.authorid} />
+                        <AuthorBlock
+                            author={ answer.authorname }
+                            date={ answer.date }
+                            profilePic={ staticData+answer.authorimagepath }
+                            authorid={ answer.authologin }
+                        />
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
             </Row>
@@ -461,28 +512,53 @@ class PQuestion extends Component {
                                                     <textarea
                                                         className="textBox"
                                                         rows="4"
-                                                        placeholder="Название"
+                                                        placeholder="Ответ"
                                                         onChange={(event) => {
                                                             this.setState({
-                                                                text: event.target.value
+                                                                answerText: event.target.value
                                                             })
                                                         }}
                                                     />
                                                     <input
                                                         type="file"
-                                                        id="avatar"
-                                                        name="avatar"
+                                                        id="answerImage"
+                                                        name="answerImage"
                                                         accept="image/png, image/jpeg"
                                                         onChange={(event) => {
                                                             this.setState({
-                                                                avatar: event.target.files[0]
+                                                                answerImage: event.target.files[0]
                                                             })
                                                         }} />
                                                     <div style={{ textAlign: "right", marginTop: "4px" }}>
-                                                        <ButtonGray title="Отправить ответ" onClick={() => {
-                                                            this.setState({
-                                                                addingAnswer: true
-                                                            })
+                                                        <ButtonGray title="Отправить ответ" onClick={ () => {
+                                                            Post(
+                                                                questionsService+"answer", {
+                                                                    questionid: this.state.question.id,
+                                                                    text: this.state.answerText,
+                                                                }, ((response) => {
+                                                                    const formData = new FormData();
+                                                                    formData.append(
+                                                                        'answerImage',
+                                                                        this.state.answerImage,
+                                                                        this.state.answerImage.name,
+                                                                    )
+                                                                    formData.append(
+                                                                        'answerID',
+                                                                        response.data.answerid,
+                                                                    )
+                                                                    axios.post(uploadStaticAnswerData, formData,{
+                                                                        headers: {
+                                                                            'Content-Type': 'multipart/form-data'
+                                                                        }
+                                                                    }).then(() => {
+                                                                        this.loadDetailedQuestion()
+                                                                        this.setState({
+                                                                            addingAnswer: false
+                                                                        })
+                                                                    })
+
+                                                                })
+                                                            )
                                                         }} />
                                                     </div>
                                                 </div> : <div style={{ textAlign: "left", marginTop: "16px" }}>
