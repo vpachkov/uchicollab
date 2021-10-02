@@ -48,6 +48,7 @@ class PHelp extends Component {
     }
 
     componentDidMount() {
+        this.getInfo()
         this.loadBriefQuestions()
     }
 
@@ -147,6 +148,27 @@ class PHelp extends Component {
         )
     }
 
+    getInfo() {
+        Post(profileService + "userinfo", {}, (response) => {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    name: response.data.name,
+                    profilePic: staticData + response.data.imagepath,
+                }
+            }))
+        })
+
+        Post(profileService + "usercoins", {}, (response) => {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    coins: response.data.coin,
+                }
+            }))
+        })
+    }
+
     loadBriefQuestions() {
         Post(
             questionsService + "briefquestions",
@@ -158,6 +180,7 @@ class PHelp extends Component {
                 deadline: this.state.deadline,
             },
             (response) => {
+                console.log(response.data.questions)
                 this.setState({
                     questions: response.data.questions
                 })

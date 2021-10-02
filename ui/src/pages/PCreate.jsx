@@ -9,14 +9,13 @@ import { Col, Container, Row } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowAltCircleLeft, faCoins, faTimes, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Post, profileService, questionsService } from "../config";
+import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import Select from 'react-select';
 import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
 import { Header, Navigation } from "../components/Header";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Tags } from "../components/Tags";
 import { SubjectColor, Subjects } from "../constants";
@@ -57,6 +56,10 @@ class PCreate extends Component {
         };
     }
 
+    componentDidMount() {
+        this.getInfo()
+    }
+
     submit() {
 
     }
@@ -81,10 +84,12 @@ class PCreate extends Component {
                         this.setState({ tags: tags })
                     }}
                 />
+                <BlockLine color="rgb(133, 133, 138)">Заголовок</BlockLine>
+                <input className="inputBox" rows="4" placeholder="Опшите вопрос максимально кратко" maxLength={60}></input>
                 <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
                 <textarea className="textBox" rows="4" placeholder="Название"></textarea>
                 <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
-                <input className="inputBox" type="number" rows="4" placeholder="Стоимость"></input>
+                <input className="inputBox" type="number" rows="4" placeholder="Стоимость" min={0} max={this.state.user.coins}></input>
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input className="inputBox" type="date" rows="4"></input>
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
@@ -108,7 +113,7 @@ class PCreate extends Component {
                         <Row>
                             <Col xs={12} md={4}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Сформулировать вопрос</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Сформулируйте вопрос</BlockTitle>
                                     {this.renderTextInput()}
                                 </Block>
                             </Col>
@@ -123,6 +128,27 @@ class PCreate extends Component {
                 </Container>
             </div>
         )
+    }
+
+    getInfo() {
+        Post(profileService + "userinfo", {}, (response) => {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    name: response.data.name,
+                    profilePic: staticData + response.data.imagepath,
+                }
+            }))
+        })
+
+        Post(profileService + "usercoins", {}, (response) => {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    coins: response.data.coin,
+                }
+            }))
+        })
     }
 }
 

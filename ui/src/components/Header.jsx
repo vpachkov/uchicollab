@@ -45,7 +45,6 @@ export class Header extends Component {
     }
 
     render() {
-        console.log(this.state.classColor)
         return (
             <div>
                 <header className={this.state.classColor+" bigHeader"}>
