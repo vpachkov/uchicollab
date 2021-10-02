@@ -16,7 +16,7 @@ import {
     SquareBlockText,
     HeaderSquareBlock
 } from "../components/Blocks";
-import { BriefQuestion } from "../components/Questions";
+import { BriefAnswer, BriefQuestion } from "../components/Questions";
 import { Header, Navigation, ProfileHeader } from "../components/Header";
 import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
@@ -184,7 +184,7 @@ class PProfile extends Component {
                             </Col>
                             <Col sm={12} md={4}>
                                 <Block color="white">
-                                    <BlockTitle color="black" text="bold">Новые вопросы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Новые вопросы</BlockTitle>
                                     {
                                         this.state.yourQuestions === undefined || this.state.yourQuestions === null ? null :
                                             this.state.yourQuestions.map(question => {
@@ -197,19 +197,12 @@ class PProfile extends Component {
                             </Col>
                             <Col sm={12} md={4}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Последние отзывы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Лучшие ответы</BlockTitle>
                                     {
-                                        this.state.comments === undefined || this.state.comments === null ? null :
-                                            this.state.comments.map(comment => {
+                                        this.state.answers === undefined || this.state.answers === null ? null :
+                                            this.state.answers.map(answer => {
                                                 return (
-                                                    <CommentBlock textColor="rgb(69, 68, 79)"
-                                                        raiting={comment.score}
-                                                        user={{
-                                                            name: comment.name,
-                                                            profilePic: staticData + comment.imagepath
-                                                        }}>
-                                                        <CommentText text={comment.text} max={60} />
-                                                    </CommentBlock>
+                                                    <BriefAnswer answer={answer} />
                                                 )
                                             })
                                     }

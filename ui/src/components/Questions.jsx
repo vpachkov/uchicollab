@@ -10,6 +10,7 @@ import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire
 import { SubjectColor, Subjects } from "../constants";
 import { Post, profileService, questionsService, staticData } from "../config";
 import { ButtonGray } from './Buttons';
+import { faHeart } from '@fortawesome/free-regular-svg-icons';
 
 export class MiniQuestion extends Component {
     render() {
@@ -88,6 +89,46 @@ export class BriefQuestion extends Component {
                                 <Span fontWeight="regular">{question.cost} <FontAwesomeIcon color="" icon={faCoins} /></Span>
                             </div>
                             <AuthorBlock author={question.askedbyname} date={this.formatTimestamp(question.date / 1000000)} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
+                        </AbstractBetweenSpacingBlock>
+                    </Col>
+                </Row>
+            </MiniQuestion>
+        )
+    }
+}
+
+export class BriefAnswer extends Component {
+    formatTimestamp = (timestamp) => {
+        var date = new Date(timestamp);
+        var year = date.getFullYear()
+        var date2 = ("0" + date.getDate()).substr(-2)
+        var month = ("0" + date.getMonth()).substr(-2)
+        var hours = ("0" + date.getHours()).substr(-2)
+        var minutes = ("0" + date.getMinutes()).substr(-2)
+        var seconds = ("0" + date.getSeconds()).substr(-2)
+        var formattedTime = date2 + '/' + month + '/' + year + ' ' + hours + ':' + minutes
+        return formattedTime
+    }
+    
+    render() {
+        var answer = this.props.answer
+        // answer.questionid
+        // answer.questiontitle
+        // answer.text
+        // answer.likes
+
+        return (
+            <MiniQuestion onClick={() => {
+                history.push(`/question/${answer.questionid}`)
+            }}>
+                <Row>
+                    <Col>
+                        <QuestionTitle>{answer.questiontitle}</QuestionTitle>
+                        <QuestionBody max={128} text={answer.text} />
+                        <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
+                            <div style={{ width: "100%", color: "rgb(69, 68, 79)" }}>
+                                <Span fontWeight="regular">{answer.likes} <FontAwesomeIcon color="" icon={faHeart} /></Span>
+                            </div>
                         </AbstractBetweenSpacingBlock>
                     </Col>
                 </Row>
