@@ -151,7 +151,9 @@ func main() {
 
 	// setup workers
 	sc := workers.SessionCollector{}
+	cc := workers.CostCalculator{}
 	workers.StartWorker(sc)
+	workers.StartWorker(cc)
 
 	// setup microservices routing
 	mux := http.NewServeMux()

@@ -168,3 +168,11 @@ type AnswerRequest struct {
 type AnswerResponse struct {
 	AnswerID int `json:"answerid"`
 }
+
+type PopularRequest struct {
+	services.SessionableRequest
+}
+
+type PopularResponse struct {
+	Questions []BriefQuestion `json:"questions"`
+}

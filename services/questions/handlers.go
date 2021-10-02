@@ -501,3 +501,38 @@ func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
 	status = http.StatusOK
 	return
 }
+
+func handlePopular(request PopularRequest) (response PopularResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var questions []db.Question
+	dbi.
+		Preload("Tags").
+		Preload("Opener").
+		Preload("Answers").
+		Preload("Upvoters").
+		Find(&questions).
+		Order("cost").
+		Limit(5)
+
+	for _, question := range questions {
+		response.Questions = append(response.Questions, BriefQuestion{
+			ID:               question.ID,
+			Answers:          len(question.Answers),
+			Cost:             question.Cost,
+			Title:            question.Title,
+			Description:      question.Description,
+			AskedByName:      question.Opener.Name,
+			AskedByLogin:     question.Opener.Login,
+			AskedByImagePath: question.Opener.ImagePath,
+		})
+	}
+
+	status = http.StatusOK
+	return
+}
