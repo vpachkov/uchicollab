@@ -44,6 +44,8 @@ class PHelp extends Component {
             maincolor: "rgb(62, 134, 247)",
             selectedSubjectOption: null,
             tags: [],
+
+            searchLine: "",
         };
     }
 
@@ -113,7 +115,7 @@ class PHelp extends Component {
     render() {
         return (
             <div>
-                <Header prefix="Список вопросов," user={ this.state.user } />
+                <Header prefix="Список вопросов," user={this.state.user} />
                 <Container>
                     <main>
                         <Navigation>
@@ -124,6 +126,13 @@ class PHelp extends Component {
                         <Row>
                             <Col xs={12} md={4}>
                                 <Block color="white">
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Поиск</BlockTitle>
+                                    <input
+                                        onChange={(event) => {
+                                            this.setState({ searchLine: event.target.value }, this.loadBriefQuestions)
+                                        }}
+                                        className="inputBox" placeholder="Введите ключевые слова"
+                                    />
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Фильтры</BlockTitle>
                                     {this.renderFilters()}
                                 </Block>
@@ -135,7 +144,7 @@ class PHelp extends Component {
                                         this.state.questions === undefined || this.state.questions === null ? null :
                                             this.state.questions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={question} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
                                             })
                                     }

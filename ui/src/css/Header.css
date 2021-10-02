@@ -102,6 +102,41 @@ header {
   z-index: 1;
 }
 
+.attachmentViewer {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  width: calc(100% - 64px);
+  height: calc(100% - 64px);
+  border-radius: 16px;
+  padding-bottom: 36px;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.attachmentViewer img {
+  height: 100%;
+  width: 100%;
+}
+
+.attachmentClose {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 0.7em;
+  top: 4px;
+  right: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 4;
+}
+
 .privateChat {
   display: inline;
   padding: 4px 8px;
@@ -145,6 +180,7 @@ header {
 }
 .popupChatHandler .chatInput {
   width: calc(100% - 36px);
+  height: 36px;
   padding: 6px 0px 6px 12px;
   border-radius: 0px 0px 0px 16px;
   border: none;
@@ -163,8 +199,9 @@ header {
   height: 36px;
 }
 .popupChatHandler .sendInput {
+  margin-bottom: -2px;
   display: inline-flex;
-  height: 36px;
+  height: 35px;
   width: 36px;
   font-size: 0.8em;
   border-radius: 0px 0px 16px 0px;

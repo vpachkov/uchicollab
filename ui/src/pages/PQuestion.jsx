@@ -30,21 +30,23 @@ import {
     faTimes
 } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
-import {Post, profileService, questionsService, staticData, uploadStaticAnswerData, uploadStaticData} from "../config";
+import { Post, profileService, questionsService, staticData, uploadStaticAnswerData, uploadStaticData } from "../config";
 import { withCookies } from 'react-cookie';
 import history from "../history";
 import InfiniteScrollReverse from "react-infinite-scroll-reverse";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import axios from "axios";
-import {SubjectColor} from "../constants";
+import { SubjectColor } from "../constants";
 
 class PQuestion extends Component {
 
     constructor(props) {
         super(props);
 
+        this.chatInterval = null
+
         this.state = {
-            expandedAnswers : new Set(),
+            expandedAnswers: new Set(),
 
             isChatLoading: true,
             addingAnswer: false,
@@ -195,6 +197,8 @@ class PQuestion extends Component {
     }
 
     renderAnswer = (answer) => {
+        var tinycolor = require("tinycolor2")
+
         // FIXME: NEW GRAY COLOR
         var bc = "lightgray"
         if (answer.best) {
@@ -218,30 +222,31 @@ class PQuestion extends Component {
                                     }}
                                 />
                             </Span>
-                            { this.state.login === this.state.question.askedbylogin ?
+                            {this.state.login === this.state.question.askedbylogin ?
                                 <div className="privateChat">
                                     <FontAwesomeIcon style={{ marginRight: "4px" }} icon={faComments} onClick={() => {
                                     }} />
                                     Начать чат
                                 </div> : null
                             }
-                            { answer.imagepath !== undefined &&
+                            {answer.imagepath !== undefined &&
                                 answer.imagepath !== "" &&
                                 !this.state.expandedAnswers.has(answer.id) ?
                                 <div>
                                     <div
                                         className="privateChat"
-                                        onClick={ () => {
-                                            const ea =  this.state.expandedAnswers
+                                        onClick={() => {
+                                            disableBodyScroll(document.querySelector('#mainScroll'))
+                                            const ea = this.state.expandedAnswers
                                             ea.add(answer.id)
                                             this.setState({
                                                 expandedAnswers: ea
                                             })
-                                        } }
+                                        }}
                                     >
                                         <FontAwesomeIcon
                                             style={{ marginRight: "4px" }}
-                                            icon={ faImage }
+                                            icon={faImage}
                                         />
                                         Открыть вложения
                                     </div>
@@ -252,27 +257,41 @@ class PQuestion extends Component {
                             {
                                 this.state.expandedAnswers.has(answer.id) ?
                                     <div>
-                                    <img
-                                        style={{ cursor: 'pointer' }}
-                                        src={ staticData + answer.imagepath }
-                                        onClick={ () => {
-                                            const ea =  this.state.expandedAnswers
-                                            ea.delete(answer.id)
-                                            this.setState({
-                                                expandedAnswers: ea
-                                            })
-                                        } }
-                                    />
+                                        <div className="attachmentClose"
+                                            style={{ backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString() }}
+                                            onClick={() => {
+                                                enableBodyScroll(document.querySelector('#mainScroll'))
+                                                const ea = this.state.expandedAnswers
+                                                ea.delete(answer.id)
+                                                this.setState({
+                                                    expandedAnswers: ea
+                                                })
+                                            }}><FontAwesomeIcon icon={faTimes} /></div>
+                                        <div className="tintHandler"></div>
+                                        <div className="attachmentViewer">
+                                            <img
+                                                style={{ cursor: 'pointer' }}
+                                                src={staticData + answer.imagepath}
+                                                onClick={() => {
+                                                    enableBodyScroll(document.querySelector('#mainScroll'))
+                                                    const ea = this.state.expandedAnswers
+                                                    ea.delete(answer.id)
+                                                    this.setState({
+                                                        expandedAnswers: ea
+                                                    })
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                     :
                                     null
                             }
                         </div>
                         <AuthorBlock
-                            author={ answer.authorname }
-                            date={ answer.date }
-                            profilePic={ staticData+answer.authorimagepath }
-                            authorid={ answer.authologin }
+                            author={answer.authorname}
+                            date={answer.date}
+                            profilePic={staticData + answer.authorimagepath}
+                            authorid={answer.authologin}
                         />
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
@@ -361,6 +380,7 @@ class PQuestion extends Component {
             <div>
                 <div className="tintHandler" onClick={() => {
                     enableBodyScroll(document.querySelector('#mainScroll'))
+                    clearInterval(this.chatInterval)
                     this.setState({ chatWithUser: undefined })
                 }} />
                 <div className="popupChatHandler">
@@ -368,6 +388,7 @@ class PQuestion extends Component {
                         style={{ backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString() }}
                         onClick={() => {
                             enableBodyScroll(document.querySelector('#mainScroll'))
+                            clearInterval(this.chatInterval)
                             this.setState({ chatWithUser: undefined })
                         }}><FontAwesomeIcon icon={faTimes} /></div>
                     <InfiniteScrollReverse
@@ -378,7 +399,7 @@ class PQuestion extends Component {
                     >
                         {
                             this.state.chatMessages === undefined ||
-                                this.state.chatMessages === null ? null :
+                                this.state.chatMessages === null ? <BlockLine>Добро пожаловать в чат</BlockLine> :
                                 this.state.chatMessages.map((message) => {
                                     return (
                                         <MessageBlock
@@ -489,6 +510,7 @@ class PQuestion extends Component {
                                 <BigButtonWithIcon onClick={() => {
                                     disableBodyScroll(document.querySelector('#mainScroll'))
                                     this.loadChatMessages()
+                                    this.chatInterval = setInterval(() => this.loadChatMessages(), 2000);
                                 }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат" />
                                 <InlineBigButtonWithIcon onClick={() => {
                                     history.goBack()
@@ -530,34 +552,34 @@ class PQuestion extends Component {
                                                             })
                                                         }} />
                                                     <div style={{ textAlign: "right", marginTop: "4px" }}>
-                                                        <ButtonGray title="Отправить ответ" onClick={ () => {
+                                                        <ButtonGray title="Отправить ответ" onClick={() => {
                                                             Post(
-                                                                questionsService+"answer", {
-                                                                    questionid: this.state.question.id,
-                                                                    text: this.state.answerText,
-                                                                }, ((response) => {
-                                                                    const formData = new FormData();
-                                                                    formData.append(
-                                                                        'answerImage',
-                                                                        this.state.answerImage,
-                                                                        this.state.answerImage.name,
-                                                                    )
-                                                                    formData.append(
-                                                                        'answerID',
-                                                                        response.data.answerid,
-                                                                    )
-                                                                    axios.post(uploadStaticAnswerData, formData,{
-                                                                        headers: {
-                                                                            'Content-Type': 'multipart/form-data'
-                                                                        }
-                                                                    }).then(() => {
-                                                                        this.loadDetailedQuestion()
-                                                                        this.setState({
-                                                                            addingAnswer: false
-                                                                        })
+                                                                questionsService + "answer", {
+                                                                questionid: this.state.question.id,
+                                                                text: this.state.answerText,
+                                                            }, ((response) => {
+                                                                const formData = new FormData();
+                                                                formData.append(
+                                                                    'answerImage',
+                                                                    this.state.answerImage,
+                                                                    this.state.answerImage.name,
+                                                                )
+                                                                formData.append(
+                                                                    'answerID',
+                                                                    response.data.answerid,
+                                                                )
+                                                                axios.post(uploadStaticAnswerData, formData, {
+                                                                    headers: {
+                                                                        'Content-Type': 'multipart/form-data'
+                                                                    }
+                                                                }).then(() => {
+                                                                    this.loadDetailedQuestion()
+                                                                    this.setState({
+                                                                        addingAnswer: false
                                                                     })
-
                                                                 })
+
+                                                            })
                                                             )
                                                         }} />
                                                     </div>
