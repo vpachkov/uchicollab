@@ -223,12 +223,14 @@ class PQuestion extends Component {
                                     }}
                                 />
                             </Span>
-                            {this.state.login === this.state.question.askedbylogin ?
-                                <div className="privateChat">
-                                    <FontAwesomeIcon style={{ marginRight: "4px" }} icon={faComments} onClick={() => {
-                                    }} />
-                                    Начать чат
-                                </div> : null
+                            {
+                                this.state.login === this.state.question.askedbylogin ?
+                                    <div className="privateChat">
+                                        <FontAwesomeIcon style={{ marginRight: "4px" }} icon={faComments} onClick={() => {
+                                        }} />
+                                        Личный чат
+                                    </div>
+                                    : null
                             }
                             {answer.imagepath !== undefined &&
                                 answer.imagepath !== "" &&
