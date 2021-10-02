@@ -102,6 +102,20 @@ header {
   z-index: 1;
 }
 
+.privateChat {
+  display: inline;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background-color: #4dccc6;
+  background-image: linear-gradient(315deg, #bbdfe3, #c2e2e6);
+  font-size: 0.74em;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #317078;
+  cursor: pointer;
+  margin-left: 12px;
+}
+
 .popupChatHandler {
   position: fixed;
   bottom: 32px;

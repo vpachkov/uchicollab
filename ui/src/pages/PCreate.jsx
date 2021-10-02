@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowAltCircleLeft, faCoins, faTimes, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faArrowAltCircleLeft, faArrowLeft, faCoins, faTimes, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
@@ -108,16 +108,16 @@ class PCreate extends Component {
                         <Navigation>
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
-                            }} icon={faArrowAltCircleLeft} title="Назад" />
+                            }} icon={faArrowLeft} title="Назад" />
                         </Navigation>
                         <Row>
-                            <Col xs={12} md={4}>
+                            <Col xs={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Сформулируйте вопрос</BlockTitle>
                                     {this.renderTextInput()}
                                 </Block>
                             </Col>
-                            <Col xs={12} md={8}>
+                            <Col xs={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
                                     <BriefQuestion question={this.state.question} />

@@ -9,7 +9,7 @@ import { Row, Col } from "react-bootstrap";
 import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire, faComment } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire, faComment, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
@@ -85,7 +85,7 @@ class PHelp extends Component {
                             onChange={(event) => {
                                 this.setState({ costFrom: parseInt(event.target.value) }, this.loadBriefQuestions)
                             }}
-                            className="inputBox" type="number" placeholder="от"
+                            className="inputBox" type="number" placeholder="от" min={0}
                         />
                     </Col>
                     <Col>
@@ -93,7 +93,7 @@ class PHelp extends Component {
                             onChange={(event) => {
                                 this.setState({ costTo: parseInt(event.target.value) }, this.loadBriefQuestions)
                             }}
-                            className="inputBox" type="number" placeholder="до"
+                            className="inputBox" type="number" placeholder="до" min={0}
                         />
                     </Col>
                 </Row>
@@ -119,7 +119,7 @@ class PHelp extends Component {
                         <Navigation>
                             <InlineBigButtonWithIcon onClick={() => {
                                 history.goBack()
-                            }} icon={faArrowAltCircleLeft} title="Назад" />
+                            }} icon={faArrowLeft} title="Назад" />
                         </Navigation>
                         <Row>
                             <Col xs={12} md={4}>

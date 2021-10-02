@@ -18,6 +18,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
     faArrowAltCircleLeft,
+    faArrowLeft,
     faClock,
     faCoins,
     faComments,
@@ -99,6 +100,7 @@ class PQuestion extends Component {
     }
 
     componentDidMount() {
+        this.getInfo()
         this.loadUserCoins()
         this.loadLogin()
         this.loadDetailedQuestion()
@@ -210,9 +212,13 @@ class PQuestion extends Component {
                                     }}
                                 />
                             </Span>
-                            <FontAwesomeIcon style={{marginLeft: "12px", cursor: "pointer"}} color="lightgray"
-                                             icon={faComments} onClick={() => {
-                            }}/>
+                            { this.state.login === this.state.question.askedbylogin ?
+                                <div className="privateChat">
+                                    <FontAwesomeIcon style={{marginRight: "4px"}}icon={faComments} onClick={() => {
+                                    }}/>
+                                    Начать чат
+                                </div> : null
+                            }
                         </div>
                         <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic}
                                      authorid={answer.authorid}/>
@@ -245,9 +251,7 @@ class PQuestion extends Component {
         return (
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Поднять стоимость</BlockTitle>
-                <BlockLine color="rgb(0, 0, 0)">
-                    Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}
-                </BlockLine>
+                <BlockLine color="rgb(39, 38, 49)">Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}</BlockLine>
                 <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы
                     эксперты ответили быстрее. </BlockLine>
                 <input
@@ -258,7 +262,8 @@ class PQuestion extends Component {
                     }}
                     className="inputBox"
                     type="number"
-                    rows="4"
+                    min={0}
+                    max={this.state.user.coins}
                     placeholder="Стоимость"
                     value={this.state.donateCoins}
                 />
@@ -275,7 +280,7 @@ class PQuestion extends Component {
         return (
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Информация</BlockTitle>
-                <BlockLine color="rgb(0, 0, 0)">Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}</BlockLine>
+                
             </div>
         )
     }
@@ -333,19 +338,6 @@ class PQuestion extends Component {
                                     )
                                 })
                         }
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
-                        {/*<MessageBlock isMine={true} time="28/02/20 11:11" author="Russ Cox" profilePic="" text="Hello"/>*/}
                     </InfiniteScrollReverse>
                     <input
                         className="chatInput"
@@ -425,7 +417,7 @@ class PQuestion extends Component {
                                 }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат"/>
                                 <InlineBigButtonWithIcon onClick={() => {
                                     history.goBack()
-                                }} icon={faArrowAltCircleLeft} title="Назад"/>
+                                }} icon={faArrowLeft} title="Назад"/>
                             </Navigation>
                             <Row>
                                 <Col xs={12} md={4}>
@@ -456,6 +448,18 @@ class PQuestion extends Component {
         )
     }
 
+    getInfo() {
+        Post(profileService + "userinfo", {}, (response) => {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    name: response.data.name,
+                    profilePic: staticData + response.data.imagepath,
+                }
+            }))
+        })
+    }
+
     loadChatMessages() {
         Post(questionsService + "chatmessages", {
             questionid: this.state.question.id
@@ -478,9 +482,12 @@ class PQuestion extends Component {
 
     loadUserCoins() {
         Post(profileService + "usercoins", {}, (response) => {
-            this.setState({
-                usercoins: response.data.coin
-            })
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    coins: response.data.coin,
+                }
+            }))
         })
     }
 
