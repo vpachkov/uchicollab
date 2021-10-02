@@ -177,3 +177,11 @@ type PopularRequest struct {
 type PopularResponse struct {
 	Questions []BriefQuestion `json:"questions"`
 }
+
+type RecommendationsRequest struct {
+	services.SessionableRequest
+}
+
+type RecommendationsResponse struct {
+	Questions []BriefQuestion `json:"questions"`
+}
