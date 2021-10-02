@@ -22,7 +22,7 @@ func handleComments(request CommentsRequest) (response CommentsResponse, status 
 			Text:      comment.Text,
 			Score:     int(comment.Score),
 			Name:      comment.Commentator.Name,
-			ImagePath: comment.Commentator.Login + ".png",
+			ImagePath: comment.Commentator.ImagePath,
 		})
 
 		println(comment.Commentator.Name)
@@ -41,7 +41,7 @@ func handleUserInfo(request SessionableRequest) (response UserInfoResponse, stat
 
 	response.Name = session.User.Name
 	response.Login = session.User.Login
-	response.ImagePath = session.User.Login + ".png"
+	response.ImagePath = session.User.ImagePath
 
 	status = http.StatusOK
 	return
@@ -87,10 +87,10 @@ func handleRegister(request RegisterRequest) (status int) {
 		return
 	}
 	newUser := &db.User{
-		Coins: 10,
-		Login: request.Login,
+		Coins:        10,
+		Login:        request.Login,
 		PasswordHash: request.Password,
-		Name: request.Name,
+		Name:         request.Name,
 	}
 	dbi.Create(newUser)
 	status = http.StatusOK

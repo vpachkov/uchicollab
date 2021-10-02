@@ -114,7 +114,7 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
 			AskedByLogin:     question.Opener.Login,
-			AskedByImagePath: question.Opener.Login + ".png",
+			AskedByImagePath: question.Opener.ImagePath,
 		})
 	}
 
@@ -160,7 +160,7 @@ func handleDetailedQuestion(request DetailedQuestionRequest) (response DetailedQ
 
 	response.AskedByName = question.Opener.Name
 	response.AskedByLogin = question.Opener.Login
-	response.AskedByImagePath = question.Opener.Login + ".png"
+	response.AskedByImagePath = question.Opener.ImagePath
 
 	for _, upvoter := range question.Upvoters {
 		response.Upvoters = append(response.Upvoters, Upvoter{
@@ -177,7 +177,7 @@ func handleDetailedQuestion(request DetailedQuestionRequest) (response DetailedQ
 			Date:            answer.Date.UnixNano(),
 			AuthorName:      answer.Author.Name,
 			AuthorLogin:     answer.Author.Login,
-			AuthorImagePath: answer.Author.Login + ".png",
+			AuthorImagePath: answer.Author.ImagePath,
 		}
 
 		for _, donator := range answer.Donators {
@@ -319,7 +319,7 @@ func handleChatMessages(request ChatMessagesRequest) (response ChatMessagesRespo
 		response.Messages = append(response.Messages, ChatMessage{
 			UserName:      message.User.Name,
 			UserLogin:     message.User.Login,
-			UserImagePath: message.User.Login + ".png",
+			UserImagePath: message.User.ImagePath,
 			Time:          message.Time.UnixNano(),
 			Text:          message.Text,
 		})

@@ -1,8 +1,11 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"uchicollab/db"
@@ -20,8 +23,19 @@ func main() {
 	var vass db.User
 	dbi.First(&vass)
 	if vass.ID == 0 {
-		vas := &db.User{Name: "Русс Молочков", Login: "russcox", PasswordHash: "fafa", Coins: 40}
-		dich := &db.User{Name: "Никита Коровкин", Login: "nimelekhin", PasswordHash: "fafa"}
+		vas := &db.User{
+			Name:         "Русс Молочков",
+			Login:        "russcox",
+			PasswordHash: "fafa",
+			Coins:        40,
+			ImagePath:    "russcox.png",
+		}
+		dich := &db.User{
+			Name:         "Никита Коровкин",
+			Login:        "nimelekhin",
+			PasswordHash: "fafa",
+			ImagePath:    "nimelekhin.png",
+		}
 		sess := &db.Session{User: vas}
 		dbi.Create(dich)
 		dbi.Create(sess)
@@ -127,6 +141,41 @@ func main() {
 	// setup statics
 	fs := http.FileServer(http.Dir("static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
+	mux.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
+		header := w.Header()
+		header.Add("Access-Control-Allow-Origin", "*")
+		header.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
+		header.Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+
+		er := r.ParseMultipartForm(0)
+		if er != nil {
+			log.Fatal(er)
+		}
+
+		file, handler, err := r.FormFile("avatar")
+		if err != nil {
+			return
+		}
+		defer file.Close()
+
+		ext := filepath.Ext(handler.Filename)
+		login := r.FormValue("login")
+		imagePath := login + ext
+		f, err := os.OpenFile("static/"+imagePath, os.O_WRONLY|os.O_CREATE, 0666)
+
+		if err != nil {
+			return
+		}
+
+		io.Copy(f, file)
+
+		var user db.User
+		dbi.First(&user, "login = ?", login)
+		if user.ID != 0 {
+			user.ImagePath = imagePath
+			dbi.Updates(&user)
+		}
+	})
 
 	// start the server
 	log.Println("Starting...")

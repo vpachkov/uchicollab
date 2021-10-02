@@ -10,7 +10,7 @@ import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faClock, faCoins, faUser, faPlus, faArrowAltCircleLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
-import {authorizationService, Post, profileService} from "../config";
+import {authorizationService, Post, profileService, uploadStaticData} from "../config";
 import { withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import Select from 'react-select';
@@ -109,6 +109,18 @@ class PRegister extends Component {
                                         })
                                     } }
                                 />
+                                <BlockLine color="rgb(133, 133, 138)">Загрузите аватар*</BlockLine>
+                                <input
+                                    type="file"
+                                    id="avatar"
+                                    name="avatar"
+                                    accept="image/png, image/jpeg"
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            avatar: event.target.files[0]
+                                        })
+                                    } }
+                                />
                                 <BlockLine color="rgb(133, 133, 138)"/>
                             </Col>
                             <Col>
@@ -190,7 +202,28 @@ class PRegister extends Component {
                                         })).then(() => {
                                             Cookies.set('login', this.state.login)
                                             Cookies.set('password', this.state.password)
-                                            history.push('/')
+
+                                            const formData = new FormData();
+                                            formData.append(
+                                                'avatar',
+                                                this.state.avatar,
+                                                this.state.avatar.name,
+                                            )
+
+                                            formData.append(
+                                                'login',
+                                                this.state.login,
+                                            )
+
+                                            axios.post(uploadStaticData, formData,{
+                                                headers: {
+                                                    'Content-Type': 'multipart/form-data'
+                                                }
+                                            }).then(() => {
+                                                history.push('/')
+                                            })
+
+
                                         }).catch((error) => {
                                             if (error.response !== undefined && error.response.status === 401) {
                                                 this.setState({
