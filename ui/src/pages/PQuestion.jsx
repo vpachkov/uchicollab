@@ -325,7 +325,8 @@ class PQuestion extends Component {
                         loadMore={this.chatLoadMore()}
                     >
                         {
-                            this.state.chatMessages === undefined ? null :
+                            this.state.chatMessages === undefined ||
+                            this.state.chatMessages === null ? null :
                                 this.state.chatMessages.map((message) => {
                                     return (
                                         <MessageBlock
@@ -406,7 +407,8 @@ class PQuestion extends Component {
                 <AbstractBlock color="white">
                     <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                     {
-                        question.tags === undefined ? null :
+                        question.tags === undefined ||
+                        question.tags === null ? null :
                             question.tags.map(tag => {
                                 return (
                                     <KeywordBlock><span>{tag}</span></KeywordBlock>

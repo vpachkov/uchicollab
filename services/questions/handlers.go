@@ -212,14 +212,14 @@ func handleUpvote(request UpvoteRequest) (status int) {
 	}
 
 	if session.User.Coins >= request.Coins {
+		session.User.Coins -= request.Coins
+		dbi.Save(session.User)
+
 		var question db.Question
 		dbi.
 			Preload("Upvoters").
 			Preload("Upvoters.User").
 			First(&question, "id = ?", request.QuestionID)
-
-		session.User.Coins -= request.Coins
-		dbi.Updates(session.User)
 
 		exists := false
 		for _, upvoter := range question.Upvoters {
