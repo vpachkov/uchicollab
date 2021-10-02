@@ -38,6 +38,7 @@ type BriefQuestionsRequest struct {
 type BriefQuestion struct {
 	ID               int    `json:"id"`
 	Answers          int    `json:"answers"`
+	Cost             int    `json:"cost"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`
 	AskedByName      string `json:"askedbyname"`

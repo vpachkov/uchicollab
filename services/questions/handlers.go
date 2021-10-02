@@ -57,6 +57,7 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 		Preload("Tags").
 		Preload("Opener").
 		Preload("Answers").
+		Preload("Upvoters").
 		Find(&questions).Order("cost")
 
 	for _, question := range questions {
@@ -100,9 +101,15 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 			}
 		}
 
+		cost := 0
+		for _, upvoter := range question.Upvoters {
+			cost += upvoter.Coins
+		}
+
 		response.Questions = append(response.Questions, BriefQuestion{
 			ID:               question.ID,
 			Answers:          len(question.Answers),
+			Cost:             cost,
 			Title:            question.Title,
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
@@ -110,6 +117,10 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 			AskedByImagePath: question.Opener.Login + ".png",
 		})
 	}
+
+	sort.Slice(response.Questions, func(i, j int) bool {
+		return response.Questions[i].Cost > response.Questions[j].Cost
+	})
 
 	status = http.StatusOK
 	return
