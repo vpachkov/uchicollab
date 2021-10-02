@@ -29,7 +29,7 @@ import {
     faStar,
     faTimes
 } from '@fortawesome/free-solid-svg-icons'
-import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
+import { faHeart as fasHeart, faHourglass } from '@fortawesome/free-regular-svg-icons'
 import { notificationService, Post, profileService, questionsService, staticData, uploadStaticAnswerData, uploadStaticData } from "../config";
 import { withCookies } from 'react-cookie';
 import history from "../history";
@@ -370,7 +370,17 @@ class PQuestion extends Component {
 
     renderSideBar = () => {
         if (!this.questionIsActive()) {
-            return null
+            return (
+                <Col xs={12} md={4}>
+                    <Block color="white">
+                        <div>
+                            <div style={{textAlign: "center", fontSize: "3em", color: "lightgray", marginBottom: "-20px"}}><FontAwesomeIcon icon={faHourglass} /></div>
+                            <BlockTitle color="rgb(69, 68, 79)" text="bold">Вопрос решен</BlockTitle>
+                            <BlockLine>Вопрос закрыт и дальнеейшее обсуждения вопроса возможно только в общем чате.</BlockLine>
+                        </div>
+                    </Block>
+                </Col>
+            )
         }
         return (
             <Col xs={12} md={4}>
@@ -434,21 +444,21 @@ class PQuestion extends Component {
                     </InfiniteScrollReverse>
                     {
                         !this.questionIsActive() ? null :
-                        <div>
-                            <input
-                                className="chatInput"
-                                placeholder="Ваше сообщение"
-                                onChange={(event) => {
-                                    this.setState({
-                                        myMessage: event.target.value,
-                                    })
-                                }}
-                                value={this.state.myMessage}
-                            />
-                            <div
-                                onClick={() => {
-                                    Post(
-                                        questionsService + "sendmessage", {
+                            <div>
+                                <input
+                                    className="chatInput"
+                                    placeholder="Ваше сообщение"
+                                    onChange={(event) => {
+                                        this.setState({
+                                            myMessage: event.target.value,
+                                        })
+                                    }}
+                                    value={this.state.myMessage}
+                                />
+                                <div
+                                    onClick={() => {
+                                        Post(
+                                            questionsService + "sendmessage", {
                                             questionid: this.state.question.id,
                                             text: this.state.myMessage,
                                         }, () => {
@@ -457,12 +467,12 @@ class PQuestion extends Component {
                                                 myMessage: ""
                                             })
                                         })
-                                }}
-                                className="sendInput"
-                            >
-                                <FontAwesomeIcon icon={faPaperPlane}/>
+                                    }}
+                                    className="sendInput"
+                                >
+                                    <FontAwesomeIcon icon={faPaperPlane} />
+                                </div>
                             </div>
-                        </div>
                     }
                 </div>
             </div>
@@ -542,7 +552,7 @@ class PQuestion extends Component {
                                 }} icon={faArrowLeft} title="Назад" />
                             </Navigation>
                             <Row>
-                                { this.renderSideBar() }
+                                {this.renderSideBar()}
                                 <Col xs={12} md={8}>
                                     {this.renderQuestion(this.state.question)}
 
@@ -606,13 +616,13 @@ class PQuestion extends Component {
                                                     </div>
                                                 </div> :
                                                 !this.questionIsActive() ? null :
-                                                <div style={{ marginTop: "-42px", textAlign: "right" }}>
-                                                    <ButtonGray title="Добавить ответ" onClick={() => {
-                                                        this.setState({
-                                                            addingAnswer: true
-                                                        })
-                                                    }} />
-                                                </div>
+                                                    <div style={{ marginTop: "-42px", textAlign: "right" }}>
+                                                        <ButtonGray title="Добавить ответ" onClick={() => {
+                                                            this.setState({
+                                                                addingAnswer: true
+                                                            })
+                                                        }} />
+                                                    </div>
                                         }
                                         {
                                             this.state.question === undefined ||
