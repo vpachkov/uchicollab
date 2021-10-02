@@ -1,7 +1,10 @@
 package notifications
 
 import (
+	"fmt"
 	"net/http"
+	"sort"
+	"time"
 	"uchicollab/db"
 )
 
@@ -13,7 +16,12 @@ func handleList(request NotificationListRequest) (response NotificationListRespo
 		return
 	}
 
-	for idx, notific := range session.User.Notifications {
+	notifics := session.User.Notifications
+	sort.Slice(notifics, func(i, j int) bool {
+		return notifics[i].ID > notifics[j].ID
+	})
+
+	for idx, notific := range notifics {
 		if idx >= request.Number {
 			break
 		}
@@ -25,6 +33,38 @@ func handleList(request NotificationListRequest) (response NotificationListRespo
 			Date:  notific.Time.UnixNano(),
 		})
 	}
+
+	status = http.StatusOK
+	return
+}
+
+func handleCallUser(request CallUserRequest) (response CallUserResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var user db.User
+	dbi.First(&user, "login = ?", request.Login)
+	if user.ID == 0 {
+		status = http.StatusForbidden
+		return
+	}
+
+	var question db.Question
+	dbi.First(&question, "id = ?", request.QuestionID)
+	if question.ID == 0 {
+		status = http.StatusForbidden
+		return
+	}
+
+	notificMessage := fmt.Sprintf("Пользователь %v обратил Ваше внимание на вопрос «%v»", session.User.Name, question.Title)
+	notificLink := fmt.Sprintf("/question/%v", question.ID)
+	notific := db.Notification{Title: "Новое приглашение", Text: notificMessage, Link: notificLink, Time: time.Now()}
+	user.Notifications = append(user.Notifications, notific)
+	dbi.Save(&user)
 
 	status = http.StatusOK
 	return

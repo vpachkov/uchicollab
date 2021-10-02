@@ -1,6 +1,7 @@
 package questions
 
 import (
+	"fmt"
 	"net/http"
 	"sort"
 	"time"
@@ -490,6 +491,12 @@ func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
 
 	dbi.Save(&question)
 	response.AnswerID = question.Answers[len(question.Answers)-1].ID
+
+	notificMessage := fmt.Sprintf("Новый ответ на вопрос «%v» от пользователя %v", question.Title, session.User.Name)
+	notificLink := fmt.Sprintf("/question/%v#%v", question.ID, response.AnswerID)
+	notific := db.Notification{Title: "Новый ответ на вопрос", Text: notificMessage, Link: notificLink, Time: time.Now()}
+	question.Opener.Notifications = append(question.Opener.Notifications, notific)
+	dbi.Save(&question.Opener)
 
 	status = http.StatusOK
 	return

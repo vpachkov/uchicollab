@@ -30,7 +30,7 @@ import {
     faTimes
 } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
-import { Post, profileService, questionsService, staticData, uploadStaticAnswerData, uploadStaticData } from "../config";
+import { notificationService, Post, profileService, questionsService, staticData, uploadStaticAnswerData, uploadStaticData } from "../config";
 import { withCookies } from 'react-cookie';
 import history from "../history";
 import InfiniteScrollReverse from "react-infinite-scroll-reverse";
@@ -63,6 +63,7 @@ class PQuestion extends Component {
                 subscribedTages: ["Math", "Russian"],
             },
 
+            calluser: "",
             userid: 0,
             // question: {
             //     id: 0,
@@ -350,8 +351,23 @@ class PQuestion extends Component {
     renderInformation = () => {
         return (
             <div>
-                <BlockTitle color="rgb(69, 68, 79)" text="bold">Информация</BlockTitle>
+                <BlockTitle color="rgb(69, 68, 79)" text="bold">Пригласить пользователя</BlockTitle>
+                <input
+                    className="inputBox"
+                    min={0}
+                    max={this.state.user.coins}
+                    placeholder="Введите логин"
+                    value={this.state.calluser}
+                    onChange={(event) => {
+                        this.setState({
+                            calluser: event.target.value
+                        })
+                    }}
+                />
 
+                <Button title="Внести голоса" onClick={() => {
+                    this.calluserfunc()
+                }} />
             </div>
         )
     }
@@ -620,6 +636,16 @@ class PQuestion extends Component {
                     profilePic: staticData + response.data.imagepath,
                 }
             }))
+        })
+    }
+
+    calluserfunc() {
+        console.log("shit")
+        Post(notificationService + "calluser", {
+            questionid: this.state.question.id,
+            login: this.state.calluser
+        }, (response) => {
+            
         })
     }
 
