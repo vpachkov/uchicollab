@@ -375,8 +375,8 @@ class PQuestion extends Component {
                     <Block color="white">
                         <div>
                             <div style={{textAlign: "center", fontSize: "3em", color: "lightgray", marginBottom: "-20px"}}><FontAwesomeIcon icon={faHourglass} /></div>
-                            <BlockTitle color="rgb(69, 68, 79)" text="bold">Вопрос решен</BlockTitle>
-                            <BlockLine>Вопрос закрыт и дальнеейшее обсуждения вопроса возможно только в общем чате.</BlockLine>
+                            <BlockTitle color="rgb(69, 68, 79)" text="bold">Вопрос закрыт</BlockTitle>
+                            <BlockLine>Вопрос закрыт и не подлежит дальнейшему обсуждению. Вам доступны запись чата и ответы</BlockLine>
                         </div>
                     </Block>
                 </Col>
