@@ -164,3 +164,39 @@ func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInf
 	status = http.StatusOK
 	return
 }
+
+func handleUserRaitingList(request SessionableRequest) (response UserRaitingListResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+	var users []db.User
+	dbi.Find(&users)
+
+	for _, user := range users {
+		var count int64
+		dbi.Model(&db.Answer{}).Where("author_id = ?", user.ID).Count(&count)
+
+		var answers []db.Answer
+		dbi.Preload("Donators").
+			Find(&answers, "author_id = ?", user.ID)
+
+		likes := 0
+		for _, answer := range answers {
+			for _, donator := range answer.Donators {
+				likes += donator.Coins
+			}
+		}
+
+		response.Raitings = append(response.Raitings, UserRaiting{Name: user.Name, Login: user.Login, ImagePath: user.ImagePath, Rating: likes/5 + int(count)})
+	}
+
+	sort.Slice(response.Raitings, func(i, j int) bool {
+		return response.Raitings[i].Rating > response.Raitings[j].Rating
+	})
+
+	status = http.StatusOK
+	return
+}

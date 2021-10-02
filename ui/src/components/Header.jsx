@@ -159,6 +159,9 @@ export class Navigation extends Component {
                 <InlineBigButton onClick={() => {
                     history.push('/help')
                 }} title="Все Вопросы" />
+                <InlineBigButton onClick={() => {
+                    history.push('/raitings')
+                }} title="Рейтинг" />
             </ButtonHandler>
         )
     }

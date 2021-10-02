@@ -72,3 +72,14 @@ type PublicUserInfoResponse struct {
 
 	Comments []Comment `json:"comments"`
 }
+
+type UserRaiting struct {
+	Name      string `json:"name"`
+	ImagePath string `json:"imagepath"`
+	Login     string `json:"login"`
+	Rating    int    `json:"raiting"`
+}
+
+type UserRaitingListResponse struct {
+	Raitings []UserRaiting `json:"raitings"`
+}

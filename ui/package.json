@@ -14,6 +14,8 @@
         "body-scroll-lock": "*",
         "bootstrap": "^5.1.1",
         "ember-font-awesome": "^3.0.5",
+        "js-cookie": "^3.0.1",
+        "moment": "^2.29.1",
         "prop-types": "^15.7.2",
         "react": "^17.0.2",
         "react-bootstrap": "^1.6.4",
@@ -31,9 +33,7 @@
         "saas": "^1.0.0",
         "tinycolor2": "^1.4.2",
         "wavy-svg": "^1.1.2",
-        "web-vitals": "^1.1.2",
-        "js-cookie": "^3.0.1",
-        "moment": "^2.29.1"
+        "web-vitals": "^1.1.2"
     },
     "scripts": {
         "start": "react-scripts start",

@@ -12,6 +12,7 @@ import history from './history'
 import PProfile from './pages/PProfile';
 import PLogin from './pages/PLogin';
 import PRegister from './pages/PRegister';
+import PRaiting from './pages/PRaiting';
 
 function App() {
     return (
@@ -26,6 +27,8 @@ function App() {
                 <Route exact path="/login" render={(props) => <PLogin/>}>
                 </Route>
                 <Route exact path="/register" render={(props) => <PRegister/>}>
+                </Route>
+                <Route exact path="/raitings" render={(props) => <PRaiting/>}>
                 </Route>
                 <Route
                     exact path="/question/:id"

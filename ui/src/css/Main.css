@@ -156,4 +156,13 @@
   color: black;
 }
 
+.allCenterFlex {
+  padding: 10px;
+  color: #45444f;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+
 /*# sourceMappingURL=Main.css.map */
