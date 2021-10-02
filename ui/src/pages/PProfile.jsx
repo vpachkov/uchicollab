@@ -243,23 +243,34 @@ class PProfile extends Component {
 
     getInfo() {
         Post(profileService + "userinfo", {}, (response) => {
-            this.setState({
+            this.setState(prevState => ({
                 user: {
+                    ...prevState.user,
                     name: response.data.name,
                     profilePic: staticData + response.data.imagepath,
                 }
-            })
+            }))
+        })
+
+        Post(profileService + "usercoins", {}, (response) => {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    coins: response.data.coin,
+                }
+            }))
         })
     }
 
     getRaiting() {
         Post(profileService + "userraiting", {}, (response) => {
-            this.setState({
+            this.setState(prevState => ({
                 user: {
+                    ...prevState.user,
                     answers: response.data.answers,
                     bestAnswers: response.data.bestAnswers,
                 }
-            })
+            }))
         })
     }
 }
