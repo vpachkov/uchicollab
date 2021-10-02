@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
     AbstractBetweenSpacingBlock,
     AbstractBlock,
@@ -10,12 +10,12 @@ import {
     MessageBlock,
     Span
 } from "../components/Blocks";
-import {BigButtonWithIcon, Button, InlineBigButtonWithIcon} from "../components/Buttons";
-import {MiniQuestion, QuestionBody} from "../components/Questions";
-import {Header, Navigation} from "../components/Header";
+import { BigButtonWithIcon, Button, InlineBigButtonWithIcon, ButtonGray } from "../components/Buttons";
+import { MiniQuestion, QuestionBody } from "../components/Questions";
+import { Header, Navigation } from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Container, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { Col, Container, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faArrowAltCircleLeft,
     faArrowLeft,
@@ -28,12 +28,12 @@ import {
     faStar,
     faTimes
 } from '@fortawesome/free-solid-svg-icons'
-import {faHeart as fasHeart} from '@fortawesome/free-regular-svg-icons'
-import {Post, profileService, questionsService, staticData} from "../config";
-import {withCookies} from 'react-cookie';
+import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons'
+import { Post, profileService, questionsService, staticData } from "../config";
+import { withCookies } from 'react-cookie';
 import history from "../history";
 import InfiniteScrollReverse from "react-infinite-scroll-reverse";
-import {disableBodyScroll, enableBodyScroll} from 'body-scroll-lock';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 class PQuestion extends Component {
 
@@ -42,6 +42,7 @@ class PQuestion extends Component {
 
         this.state = {
             isChatLoading: true,
+            addingAnswer: false,
             chatWithUser: undefined,
 
             user: {
@@ -195,16 +196,16 @@ class PQuestion extends Component {
             bc = "#e7d27c"
         }
         return (
-            <Row style={{marginTop: "16px"}}>
-                <MiniQuestion borderColor={bc} style={{cursor: "default"}}>
-                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#e7d27c" icon={faStar}/> Лучший
+            <Row style={{ marginTop: "16px" }}>
+                <MiniQuestion borderColor={bc} style={{ cursor: "default" }}>
+                    {answer.best ? <Span fontWeight="bold"> <FontAwesomeIcon color="#e7d27c" icon={faStar} /> Лучший
                         ответ</Span> : null}
-                    <QuestionBody max={-1} text={answer.text}/>
-                    <AbstractBetweenSpacingBlock style={{marginTop: "8px"}}>
-                        <div style={{width: "100%"}}>
+                    <QuestionBody max={-1} text={answer.text} />
+                    <AbstractBetweenSpacingBlock style={{ marginTop: "8px" }}>
+                        <div style={{ width: "100%" }}>
                             <Span fontWeight="regular" color={this.state.maincolor}>{answer.likes}
                                 <FontAwesomeIcon
-                                    style={{marginLeft: "4px", cursor: "pointer"}}
+                                    style={{ marginLeft: "4px", cursor: "pointer" }}
                                     color="#FAA0A0"
                                     icon={this.isLikedAnswer(answer) ? faHeart : fasHeart}
                                     onClick={() => {
@@ -212,16 +213,16 @@ class PQuestion extends Component {
                                     }}
                                 />
                             </Span>
-                            { this.state.login === this.state.question.askedbylogin ?
+                            {this.state.login === this.state.question.askedbylogin ?
                                 <div className="privateChat">
-                                    <FontAwesomeIcon style={{marginRight: "4px"}}icon={faComments} onClick={() => {
-                                    }}/>
+                                    <FontAwesomeIcon style={{ marginRight: "4px" }} icon={faComments} onClick={() => {
+                                    }} />
                                     Начать чат
                                 </div> : null
                             }
                         </div>
                         <AuthorBlock author={answer.author} date={answer.date} profilePic={answer.profilePic}
-                                     authorid={answer.authorid}/>
+                            authorid={answer.authorid} />
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
             </Row>
@@ -267,10 +268,10 @@ class PQuestion extends Component {
                     placeholder="Стоимость"
                     value={this.state.donateCoins}
                 />
-                <div style={{textAlign: "right", marginTop: "16px"}}>
+                <div style={{ textAlign: "right", marginTop: "16px" }}>
                     <Button title="Внести голоса" onClick={() => {
                         this.onDonate()
-                    }}/>
+                    }} />
                 </div>
             </div>
         )
@@ -280,7 +281,7 @@ class PQuestion extends Component {
         return (
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Информация</BlockTitle>
-                
+
             </div>
         )
     }
@@ -309,15 +310,15 @@ class PQuestion extends Component {
             <div>
                 <div className="tintHandler" onClick={() => {
                     enableBodyScroll(document.querySelector('#mainScroll'))
-                    this.setState({chatWithUser: undefined})
-                }}/>
+                    this.setState({ chatWithUser: undefined })
+                }} />
                 <div className="popupChatHandler">
                     <div className="chatClose"
-                         style={{backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString()}}
-                         onClick={() => {
-                             enableBodyScroll(document.querySelector('#mainScroll'))
-                             this.setState({chatWithUser: undefined})
-                         }}><FontAwesomeIcon icon={faTimes}/></div>
+                        style={{ backgroundColor: "#ffe2e1", color: tinycolor("#ffe2e1").darken(50).toString() }}
+                        onClick={() => {
+                            enableBodyScroll(document.querySelector('#mainScroll'))
+                            this.setState({ chatWithUser: undefined })
+                        }}><FontAwesomeIcon icon={faTimes} /></div>
                     <InfiniteScrollReverse
                         className="chatHandler"
                         hasMore={this.chatHasMore()}
@@ -326,15 +327,15 @@ class PQuestion extends Component {
                     >
                         {
                             this.state.chatMessages === undefined ||
-                            this.state.chatMessages === null ? null :
+                                this.state.chatMessages === null ? null :
                                 this.state.chatMessages.map((message) => {
                                     return (
                                         <MessageBlock
                                             time="28/02/20 11:11"
-                                            author={ message.username }
-                                            profilePic={ staticData + message.userimagepath }
-                                            text={ message.text }
-                                            isMine={ this.state.login === message.userlogin }
+                                            author={message.username}
+                                            profilePic={staticData + message.userimagepath}
+                                            text={message.text}
+                                            isMine={this.state.login === message.userlogin}
                                         />
                                     )
                                 })
@@ -343,27 +344,27 @@ class PQuestion extends Component {
                     <input
                         className="chatInput"
                         placeholder="Ваше сообщение"
-                        onChange={ (event) => {
+                        onChange={(event) => {
                             this.setState({
-                                myMessage : event.target.value,
+                                myMessage: event.target.value,
                             })
                         }}
-                        value={ this.state.myMessage }
-                        // value={}
+                        value={this.state.myMessage}
+                    // value={}
                     />
-                    <div onClick={ () => {
+                    <div onClick={() => {
                         Post(
-                            questionsService+"sendmessage", {
-                                questionid: this.state.question.id,
-                                text: this.state.myMessage,
-                            }, () => {
-                                this.loadChatMessages()
-                                this.setState({
-                                    myMessage: ""
-                                })
-                            }
+                            questionsService + "sendmessage", {
+                            questionid: this.state.question.id,
+                            text: this.state.myMessage,
+                        }, () => {
+                            this.loadChatMessages()
+                            this.setState({
+                                myMessage: ""
+                            })
+                        }
                         )
-                    }} className="sendInput"><FontAwesomeIcon icon={faPaperPlane}/></div>
+                    }} className="sendInput"><FontAwesomeIcon icon={faPaperPlane} /></div>
                 </div>
             </div>
         )
@@ -394,21 +395,21 @@ class PQuestion extends Component {
         return (
             <Block color="white">
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">{question.title}</BlockTitle>
-                <QuestionBody max={-1} text={question.text}/>
+                <QuestionBody max={-1} text={question.text} />
                 <AbstractBlock color="white">
                     <KeywordBlock subject={question.subject}><FontAwesomeIcon icon={faGraduationCap}
-                                                                              style={{fontSize: ".9em"}}/><span
-                        style={{marginLeft: "4px"}}>{question.subject}</span></KeywordBlock>
-                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{fontSize: ".9em"}}/><span
-                        style={{marginLeft: "4px"}}>4 days</span></KeywordBlock>
-                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{fontSize: ".9em"}}/><span
-                        style={{marginLeft: "4px"}}>{question.cost}</span></KeywordBlock>
+                        style={{ fontSize: ".9em" }} /><span
+                            style={{ marginLeft: "4px" }}>{question.subject}</span></KeywordBlock>
+                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{ fontSize: ".9em" }} /><span
+                        style={{ marginLeft: "4px" }}>4 days</span></KeywordBlock>
+                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{ fontSize: ".9em" }} /><span
+                        style={{ marginLeft: "4px" }}>{question.cost}</span></KeywordBlock>
                 </AbstractBlock>
                 <AbstractBlock color="white">
                     <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
                     {
                         question.tags === undefined ||
-                        question.tags === null ? null :
+                            question.tags === null ? null :
                             question.tags.map(tag => {
                                 return (
                                     <KeywordBlock><span>{tag}</span></KeywordBlock>
@@ -417,10 +418,10 @@ class PQuestion extends Component {
                     }
                 </AbstractBlock>
                 <AuthorBlock
-                    author={ question.askedbyname }
-                    date={ this.formatTimestamp(question.date / 1000) }
-                    profilePic={ staticData + question.askedbyimagepath }
-                    authorid={ question.askedbylogin }/>
+                    author={question.askedbyname}
+                    date={this.formatTimestamp(question.date / 1000)}
+                    profilePic={staticData + question.askedbyimagepath}
+                    authorid={question.askedbylogin} />
             </Block>
         )
     }
@@ -430,17 +431,17 @@ class PQuestion extends Component {
             <div>
                 {this.state.chatWithUser === undefined ? null : this.renderChatPopup()}
                 <div id="mainScroll">
-                    <Header prefix="Вопрос от" user={this.state.user}/>
+                    <Header prefix="Вопрос от" user={this.state.user} />
                     <Container>
                         <main>
                             <Navigation>
                                 <BigButtonWithIcon onClick={() => {
                                     disableBodyScroll(document.querySelector('#mainScroll'))
                                     this.loadChatMessages()
-                                }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат"/>
+                                }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат" />
                                 <InlineBigButtonWithIcon onClick={() => {
                                     history.goBack()
-                                }} icon={faArrowLeft} title="Назад"/>
+                                }} icon={faArrowLeft} title="Назад" />
                             </Navigation>
                             <Row>
                                 <Col xs={12} md={4}>
@@ -454,9 +455,34 @@ class PQuestion extends Component {
                                     <Block color="white">
                                         <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
                                         {
+                                            this.state.addingAnswer ? <div><BlockLine color="rgb(133, 133, 138)">Ваш ответ</BlockLine>
+                                                <textarea
+                                                    className="textBox"
+                                                    rows="4"
+                                                    placeholder="Название"
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            text: event.target.value
+                                                        })
+                                                    }}
+                                                /><div style={{ textAlign: "right", marginTop: "4px" }}>
+                                                    <ButtonGray title="Добавить ответ" onClick={() => {
+                                                        this.setState({
+                                                            addingAnswer: true
+                                                        })
+                                                    }} />
+                                                </div></div> : <div style={{ textAlign: "left", marginTop: "16px" }}>
+                                                <ButtonGray title="Добавить ответ" onClick={() => {
+                                                    this.setState({
+                                                        addingAnswer: true
+                                                    })
+                                                }} />
+                                            </div>
+                                        }
+                                        {
                                             this.state.question === undefined ||
-                                            this.state.question.answers === undefined ||
-                                            this.state.question.answers === null ? null :
+                                                this.state.question.answers === undefined ||
+                                                this.state.question.answers === null ? null :
                                                 this.state.question.answers.map(answer => {
                                                     return (
                                                         this.renderAnswer(answer)
@@ -519,22 +545,22 @@ class PQuestion extends Component {
     loadDetailedQuestion() {
         Post(
             questionsService + "detailedquestion", {
-                id: parseInt(this.props.match.params.id)
-            }, (response) => {
-                this.setState({
-                    question: response.data
-                })
-            }
+            id: parseInt(this.props.match.params.id)
+        }, (response) => {
+            this.setState({
+                question: response.data
+            })
+        }
         )
     }
 
     loadComments() {
         Post(
             profileService + "comments", {
-                number: 5
-            }, (response) => {
-                this.setState({comments: response.data.comments})
-            })
+            number: 5
+        }, (response) => {
+            this.setState({ comments: response.data.comments })
+        })
     }
 }
 
