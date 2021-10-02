@@ -18,10 +18,11 @@ func handleList(request NotificationListRequest) (response NotificationListRespo
 			break
 		}
 		response.NotificationList = append(response.NotificationList, Notification{
-			ID:   notific.ID,
-			Text: notific.Text,
-			Link: notific.Link,
-			Date: notific.Time.UnixNano(),
+			ID:    notific.ID,
+			Title: notific.Title,
+			Text:  notific.Text,
+			Link:  notific.Link,
+			Date:  notific.Time.UnixNano(),
 		})
 	}
 
