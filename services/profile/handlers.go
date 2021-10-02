@@ -58,3 +58,22 @@ func handleUserCoins(request SessionableRequest) (response UserCoinsResponse, st
 	status = http.StatusOK
 	return
 }
+
+func handleUserRaiting(request SessionableRequest) (response UserRaitingResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var answerCount int64 = 0
+	var bestAnswerCount int64 = 0
+	dbi.Table("answers").Where("author_id = ?", session.User.ID).Count(&answerCount)
+	dbi.Table("answers").Where("author_id = ? AND best = true", session.User.ID).Count(&bestAnswerCount)
+
+	response.Answers = int(answerCount)
+	response.BestAnswers = int(bestAnswerCount)
+	status = http.StatusOK
+	return
+}

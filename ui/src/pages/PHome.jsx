@@ -20,15 +20,12 @@ import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
 import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components/Buttons";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Container, Row} from "react-bootstrap";
-import Wave from 'react-wavify'
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faClock, faCoins, faPlus, faStar, faUser, faHeart, faQuestion, faComment, faFire} from '@fortawesome/free-solid-svg-icons'
-import {Post, profileService, staticData} from "../config";
-import {Cookies, withCookies} from 'react-cookie';
-import {instanceOf} from 'prop-types';
+import { Col, Container, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBook, faChartLine, faClock, faCoins, faComment, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
+import { Post, profileService, staticData } from "../config";
+import { Cookies, withCookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 import history from "../history";
 
 
@@ -67,7 +64,7 @@ class PHome extends Component {
                 questions: 0,
                 likesRecieved: 0,
                 answers: 0,
-                bestAnswersRate: 0,
+                bestAnswers: 0,
                 subscribedTages: ["Math", "Russian"],
             },
 
@@ -83,6 +80,7 @@ class PHome extends Component {
 
     componentDidMount() {
         this.getInfo()
+        this.getRaiting()
         this.loadComments()
     }
 
@@ -103,6 +101,10 @@ class PHome extends Component {
                 }
             </div>
         )
+    }
+
+    recalcRaiting = (allAnswers, bestAnswers) => {
+        return bestAnswers * 10 + (allAnswers / 4)
     }
 
     render() {
@@ -140,28 +142,23 @@ class PHome extends Component {
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <AbstractBlock color="white">
-                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Аналитика</BlockTitle>
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Рейтинг</BlockTitle>
                                                 <AbstractBetweenSpacingBlock>
-                                                    <SquareBlock color="white"><SquareBlockImage
-                                                        color="rgb(250, 225, 213)"><FontAwesomeIcon
-                                                            color="rgb(225, 113, 60)"
-                                                            icon={faHeart} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.likesRecieved}</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(220, 222, 242)"><FontAwesomeIcon
                                                             color="rgb(74, 89, 183)"
-                                                            icon={faQuestion} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.questions}</SquareBlockText></SquareBlock>
+                                                            icon={faChartLine} /></SquareBlockImage><SquareBlockText
+                                                                color="rgb(133, 133, 138)">{this.recalcRaiting(this.state.user.answers, this.state.user.bestAnswers)}</SquareBlockText></SquareBlock>
+                                                    <SquareBlock color="white"><SquareBlockImage
+                                                        color="rgb(244, 222, 250)"><FontAwesomeIcon
+                                                            color="rgb(213, 98, 234)"
+                                                            icon={faFire} /></SquareBlockImage><SquareBlockText
+                                                                color="rgb(133, 133, 138)">{this.state.user.bestAnswers / this.state.user.answers}%</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(211, 239, 229)"><FontAwesomeIcon
                                                             color="rgb(105, 193, 153)"
                                                             icon={faComment} /></SquareBlockImage><SquareBlockText
                                                                 color="rgb(133, 133, 138)">{this.state.user.answers}</SquareBlockText></SquareBlock>
-                                                    <SquareBlock color="white"><SquareBlockImage
-                                                        color="rgb(244, 222, 250)"><FontAwesomeIcon
-                                                            color="rgb(213, 98, 234)"
-                                                            icon={faFire} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.bestAnswersRate}%</SquareBlockText></SquareBlock>
                                                 </AbstractBetweenSpacingBlock>
                                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные
                                                     темы</BlockTitle>
@@ -188,7 +185,7 @@ class PHome extends Component {
                             </Col>
                             <Col sm={12} md={6}>
                                 <Block color="white">
-                                    <BlockTitle color="black" text="bold">Новые вопросы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Новые вопросы</BlockTitle>
                                     {
                                         this.state.yourQuestions === undefined || this.state.yourQuestions === null ? null :
                                             this.state.yourQuestions.map(question => {
@@ -254,6 +251,17 @@ class PHome extends Component {
                 user: {
                     name: response.data.name,
                     profilePic: staticData + response.data.imagepath,
+                }
+            })
+        })
+    }
+
+    getRaiting() {
+        Post(profileService + "userraiting", {}, (response) => {
+            this.setState({
+                user: {
+                    answers: response.data.answers,
+                    bestAnswers: response.data.bestAnswers,
                 }
             })
         })

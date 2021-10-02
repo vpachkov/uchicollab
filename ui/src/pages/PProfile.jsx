@@ -24,7 +24,7 @@ import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faClock, faCoins, faComment, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faClock, faCoins, faComment, faChartLine, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Post, profileService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
@@ -65,7 +65,7 @@ class PProfile extends Component {
                 questions: 0,
                 likesRecieved: 0,
                 answers: 0,
-                bestAnswersRate: 0,
+                bestAnswers: 0,
                 subscribedTages: ["Math", "Russian"],
             },
 
@@ -78,6 +78,7 @@ class PProfile extends Component {
 
     componentDidMount() {
         this.getInfo()
+        this.getRaiting()
         this.loadComments()
     }
 
@@ -108,6 +109,10 @@ class PProfile extends Component {
         )
     }
 
+    recalcRaiting = (allAnswers, bestAnswers) => {
+        return bestAnswers * 10 + (allAnswers / 4)
+    }
+
     render() {
         if (this.state.user === undefined) {
             return null
@@ -117,7 +122,7 @@ class PProfile extends Component {
                 <Header prefix="Пользователь" user={this.state.user} />
                 <Container>
                     <main>
-                        <Navigation/>
+                        <Navigation />
                         <Row>
                             {this.isUserProfile() ? <Col xs={12} lg={12}><Block color="white">
                                 <AbstractBlock color="white">
@@ -144,28 +149,23 @@ class PProfile extends Component {
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <AbstractBlock color="white">
-                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Статус</BlockTitle>
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Рейтинг</BlockTitle>
                                                 <AbstractBetweenSpacingBlock>
-                                                    <SquareBlock color="white"><SquareBlockImage
-                                                        color="rgb(250, 225, 213)"><FontAwesomeIcon
-                                                            color="rgb(225, 113, 60)"
-                                                            icon={faHeart} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.likesRecieved}</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(220, 222, 242)"><FontAwesomeIcon
                                                             color="rgb(74, 89, 183)"
-                                                            icon={faQuestion} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.questions}</SquareBlockText></SquareBlock>
+                                                            icon={faChartLine} /></SquareBlockImage><SquareBlockText
+                                                                color="rgb(133, 133, 138)">{this.recalcRaiting(this.state.user.answers, this.state.user.bestAnswers)}</SquareBlockText></SquareBlock>
+                                                    <SquareBlock color="white"><SquareBlockImage
+                                                        color="rgb(244, 222, 250)"><FontAwesomeIcon
+                                                            color="rgb(213, 98, 234)"
+                                                            icon={faFire} /></SquareBlockImage><SquareBlockText
+                                                                color="rgb(133, 133, 138)">{this.state.user.bestAnswers / this.state.user.answers}%</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(211, 239, 229)"><FontAwesomeIcon
                                                             color="rgb(105, 193, 153)"
                                                             icon={faComment} /></SquareBlockImage><SquareBlockText
                                                                 color="rgb(133, 133, 138)">{this.state.user.answers}</SquareBlockText></SquareBlock>
-                                                    <SquareBlock color="white"><SquareBlockImage
-                                                        color="rgb(244, 222, 250)"><FontAwesomeIcon
-                                                            color="rgb(213, 98, 234)"
-                                                            icon={faFire} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.bestAnswersRate}%</SquareBlockText></SquareBlock>
                                                 </AbstractBetweenSpacingBlock>
                                                 <AbstractBlock color="white">
                                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные
@@ -247,6 +247,17 @@ class PProfile extends Component {
                 user: {
                     name: response.data.name,
                     profilePic: staticData + response.data.imagepath,
+                }
+            })
+        })
+    }
+
+    getRaiting() {
+        Post(profileService + "userraiting", {}, (response) => {
+            this.setState({
+                user: {
+                    answers: response.data.answers,
+                    bestAnswers: response.data.bestAnswers,
                 }
             })
         })

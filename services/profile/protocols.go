@@ -37,3 +37,8 @@ type UserInfoResponse struct {
 type UserCoinsResponse struct {
 	Coin int `json:"coin"`
 }
+
+type UserRaitingResponse struct {
+	Answers     int `json:"answers"`
+	BestAnswers int `json:"bestAnswers"`
+}
