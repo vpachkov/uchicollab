@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { User } from "../components/User";
 import { Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
-import { CustomSelect, Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton, InlineButton } from "../components/Buttons";
+import { CustomInputFile, CustomSelect, Button, ButtonHandler, BigButton, BigButtonWithIcon, InlineBigButtonWithIcon, InlineBigButton, InlineButton } from "../components/Buttons";
 import { MiniQuestion, QuestionTitle, QuestionBody, QuestionLable } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
@@ -110,7 +110,7 @@ class PRegister extends Component {
                                     } }
                                 />
                                 <BlockLine color="rgb(133, 133, 138)">Загрузите аватар*</BlockLine>
-                                <input
+                                <CustomInputFile
                                     type="file"
                                     id="avatar"
                                     name="avatar"

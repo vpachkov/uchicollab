@@ -57,8 +57,20 @@ class PCreate extends Component {
     }
 
     componentDidMount() {
+        this.fillFinalDate()
         this.getInfo()
         this.loadBriefQuestions()
+    }
+
+    fillFinalDate() {
+        const today = new Date()
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 3)
+        tomorrow.setHours(0)
+        tomorrow.setMilliseconds(0)
+        tomorrow.setSeconds(0)
+        tomorrow.setMinutes(0)
+        document.getElementById('dateInput').value = tomorrow.toISOString().slice(0, -13) + "12:00:00.000"
     }
 
     submit() {
@@ -124,6 +136,7 @@ class PCreate extends Component {
                 />
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input
+                    id="dateInput"
                     className="inputBox"
                     type="datetime-local"
                     rows="4"
@@ -176,7 +189,7 @@ class PCreate extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
                                     {
-                                        this.state.questions === undefined || this.state.questions === null ? <BlockLine>Начните писать вопрос и мы подберем похожие</BlockLine> :
+                                        this.state.questions === undefined || this.state.questions === null ? <BlockLine>Начните состовлять вопрос и система подберет наиболее похожие</BlockLine> :
                                             this.state.questions.map(question => {
                                                 return (
                                                     <BriefQuestion question={question} />

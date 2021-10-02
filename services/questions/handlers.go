@@ -76,16 +76,6 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 	}
 
 	for _, question := range questions {
-		if request.CostFrom > 0 {
-			if question.Cost < request.CostFrom {
-				continue
-			}
-		}
-		if request.CostTo > 0 {
-			if question.Cost > request.CostTo {
-				continue
-			}
-		}
 		if request.Subject != "" {
 			if question.Subject != request.Subject {
 				continue
@@ -121,11 +111,23 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 			cost += upvoter.Coins
 		}
 
+		if request.CostFrom > 0 {
+			if cost < request.CostFrom {
+				continue
+			}
+		}
+		if request.CostTo > 0 {
+			if cost > request.CostTo {
+				continue
+			}
+		}
+
 		response.Questions = append(response.Questions, BriefQuestion{
 			ID:               question.ID,
 			Answers:          len(question.Answers),
 			Cost:             cost,
 			Title:            question.Title,
+			Date:             question.OpenedTime.UnixNano(),
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
 			AskedByLogin:     question.Opener.Login,

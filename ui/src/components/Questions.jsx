@@ -87,7 +87,7 @@ export class BriefQuestion extends Component {
                                 <Span fontWeight="regular">{question.answers} <FontAwesomeIcon color="" icon={faComment} style={{ marginRight: "12px" }} /></Span>
                                 <Span fontWeight="regular">{question.cost} <FontAwesomeIcon color="" icon={faCoins} /></Span>
                             </div>
-                            <AuthorBlock author={question.askedbyname} date={this.formatTimestamp(question.date)} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
+                            <AuthorBlock author={question.askedbyname} date={this.formatTimestamp(question.date / 1000000)} profilePic={staticData + question.askedbyimagepath} authorid={question.askedbylogin} />
                         </AbstractBetweenSpacingBlock>
                     </Col>
                 </Row>

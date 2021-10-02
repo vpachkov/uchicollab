@@ -169,8 +169,9 @@ class PHelp extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Вопросы</BlockTitle>
                                     {
-                                        this.state.questions === undefined || this.state.questions === null ? null :
+                                        this.state.questions === undefined || this.state.questions === null ? <BlockLine>Ничего не найдено. Попробуйте подобрать другое слово в поиске или параметры фильтрации.</BlockLine> :
                                             this.state.questions.map(question => {
+                                                console.log(question)
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )

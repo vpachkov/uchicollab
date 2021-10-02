@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../css/Buttons.css';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperclip } from '@fortawesome/free-solid-svg-icons';
 
 export class BigButton extends Component {
     render() {
@@ -153,16 +154,28 @@ export class CustomInputFile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedTagsOption: null,
-            tags: new Set(),
+            openedFile: "",
         }
     }
 
     render() {
+        var id = this.props.id === undefined ? "upload__photo" : this.props.id
+
         return (
             <div>
-                <label for="upload-photo">Browse...</label>
-                <input type="file" name="photo" id="upload-photo" />
+                <label className="attachFiles" for={id}><FontAwesomeIcon style={{ marginRight: "4px" }} icon={faPaperclip} /> Приложить файлы</label>
+                <div className="attachFileText">{this.state.openedFile}</div>
+                <input
+                    style={{ visibility: "hidden" }}
+                    name={this.props.name}
+                    id={id}
+                    type={this.props.type}
+                    accept={this.props.accept}
+                    onChange={(event) => {
+                        this.setState({
+                            openedFile: event.target.files[0].name
+                        }, this.props.onChange(event))
+                    }} />
             </div>
         )
     }

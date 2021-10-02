@@ -28,7 +28,6 @@ import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import history from "../history";
 
-
 class PHome extends Component {
     renderProgress = [
         {

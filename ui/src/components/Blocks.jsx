@@ -115,18 +115,20 @@ export class CommentText extends Component {
 
 export class MessageBlock extends Component {
     render() {
+        var tinycolor = require("tinycolor2");
         var bg = this.props.isMine === true ? "rgb(194,226,230)" : "rgb(203,216,226)"
         var fl = this.props.isMine === true ? "right" : "lift"
         var borderTL = this.props.isMine === true ? "12px" : "4px"
         var borderBR = this.props.isMine === true ? "4px" : "12px"
+        var loclr = tinycolor(bg).darken(50).toString()
 
         return (
             <div style={{ color: this.props.textColor, textAlign: fl }}>
                 <div>
                     <div className="messageBlock" style={{ backgroundColor: bg, borderTopLeftRadius: borderTL, borderBottomRightRadius: borderBR }}>
+                        <div style={{ fontSize: ".7em", color: loclr }}>{this.props.author} {this.props.time}</div>
                         {this.props.text}
                     </div>
-                    <div style={{ fontSize: ".7em", color: "lightgray" }}>{this.props.time} от <ProfileLogo height="8px" width="8px" src={this.props.profilePic} /> {this.props.author}</div>
                 </div>
             </div>
         )

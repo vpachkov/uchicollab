@@ -10,7 +10,7 @@ import {
     MessageBlock,
     Span
 } from "../components/Blocks";
-import { BigButtonWithIcon, Button, InlineBigButtonWithIcon, ButtonGray } from "../components/Buttons";
+import { CustomInputFile, BigButtonWithIcon, Button, InlineBigButtonWithIcon, ButtonGray } from "../components/Buttons";
 import { MiniQuestion, QuestionBody } from "../components/Questions";
 import { Header, Navigation } from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -421,7 +421,7 @@ class PQuestion extends Component {
                                 this.state.chatMessages.map((message) => {
                                     return (
                                         <MessageBlock
-                                            time="28/02/20 11:11"
+                                            time={this.formatTimestamp(message.usertime / 1000000)}
                                             author={message.username}
                                             profilePic={staticData + message.userimagepath}
                                             text={message.text}
@@ -484,11 +484,17 @@ class PQuestion extends Component {
                     <KeywordBlock subject={question.subject}><FontAwesomeIcon icon={faGraduationCap}
                         style={{ fontSize: ".9em" }} /><span
                             style={{ marginLeft: "4px" }}>{question.subject}</span></KeywordBlock>
+                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{ fontSize: ".9em" }} /><span
+                        style={{ marginLeft: "4px" }}>{this.formatTimestamp(question.until / 1000000)}</span></KeywordBlock>
                     <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{ fontSize: ".9em" }} /><span
                         style={{ marginLeft: "4px" }}>{question.cost}</span></KeywordBlock>
                 </AbstractBlock>
                 <AbstractBlock color="white">
-                    <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
+                    {
+                        question.tags === undefined ||
+                            question.tags === null ? null :
+                            <BlockLine color="rgb(133, 133, 138)">Теги</BlockLine>
+                    }
                     {
                         question.tags === undefined ||
                             question.tags === null ? null :
@@ -551,7 +557,7 @@ class PQuestion extends Component {
                                                             })
                                                         }}
                                                     />
-                                                    <input
+                                                    <CustomInputFile
                                                         type="file"
                                                         id="answerImage"
                                                         name="answerImage"
@@ -593,7 +599,7 @@ class PQuestion extends Component {
                                                             )
                                                         }} />
                                                     </div>
-                                                </div> : <div style={{ textAlign: "left", marginTop: "16px" }}>
+                                                </div> : <div style={{ marginTop: "-42px", textAlign: "right" }}>
                                                     <ButtonGray title="Добавить ответ" onClick={() => {
                                                         this.setState({
                                                             addingAnswer: true
