@@ -129,7 +129,7 @@ class PHome extends Component {
                                         this.state.popularQuestions === undefined || this.state.popularQuestions === null ? null :
                                             this.state.popularQuestions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={question} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
                                             })
                                     }
@@ -142,7 +142,7 @@ class PHome extends Component {
                                         this.state.recommendationsQuestions === undefined || this.state.recommendationsQuestions === null ? null :
                                             this.state.recommendationsQuestions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={question} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
                                             })
                                     }
@@ -155,7 +155,8 @@ class PHome extends Component {
                                         this.state.notifications === undefined || this.state.notifications === null ? null :
                                             this.state.notifications.map(notification => {
                                                 return (
-                                                    <Notification notification={notification} />
+                                                    <div style={{ marginBottom: "8px" }}> <Notification notification={notification} /></div>
+                                                    
                                                 )
                                             })
                                     }

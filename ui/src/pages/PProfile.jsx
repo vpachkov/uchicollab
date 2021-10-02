@@ -176,7 +176,7 @@ class PProfile extends Component {
                                         this.state.newQuestions === undefined || this.state.newQuestions === null ? null :
                                             this.state.newQuestions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={question} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
                                             })
                                     }
@@ -189,7 +189,7 @@ class PProfile extends Component {
                                         this.state.yourQuestions === undefined || this.state.yourQuestions === null ? null :
                                             this.state.yourQuestions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={question} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
                                             })
                                     }
@@ -202,7 +202,7 @@ class PProfile extends Component {
                                         this.state.answers === undefined || this.state.answers === null ? null :
                                             this.state.answers.map(answer => {
                                                 return (
-                                                    <BriefAnswer answer={answer} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefAnswer answer={answer} /></div>
                                                 )
                                             })
                                     }

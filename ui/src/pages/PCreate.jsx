@@ -235,7 +235,7 @@ class PCreate extends Component {
                                         this.state.questions === undefined || this.state.questions === null ? <BlockLine>Начните состовлять вопрос и система подберет наиболее похожие</BlockLine> :
                                             this.state.questions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={question} />
+                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
                                             })
                                     }
