@@ -10,26 +10,24 @@ import Wave from 'react-wavify'
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faClock, faCoins, faUser, faPlus, faArrowAltCircleLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { Post, profileService } from "../config";
-import { Cookies, withCookies } from 'react-cookie';
+import {authorizationService, Post, profileService} from "../config";
+import { withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import Select from 'react-select';
 import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
 
+import Cookies from 'js-cookie'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Tags } from "../components/Tags";
 import { SubjectColor, Subjects } from "../constants";
+import axios from "axios";
 
 class PRegister extends Component {
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    };
 
     constructor(props) {
         super(props);
 
-        const { cookies } = props;
         this.state = {
             selectedSubjectOption: null,
             subjectInterest: new Set(),
@@ -63,21 +61,80 @@ class PRegister extends Component {
                         <Row>
                             <Col>
                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Регистрация</BlockTitle>
+                                <BlockLine color="rgb(133, 133, 138)">Имя*</BlockLine>
+                                <input
+                                    className="inputBox"
+                                    rows="4"
+                                    placeholder="Придумайте имя"
+                                    required
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            name: event.target.value
+                                        })
+                                    } }
+                                />
                                 <BlockLine color="rgb(133, 133, 138)">Логин*</BlockLine>
-                                <input className="inputBox" rows="4" placeholder="Придумайте логин" required></input>
+                                <input
+                                    className="inputBox"
+                                    rows="4"
+                                    placeholder="Придумайте логин"
+                                    required
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            login: event.target.value
+                                        })
+                                    } }
+                                />
                                 <BlockLine color="rgb(133, 133, 138)">Пароль*</BlockLine>
-                                <input className="inputBox" type="password" rows="4" placeholder="Придумайте пароль"></input>
+                                <input
+                                    className="inputBox"
+                                    type="password"
+                                    rows="4"
+                                    placeholder="Придумайте пароль"
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            password: event.target.value
+                                        })
+                                    } }
+                                />
                                 <BlockLine color="rgb(133, 133, 138)">Повторить пароль*</BlockLine>
-                                <input className="inputBox" type="password" rows="4" placeholder=""></input>
-                                <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg"/>
-                                <BlockLine color="rgb(133, 133, 138)"></BlockLine>
+                                <input
+                                    className="inputBox"
+                                    type="password"
+                                    rows="4"
+                                    placeholder=""
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            passwordRepeat: event.target.value
+                                        })
+                                    } }
+                                />
+                                <BlockLine color="rgb(133, 133, 138)"/>
                             </Col>
                             <Col>
                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Мой профиль</BlockTitle>
                                 <BlockLine color="rgb(133, 133, 138)">Место обучение</BlockLine>
-                                <input className="inputBox" rows="4" placeholder="Например, Школа 1034"></input>
+                                <input
+                                    className="inputBox"
+                                    rows="4"
+                                    placeholder="Например, Школа 1034"
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            school: event.target.value
+                                        })
+                                    } }
+                                />
                                 <BlockLine color="rgb(133, 133, 138)">Обо мне</BlockLine>
-                                <textarea className="textBox" rows="3" placeholder="Я..."></textarea>
+                                <textarea
+                                    className="textBox"
+                                    rows="3"
+                                    placeholder="Я..."
+                                    onChange={ (event) => {
+                                        this.setState({
+                                            about: event.target.value
+                                        })
+                                    } }
+                                />
                                 <BlockLine color="rgb(133, 133, 138)">Профиль</BlockLine>
                                 <CustomSelect
                                     value={selectedSubjectOption}
@@ -115,7 +172,32 @@ class PRegister extends Component {
                                         history.push('/login')
                                     }} title="Вход" />
                                     <Button onClick={() => {
-                                        console.log("Enter")
+                                        if (this.state.password !== this.state.passwordRepeat) {
+                                            return
+                                        }
+
+                                        Cookies.remove('session')
+                                        Cookies.remove('login')
+                                        Cookies.remove('password')
+
+                                        axios.post(profileService+"register", JSON.stringify({
+                                            name: this.state.name,
+                                            login: this.state.login,
+                                            password: this.state.password,
+                                            school: this.state.school,
+                                            about: this.state.about,
+                                            subjects: [...this.state.subjectInterest],
+                                        })).then(() => {
+                                            Cookies.set('login', this.state.login)
+                                            Cookies.set('password', this.state.password)
+                                            history.push('/')
+                                        }).catch((error) => {
+                                            if (error.response !== undefined && error.response.status === 401) {
+                                                this.setState({
+                                                    incorrectUser: true
+                                                })
+                                            }
+                                        })
                                     }} title="Регистрация" />
                                 </div>
                             </Col>

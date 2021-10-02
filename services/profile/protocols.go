@@ -42,3 +42,12 @@ type UserRaitingResponse struct {
 	Answers     int `json:"answers"`
 	BestAnswers int `json:"bestAnswers"`
 }
+
+type RegisterRequest struct {
+	Name     string   `json:"name"`
+	Login    string   `json:"login"`
+	Password string   `json:"password"`
+	School   string   `json:"school"`
+	About    string   `json:"about"`
+	Subjects []string `json:"subjects"`
+}

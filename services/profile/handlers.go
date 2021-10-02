@@ -77,3 +77,22 @@ func handleUserRaiting(request SessionableRequest) (response UserRaitingResponse
 	status = http.StatusOK
 	return
 }
+
+func handleRegister(request RegisterRequest) (status int) {
+	dbi := db.Get()
+	var user db.User
+	dbi.First(&user, "login = ?", request.Login)
+	if user.ID != 0 {
+		status = http.StatusUnauthorized
+		return
+	}
+	newUser := &db.User{
+		Coins: 10,
+		Login: request.Login,
+		PasswordHash: request.Password,
+		Name: request.Name,
+	}
+	dbi.Create(newUser)
+	status = http.StatusOK
+	return
+}
