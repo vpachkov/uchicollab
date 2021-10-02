@@ -591,6 +591,13 @@ class PQuestion extends Component {
                                                                 questionid: this.state.question.id,
                                                                 text: this.state.answerText,
                                                             }, ((response) => {
+                                                                if (this.state.answerImage === undefined) {
+                                                                    this.loadDetailedQuestion()
+                                                                    this.setState({
+                                                                        addingAnswer: false
+                                                                    })
+                                                                    return
+                                                                }
                                                                 const formData = new FormData();
                                                                 formData.append(
                                                                     'answerImage',
