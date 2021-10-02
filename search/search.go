@@ -20,14 +20,14 @@ func Init() {
 	})
 }
 
-func Index(id int, text string) {
-	text = strings.TrimSpace(text)
+func Index(id int, title string, text string) {
+	text = strings.TrimSpace(title + " " + text)
 	searcher.Index(strconv.Itoa(id), types.DocData{Content: text})
 	searcher.Flush()
 }
 
-func Search(text string) []int {
-	text = strings.TrimSpace(text)
+func Search(title string, text string) []int {
+	text = strings.TrimSpace(title + " " + text)
 
 	res := searcher.Search(types.SearchReq{Text: text, RankOpts: &types.RankOpts{
 		OutputOffset: 0,

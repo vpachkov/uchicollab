@@ -91,7 +91,7 @@ class PCreate extends Component {
                     onChange={(selectedOption) => {
                         this.setState({
                             selectedSubjectOption: selectedOption,
-                        });
+                        }, this.loadBriefQuestions);
                     }}
                     options={Subjects}
                     placeholder="Выберите предмет"
@@ -249,8 +249,9 @@ class PCreate extends Component {
 
     loadBriefQuestions() {
         Post(
-            questionsService + "searchquestions",
+            questionsService + "briefquestions",
             {
+                subject: this.state.selectedSubjectOption ? this.state.selectedSubjectOption.label : undefined,
                 text: this.state.text !== undefined ? this.state.text : "",
             },
             (response) => {

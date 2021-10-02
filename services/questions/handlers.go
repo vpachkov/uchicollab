@@ -58,7 +58,7 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 
 	if request.Text != "" {
 		// If there is a Text, do the search
-		datas := search.Search(request.Text)
+		datas := search.Search(request.Title, request.Text)
 		dbi.
 			Preload("Tags").
 			Preload("Opener").
@@ -151,7 +151,7 @@ func handleSearchQuestions(request SearchQuestionsRequest) (response BriefQuesti
 		return
 	}
 
-	datas := search.Search(request.Text)
+	datas := search.Search(request.Title, request.Text)
 
 	var questions []db.Question
 	dbi.
@@ -466,7 +466,7 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 	dbi.Create(question)
 	response.ID = question.ID
 
-	go search.Index(question.ID, question.Description)
+	go search.Index(question.ID, question.Title, question.Description)
 
 	status = http.StatusOK
 	return
@@ -622,10 +622,10 @@ func handlePopularAnswers(request PopularAnswersRequest) (response PopularAnswer
 		}
 
 		response.Answers = append(response.Answers, PopularAnswer{
-			QuestionID: answer.QuestionID,
+			QuestionID:    answer.QuestionID,
 			QuestionTitle: question.Title,
-			Text: answer.Text,
-			Likes: likes,
+			Text:          answer.Text,
+			Likes:         likes,
 		})
 	}
 

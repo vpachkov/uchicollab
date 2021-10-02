@@ -217,7 +217,7 @@ class PHelp extends Component {
                 costfrom: this.state.costFrom,
                 costto: this.state.costTo,
                 deadline: this.state.deadline,
-                text: this.state.searchLine,
+                text: this.state.searchLine !== undefined ? this.state.searchLine : "",
             },
             (response) => {
                 console.log(response.data.questions)

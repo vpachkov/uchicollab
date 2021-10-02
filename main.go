@@ -30,7 +30,7 @@ func initSearchFromDB() {
 		Find(&questions).Order("cost")
 
 	for _, question := range questions {
-		search.Index(question.ID, question.Description)
+		search.Index(question.ID, question.Title, question.Description)
 	}
 }
 
