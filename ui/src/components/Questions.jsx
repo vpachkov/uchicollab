@@ -5,7 +5,7 @@ import { ProfileLogo } from "./ProfileLogo";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Row, Col } from "react-bootstrap";
 import history from "../history";
-import { AuthorBlock, HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
+import { AuthorBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { faStar, faClock, faCoins, faUser, faTimes, faArrowAltCircleLeft, faFire, faComment } from '@fortawesome/free-solid-svg-icons'
 import { SubjectColor, Subjects } from "../constants";
 import { Post, profileService, questionsService, staticData } from "../config";

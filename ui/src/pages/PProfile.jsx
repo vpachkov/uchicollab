@@ -13,8 +13,7 @@ import {
     Span,
     SquareBlock,
     SquareBlockImage,
-    SquareBlockText,
-    HeaderSquareBlock
+    SquareBlockText
 } from "../components/Blocks";
 import { BriefAnswer, BriefQuestion } from "../components/Questions";
 import { Header, Navigation, ProfileHeader } from "../components/Header";

@@ -63,6 +63,8 @@ header {
 .profileImage {
   display: inline;
   border-radius: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .loginPage {

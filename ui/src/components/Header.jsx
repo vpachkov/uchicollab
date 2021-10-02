@@ -62,7 +62,7 @@ export class Header extends Component {
                                         color="rgb(223, 223, 228)"
                                         icon={faCoins} /></SquareBlockImage><SquareBlockText
                                             color="rgb(69, 68, 79)">{this.props.user.coins}</SquareBlockText></HeaderSquareBlock>
-                                <HeaderSquareBlock color="white"><SquareBlockImage onClick={() => { history.push(`/user/${this.props.user.login}`) }}
+                                <HeaderSquareBlock color="white" onClick={() => { history.push(`/user/${this.props.user.login}`) }}><SquareBlockImage
                                 ><FontAwesomeIcon
                                         color="rgb(223, 223, 228)"
                                         icon={faUser} /></SquareBlockImage></HeaderSquareBlock>
@@ -125,8 +125,7 @@ export class ProfileHeader extends Component {
                                         { this.props.user.coins }
                                     </SquareBlockText>
                                 </HeaderSquareBlock>
-                                <HeaderSquareBlock color="white"><SquareBlockImage onClick={() => { history.push(`/user/${this.props.user.login}`) }}
-                                ><FontAwesomeIcon
+                                <HeaderSquareBlock color="white" onClick={() => { history.push(`/user/${this.props.user.login}`) }}><SquareBlockImage><FontAwesomeIcon
                                     color="rgb(223, 223, 228)"
                                     icon={faUser} /></SquareBlockImage></HeaderSquareBlock>
                             </div>

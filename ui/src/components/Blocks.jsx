@@ -158,7 +158,7 @@ export class AbstractBetweenSpacingBlock extends Component {
 export class HeaderSquareBlock extends Component {
     render() {
         return (
-            <div className="headerSquareBlock" style={{ backgroundColor: this.props.color }}>
+            <div className="headerSquareBlock" style={{ backgroundColor: this.props.color }} onClick={this.props.onClick}>
                 {this.props.children}
             </div>
         )
