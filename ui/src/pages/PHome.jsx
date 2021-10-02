@@ -213,7 +213,7 @@ class PHome extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Последние отзывы</BlockTitle>
                                     {
-                                        this.state.comments === undefined ? null :
+                                        this.state.comments === undefined || this.state.comments === null ? null :
                                             this.state.comments.map(comment => {
                                                 return (
                                                     <CommentBlock textColor="rgb(69, 68, 79)"
