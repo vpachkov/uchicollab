@@ -25,7 +25,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faClock, faCoins, faComment, faChartLine, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Post, profileService, staticData } from "../config";
+import {Post, profileService, questionsService, staticData} from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import history from "../history";
@@ -75,8 +75,9 @@ class PProfile extends Component {
     componentDidMount() {
         this.getInfo()
         this.getRaiting()
-        // this.loadComments()
         this.loadPublicUserInfo()
+        this.loadPopularAnswers()
+        this.loadPopularQuestions()
     }
 
     isUserProfile = () => {
@@ -171,6 +172,7 @@ class PProfile extends Component {
                             </Col>
                             <Col sm={12} md={4}>
                                 <Block color="white">
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные ответы</BlockTitle>
                                     {
                                         this.state.newQuestions === undefined || this.state.newQuestions === null ? null :
@@ -186,8 +188,8 @@ class PProfile extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Новые вопросы</BlockTitle>
                                     {
-                                        this.state.yourQuestions === undefined || this.state.yourQuestions === null ? null :
-                                            this.state.yourQuestions.map(question => {
+                                        this.state.popularQuestions === undefined || this.state.popularQuestions === null ? null :
+                                            this.state.popularQuestions.map(question => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
                                                 )
@@ -197,10 +199,10 @@ class PProfile extends Component {
                             </Col>
                             <Col sm={12} md={4}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Лучшие ответы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные ответы</BlockTitle>
                                     {
-                                        this.state.answers === undefined || this.state.answers === null ? null :
-                                            this.state.answers.map(answer => {
+                                        this.state.popularAnswers === undefined || this.state.popularAnswers === null ? null :
+                                            this.state.popularAnswers.map(answer => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefAnswer answer={answer} /></div>
                                                 )
@@ -213,6 +215,26 @@ class PProfile extends Component {
                 </Container>
             </div>
         )
+    }
+
+    loadPopularQuestions() {
+        Post(questionsService + "popularquestions", {
+            login:  this.props.match.params.login,
+        }, (response) => {
+            this.setState({
+                popularQuestions: response.data.questions,
+            })
+        })
+    }
+
+    loadPopularAnswers() {
+        Post(questionsService + "popularanswers", {
+            login: this.props.match.params.login,
+        }, (response) => {
+          this.setState({
+              popularAnswers: response.data.answers,
+          })
+        })
     }
 
     loadPublicUserInfo() {

@@ -588,3 +588,97 @@ func handleRecommendations(request RecommendationsRequest) (response Recommendat
 	status = http.StatusOK
 	return
 }
+
+func handlePopularAnswers(request PopularAnswersRequest) (response PopularAnswersResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var user db.User
+	dbi.First(&user, "login = ?", request.Login)
+	if user.ID == 0 {
+		status = http.StatusOK
+		return
+	}
+
+	var answers []db.Answer
+	dbi.
+		Preload("Donators").
+		Find(&answers, "author_id = ?", user.ID)
+
+	for _, answer := range answers {
+		var question db.Question
+		dbi.First(&question, "id = ?", answer.QuestionID)
+		if question.ID == 0 {
+			continue
+		}
+
+		likes := 0
+		for _, donator := range answer.Donators {
+			likes += donator.Coins
+		}
+
+		response.Answers = append(response.Answers, PopularAnswer{
+			QuestionID: answer.QuestionID,
+			QuestionTitle: question.Title,
+			Text: answer.Text,
+			Likes: likes,
+		})
+	}
+
+	sort.Slice(response.Answers, func(i, j int) bool {
+		return response.Answers[i].Likes > response.Answers[j].Likes
+	})
+
+	if len(response.Answers) > 5 {
+		response.Answers = response.Answers[:5]
+	}
+
+	status = http.StatusOK
+	return
+}
+
+func handlePopularQuestions(request PopularQuestionsRequest) (response PopularQuestionsResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var user db.User
+	dbi.First(&user, "login = ?", request.Login)
+	if user.ID == 0 {
+		status = http.StatusOK
+		return
+	}
+
+	var questions []db.Question
+	dbi.
+		Preload("Tags").
+		Preload("Opener").
+		Preload("Answers").
+		Preload("Upvoters").
+		Find(&questions, "opener_id = ?", user.ID).
+		Order("cost").
+		Limit(5)
+
+	for _, question := range questions {
+		response.Questions = append(response.Questions, BriefQuestion{
+			ID:               question.ID,
+			Answers:          len(question.Answers),
+			Cost:             question.Cost,
+			Title:            question.Title,
+			Description:      question.Description,
+			AskedByName:      question.Opener.Name,
+			AskedByLogin:     question.Opener.Login,
+			AskedByImagePath: question.Opener.ImagePath,
+		})
+	}
+
+	status = http.StatusOK
+	return
+}

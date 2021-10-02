@@ -18,4 +18,6 @@ func SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/"+Service+".answer", _handleAnswer)
 	mux.HandleFunc("/api/"+Service+".popular", _handlePopular)
 	mux.HandleFunc("/api/"+Service+".recommendations", _handleRecommendations)
+	mux.HandleFunc("/api/"+Service+".popularanswers", _handlePopularAnswers)
+	mux.HandleFunc("/api/"+Service+".popularquestions", _handlePopularQuestions)
 }

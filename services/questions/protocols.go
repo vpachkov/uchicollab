@@ -185,3 +185,28 @@ type RecommendationsRequest struct {
 type RecommendationsResponse struct {
 	Questions []BriefQuestion `json:"questions"`
 }
+
+type PopularAnswersRequest struct {
+	services.SessionableRequest
+	Login string `json:"login"`
+}
+
+type PopularAnswer struct {
+	QuestionID int `json:"questionid"`
+	QuestionTitle string `json:"questiontitle"`
+	Text string `json:"text"`
+	Likes int `json:"likes"`
+}
+
+type PopularAnswersResponse struct {
+	Answers []PopularAnswer `json:"answers"`
+}
+
+type PopularQuestionsRequest struct {
+	services.SessionableRequest
+	Login string `json:"login"`
+}
+
+type PopularQuestionsResponse struct {
+	Questions []BriefQuestion `json:"questions"`
+}
