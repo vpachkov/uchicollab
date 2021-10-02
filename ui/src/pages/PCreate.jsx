@@ -66,11 +66,14 @@ class PCreate extends Component {
         const today = new Date()
         const tomorrow = new Date(today)
         tomorrow.setDate(tomorrow.getDate() + 3)
-        tomorrow.setHours(0)
+        tomorrow.setHours(12)
         tomorrow.setMilliseconds(0)
         tomorrow.setSeconds(0)
         tomorrow.setMinutes(0)
         document.getElementById('dateInput').value = tomorrow.toISOString().slice(0, -13) + "12:00:00.000"
+        this.setState({
+            deadline: tomorrow
+        })
     }
 
     submit() {
@@ -78,6 +81,7 @@ class PCreate extends Component {
     }
 
     renderTextInput() {
+        var tinycolor = require("tinycolor2");
         const selectedSubjectOption = this.state.selectedSubjectOption;
 
         return (
@@ -146,10 +150,49 @@ class PCreate extends Component {
                         })
                     }}
                 />
+                <BlockLine color={tinycolor("#ffe2e1").darken(50).toString()}>{this.state.errorMsg}</BlockLine>
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
                     <Button
                         title="Создать"
                         onClick={() => {
+                            var today = new Date();
+                            if (this.state.selectedSubjectOption === undefined || this.state.selectedSubjectOption === null) {
+                                this.setState({
+                                    errorMsg: "Не выбран предмет"
+                                })
+                                return
+                            }
+                            if (this.state.title === undefined || this.state.title === null || this.state.title == "") {
+                                this.setState({
+                                    errorMsg: "Пустой заголовок"
+                                })
+                                return
+                            }
+                            if (this.state.text === undefined || this.state.text === null ||  this.state.text == "") {
+                                this.setState({
+                                    errorMsg: "Пустое поле текста"
+                                })
+                                return
+                            }
+                            if (this.state.cost === undefined || this.state.cost === null ||  this.state.cost <= 0) {
+                                this.setState({
+                                    errorMsg: "Не указана стоимость"
+                                })
+                                return
+                            }
+                            if (this.state.cost > this.state.user.coins) {
+                                this.setState({
+                                    errorMsg: "Стоимость вопроса превышает Ваш бюджет"
+                                })
+                                return
+                            }
+                            if (this.state.deadline === undefined || this.state.deadline === null || this.state.deadline <= today) {
+                                this.setState({
+                                    errorMsg: "Указана прошедшая дата"
+                                })
+                                return
+                            }
+
                             Post(questionsService + "create", {
                                 title: this.state.title,
                                 text: this.state.text,
