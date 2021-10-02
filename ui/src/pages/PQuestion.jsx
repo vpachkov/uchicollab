@@ -455,29 +455,43 @@ class PQuestion extends Component {
                                     <Block color="white">
                                         <BlockTitle color="rgb(69, 68, 79)" text="bold">Ответы</BlockTitle>
                                         {
-                                            this.state.addingAnswer ? <div><BlockLine color="rgb(133, 133, 138)">Ваш ответ</BlockLine>
-                                                <textarea
-                                                    className="textBox"
-                                                    rows="4"
-                                                    placeholder="Название"
-                                                    onChange={(event) => {
-                                                        this.setState({
-                                                            text: event.target.value
-                                                        })
-                                                    }}
-                                                /><div style={{ textAlign: "right", marginTop: "4px" }}>
+                                            this.state.addingAnswer ?
+                                                <div>
+                                                    <BlockLine color="rgb(133, 133, 138)">Ваш ответ</BlockLine>
+                                                    <textarea
+                                                        className="textBox"
+                                                        rows="4"
+                                                        placeholder="Название"
+                                                        onChange={(event) => {
+                                                            this.setState({
+                                                                text: event.target.value
+                                                            })
+                                                        }}
+                                                    />
+                                                    <input
+                                                        type="file"
+                                                        id="avatar"
+                                                        name="avatar"
+                                                        accept="image/png, image/jpeg"
+                                                        onChange={(event) => {
+                                                            this.setState({
+                                                                avatar: event.target.files[0]
+                                                            })
+                                                        }} />
+                                                    <div style={{ textAlign: "right", marginTop: "4px" }}>
+                                                        <ButtonGray title="Отправить ответ" onClick={() => {
+                                                            this.setState({
+                                                                addingAnswer: true
+                                                            })
+                                                        }} />
+                                                    </div>
+                                                </div> : <div style={{ textAlign: "left", marginTop: "16px" }}>
                                                     <ButtonGray title="Добавить ответ" onClick={() => {
                                                         this.setState({
                                                             addingAnswer: true
                                                         })
                                                     }} />
-                                                </div></div> : <div style={{ textAlign: "left", marginTop: "16px" }}>
-                                                <ButtonGray title="Добавить ответ" onClick={() => {
-                                                    this.setState({
-                                                        addingAnswer: true
-                                                    })
-                                                }} />
-                                            </div>
+                                                </div>
                                         }
                                         {
                                             this.state.question === undefined ||
@@ -495,7 +509,7 @@ class PQuestion extends Component {
                         </main>
                     </Container>
                 </div>
-            </div>
+            </div >
         )
     }
 
