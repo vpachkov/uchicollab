@@ -58,6 +58,7 @@ class PCreate extends Component {
 
     componentDidMount() {
         this.getInfo()
+        this.loadBriefQuestions()
     }
 
     submit() {
@@ -74,14 +75,14 @@ class PCreate extends Component {
                     onChange={(selectedOption) => {
                         this.setState({
                             selectedSubjectOption: selectedOption,
-                        });
+                        }, this.loadBriefQuestions);
                     }}
                     options={ Subjects }
                     placeholder="Выберите предмет"
                 />
                 <Tags
                     onChange={ (tags) => {
-                        this.setState({ tags: tags })
+                        this.setState({ tags: tags }, this.loadBriefQuestions)
                     } }
                 />
                 <BlockLine color="rgb(133, 133, 138)">Заголовок</BlockLine>
@@ -174,13 +175,35 @@ class PCreate extends Component {
                             <Col xs={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
-                                    <BriefQuestion question={this.state.question} />
+                                    {
+                                        this.state.questions === undefined || this.state.questions === null ? null :
+                                            this.state.questions.map(question => {
+                                                return (
+                                                    <BriefQuestion question={ question } />
+                                                )
+                                            })
+                                    }
                                 </Block>
                             </Col>
                         </Row>
                     </main>
                 </Container>
             </div>
+        )
+    }
+
+    loadBriefQuestions() {
+        Post(
+            questionsService + "briefquestions",
+            {
+                subject: this.state.selectedSubjectOption !== undefined && this.state.selectedSubjectOption ? this.state.selectedSubjectOption.label : undefined,
+                tags: this.state.tags,
+            },
+            (response) => {
+                this.setState({
+                    questions: response.data.questions
+                })
+            }
         )
     }
 
