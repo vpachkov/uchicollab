@@ -376,7 +376,7 @@ class PQuestion extends Component {
                         <div>
                             <div style={{textAlign: "center", fontSize: "3em", color: "lightgray", marginBottom: "-20px"}}><FontAwesomeIcon icon={faHourglass} /></div>
                             <BlockTitle color="rgb(69, 68, 79)" text="bold">Вопрос закрыт</BlockTitle>
-                            <BlockLine>Вопрос закрыт и не подлежит дальнейшему обсуждению. Вам доступны запись чата и ответы</BlockLine>
+                            <BlockLine>Вопрос находится в архиве и не подлежит дальнейшему обсуждению. Вам доступны записи чатов и ответы.</BlockLine>
                         </div>
                     </Block>
                 </Col>
