@@ -24,6 +24,7 @@ export class Tags extends Component {
         return (
             <div>
                 <CustomSelect
+                    id={this.props.id}
                     value=""
                     onChange={(selectedOption) => {
                         const tags = this.state.tags

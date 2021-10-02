@@ -33,6 +33,10 @@ type BriefQuestionsRequest struct {
 	CostFrom int      `json:"costfrom"`
 	CostTo   int      `json:"costto"`
 	Deadline int64    `json:"deadline"`
+
+	// Search is applied if any of these fields is not NULL
+	Title string `json:"title"`
+	Text  string `json:"text"`
 }
 
 type SearchQuestionsRequest struct {

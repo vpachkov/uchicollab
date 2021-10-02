@@ -54,12 +54,25 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 	deadline := time.Unix(request.Deadline/1000, 0)
 
 	var questions []db.Question
-	dbi.
-		Preload("Tags").
-		Preload("Opener").
-		Preload("Answers").
-		Preload("Upvoters").
-		Find(&questions).Order("cost")
+
+	if request.Text != "" {
+		// If there is a Text, do the search
+		datas := search.Search(request.Text)
+		dbi.
+			Preload("Tags").
+			Preload("Opener").
+			Preload("Answers").
+			Preload("Upvoters").
+			Where("ID IN ?", datas).
+			Find(&questions)
+	} else {
+		dbi.
+			Preload("Tags").
+			Preload("Opener").
+			Preload("Answers").
+			Preload("Upvoters").
+			Find(&questions).Order("cost")
+	}
 
 	for _, question := range questions {
 		if request.CostFrom > 0 {

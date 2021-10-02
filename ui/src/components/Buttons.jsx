@@ -126,6 +126,7 @@ export class CustomSelect extends Component {
 
         return (
             <Select
+                id={this.props.id}
                 styles={this.customStyles}
                 className="textSelector"
                 value={this.props.value}

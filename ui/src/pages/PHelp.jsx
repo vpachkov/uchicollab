@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { User } from "../components/User";
 import { AuthorBlock, HeaderSquareBlock, Span, AbstractBlock, Block, BlockTitle, BlockText, BlockLine, BlockSpacing, CommentBlock, CommentText, SquareBlock, AbstractBetweenSpacingBlock, SquareBlockImage, SquareBlockText, KeywordBlock } from "../components/Blocks";
 import { ProgressBar } from "../components/ProgressBar";
-import { CustomSelect, Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
+import { ButtonGray, CustomSelect, Button, BigButton, BigButtonWithIcon, InlineButton, ButtonHandler, InlineBigButtonWithIcon, InlineBigButton } from "../components/Buttons";
 import { BriefQuestion } from "../components/Questions";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "react-bootstrap";
@@ -24,6 +24,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { SubjectColor, Subjects } from "../constants";
 import { parse } from "@fortawesome/fontawesome-svg-core";
 import { Header, Navigation } from '../components/Header';
+
+// SubjectH = {
+//     ...Subjects
+//     { value: '', label: 'Не выбрано' },
+// }
 
 class PHelp extends Component {
     constructor(props) {
@@ -58,12 +63,28 @@ class PHelp extends Component {
 
     }
 
+    resetFilters = () => {
+        document.getElementById('costfrom').value=''
+        document.getElementById('costtop').value=''
+        document.getElementById('until').value=''
+        document.getElementById('tags').value=''
+        
+        this.setState({
+            costFrom: 0,
+            costTo: 0,
+            deadline: 0,
+            searchLine: "",
+            selectedSubjectOption: "",
+        }, this.loadBriefQuestions)
+    }
+
     renderFilters() {
         const selectedSubjectOption = this.state.selectedSubjectOption;
 
         return (
             <div>
                 <CustomSelect
+                    id="select"
                     value={selectedSubjectOption}
                     onChange={(selectedOption) => {
                         this.setState({
@@ -74,8 +95,9 @@ class PHelp extends Component {
                     options={Subjects}
                     placeholder="Выберите предмет"
                 />
-                <BlockLine color="rgb(133, 133, 138)">Тэги</BlockLine>
+                <BlockLine color="rgb(133, 133, 138)">Теги</BlockLine>
                 <Tags
+                    id="tags"
                     onChange={(tags) => {
                         this.setState({ tags: tags }, this.loadBriefQuestions)
                     }}
@@ -84,6 +106,7 @@ class PHelp extends Component {
                 <Row>
                     <Col>
                         <input
+                            id="costfrom"
                             onChange={(event) => {
                                 this.setState({ costFrom: parseInt(event.target.value) }, this.loadBriefQuestions)
                             }}
@@ -92,6 +115,7 @@ class PHelp extends Component {
                     </Col>
                     <Col>
                         <input
+                            id="costtop"
                             onChange={(event) => {
                                 this.setState({ costTo: parseInt(event.target.value) }, this.loadBriefQuestions)
                             }}
@@ -101,6 +125,7 @@ class PHelp extends Component {
                 </Row>
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input
+                    id="until"
                     onChange={(event) => {
                         this.setState({
                             deadline: + new Date(event.target.value)
@@ -108,6 +133,9 @@ class PHelp extends Component {
                     }}
                     className="inputBox" type="datetime-local" rows="4"
                 />
+                <div style={{marginTop: "8px"}}>
+                    <ButtonGray title="Сбросить" onClick={this.resetFilters}></ButtonGray>
+                </div>
             </div>
         )
     }
@@ -187,6 +215,7 @@ class PHelp extends Component {
                 costfrom: this.state.costFrom,
                 costto: this.state.costTo,
                 deadline: this.state.deadline,
+                text: this.state.searchLine,
             },
             (response) => {
                 console.log(response.data.questions)
