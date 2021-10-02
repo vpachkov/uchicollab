@@ -145,8 +145,8 @@ class PQuestion extends Component {
     }
 
     onDonate = () => {
-        if (this.state.question !== undefined) {
-            return;
+        if (this.state.question === undefined) {
+            return
         }
 
         Post(questionsService + "upvote", {
