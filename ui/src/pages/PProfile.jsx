@@ -25,7 +25,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faClock, faCoins, faComment, faChartLine, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
-import {Post, profileService, questionsService, staticData} from "../config";
+import { Post, profileService, questionsService, staticData } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import history from "../history";
@@ -99,7 +99,7 @@ class PProfile extends Component {
                     this.state.profileUser.subjects === undefined || this.state.profileUser.subjects === null ? null :
                         this.state.profileUser.subjects.map(subject => {
                             return (
-                                <KeywordBlock><span>{subject}</span></KeywordBlock>
+                                <KeywordBlock subject={subject}><span>{subject}</span></KeywordBlock>
                             )
                         })
                 }
@@ -121,7 +121,7 @@ class PProfile extends Component {
         }
         return (
             <div>
-                <ProfileHeader prefix="Пользователь" profileUser={ this.state.profileUser } user={this.state.user} />
+                <ProfileHeader prefix="Пользователь" profileUser={this.state.profileUser} user={this.state.user} />
                 <Container>
                     <main>
                         <Navigation />
@@ -133,15 +133,15 @@ class PProfile extends Component {
                                             <AbstractBlock color="white">
                                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Учебное заведение</BlockTitle>
                                                 <AbstractBlock color="white">
-                                                    <KeywordBlock><span>{ this.state.profileUser.school }</span></KeywordBlock>
+                                                    <KeywordBlock><span>{this.state.profileUser.school}</span></KeywordBlock>
                                                 </AbstractBlock>
                                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Любимые предметы</BlockTitle>
                                                 <AbstractBlock color="white">
-                                                    { this.renderSubscribedTags() }
+                                                    {this.renderSubscribedTags()}
                                                 </AbstractBlock>
                                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">О себе</BlockTitle>
                                                 <AbstractBlock color="white">
-                                                    { this.state.profileUser.about }
+                                                    {this.state.profileUser.about}
                                                 </AbstractBlock>
                                             </AbstractBlock>
                                         </Col>
@@ -153,38 +153,24 @@ class PProfile extends Component {
                                                         color="rgb(220, 222, 242)"><FontAwesomeIcon
                                                             color="rgb(74, 89, 183)"
                                                             icon={faChartLine} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{ this.state.profileUser.rating } Очков рейтинга</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)"><span style={{ color: "rgb(69, 68, 79)" }}>{this.state.profileUser.rating}</span> Очков рейтинга</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(244, 222, 250)"><FontAwesomeIcon
                                                             color="rgb(213, 98, 234)"
-                                                            icon={faFire} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.profileUser.likes} Монет было получено за ответы</SquareBlockText></SquareBlock>
+                                                            icon={faCoins} /></SquareBlockImage><SquareBlockText
+                                                                color="rgb(133, 133, 138)"><span style={{ color: "rgb(69, 68, 79)" }}>{this.state.profileUser.likes}</span> Монет заработано</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(211, 239, 229)"><FontAwesomeIcon
                                                             color="rgb(105, 193, 153)"
                                                             icon={faComment} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.answers} Всего ответов дал пользователь</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)"><span style={{ color: "rgb(69, 68, 79)" }}>{this.state.user.answers}</span> Всего ответов</SquareBlockText></SquareBlock>
                                                 </AbstractBetweenSpacingBlock>
                                             </AbstractBlock>
                                         </Col>
                                     </Row>
                                 </Block>
                             </Col>
-                            <Col sm={12} md={4}>
-                                <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные ответы</BlockTitle>
-                                    {
-                                        this.state.newQuestions === undefined || this.state.newQuestions === null ? null :
-                                            this.state.newQuestions.map(question => {
-                                                return (
-                                                    <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
-                                                )
-                                            })
-                                    }
-                                </Block>
-                            </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Новые вопросы</BlockTitle>
                                     {
@@ -197,7 +183,7 @@ class PProfile extends Component {
                                     }
                                 </Block>
                             </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={6}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные ответы</BlockTitle>
                                     {
@@ -219,7 +205,7 @@ class PProfile extends Component {
 
     loadPopularQuestions() {
         Post(questionsService + "popularquestions", {
-            login:  this.props.match.params.login,
+            login: this.props.match.params.login,
         }, (response) => {
             this.setState({
                 popularQuestions: response.data.questions,
@@ -231,9 +217,9 @@ class PProfile extends Component {
         Post(questionsService + "popularanswers", {
             login: this.props.match.params.login,
         }, (response) => {
-          this.setState({
-              popularAnswers: response.data.answers,
-          })
+            this.setState({
+                popularAnswers: response.data.answers,
+            })
         })
     }
 
