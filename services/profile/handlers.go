@@ -96,3 +96,32 @@ func handleRegister(request RegisterRequest) (status int) {
 	status = http.StatusOK
 	return
 }
+
+func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInfoResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+	var user db.User
+	dbi.
+		Preload("Comments").
+		Preload("Comments.Commentator").
+		First(&user, "login = ?", request.Login)
+
+	response.Name = user.Name
+	response.ImagePath = user.ImagePath
+
+	for _, comment := range user.Comments {
+		response.Comments = append(response.Comments, Comment{
+			Text:      comment.Text,
+			Name:      comment.Commentator.Name,
+			ImagePath: comment.Commentator.ImagePath,
+			Score:     int(comment.Score),
+		})
+	}
+
+	status = http.StatusOK
+	return
+}

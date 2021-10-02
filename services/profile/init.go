@@ -10,4 +10,5 @@ func SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/"+Service+".usercoins", _handleUserCoins)
 	mux.HandleFunc("/api/"+Service+".userraiting", _handleUserRaiting)
 	mux.HandleFunc("/api/"+Service+".register", _handleRegister)
+	mux.HandleFunc("/api/"+Service+".publicuserinfo", _handlePublicUserInfo)
 }

@@ -1,5 +1,7 @@
 package profile
 
+import "uchicollab/services"
+
 type SessionableRequest struct {
 	Session string `json:"session"`
 }
@@ -50,4 +52,15 @@ type RegisterRequest struct {
 	School   string   `json:"school"`
 	About    string   `json:"about"`
 	Subjects []string `json:"subjects"`
+}
+
+type PublicUserInfoRequest struct {
+	services.SessionableRequest
+	Login string `json:"login"`
+}
+
+type PublicUserInfoResponse struct {
+	Name      string    `json:"name"`
+	ImagePath string    `json:"imagepath"`
+	Comments  []Comment `json:"comments"`
 }

@@ -17,7 +17,7 @@ import {
     HeaderSquareBlock
 } from "../components/Blocks";
 import { BriefQuestion } from "../components/Questions";
-import { Header, Navigation } from "../components/Header";
+import {Header, Navigation, ProfileHeader} from "../components/Header";
 import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
 import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components/Buttons";
@@ -50,10 +50,6 @@ class PProfile extends Component {
     ]
     review = "Russ Cox was raised by a pack of crazed hillbillies in the backwoods of Tennessee. With the bulk of his life spent in Pennsylvania, he met his wife; became a graphic designer; played in punk, alternative "
 
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -79,7 +75,8 @@ class PProfile extends Component {
     componentDidMount() {
         this.getInfo()
         this.getRaiting()
-        this.loadComments()
+        // this.loadComments()
+        this.loadPublicUserInfo()
     }
 
     isUserProfile = () => {
@@ -114,12 +111,13 @@ class PProfile extends Component {
     }
 
     render() {
-        if (this.state.user === undefined) {
+        console.log(this.state.user, this.state.profileUser)
+        if (this.state.user === undefined || this.state.profileUser === undefined) {
             return null
         }
         return (
             <div>
-                <Header prefix="Пользователь" user={this.state.user} />
+                <ProfileHeader prefix="Пользователь" profileUser={ this.state.profileUser } user={ this.state.user }/>
                 <Container>
                     <main>
                         <Navigation />
@@ -230,6 +228,16 @@ class PProfile extends Component {
                 </Container>
             </div>
         )
+    }
+
+    loadPublicUserInfo() {
+        Post(profileService + "publicuserinfo", {
+            login: this.props.match.params.login
+        }, (response) => {
+            this.setState({
+                profileUser: response.data
+            })
+        })
     }
 
     loadComments() {
