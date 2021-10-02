@@ -97,9 +97,10 @@ type DetailedQuestionResponse struct {
 
 	Tags []string `json:"tags"`
 
-	Date  int64 `json:"date"`
-	Until int64 `json:"until"`
-	Cost  int   `json:"cost"`
+	Date   int64 `json:"date"`
+	Until  int64 `json:"until"`
+	Cost   int   `json:"cost"`
+	Acitve bool  `json:"active"`
 
 	AskedByName      string `json:"askedbyname"`
 	AskedByLogin     string `json:"askedbylogin"`

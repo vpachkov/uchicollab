@@ -102,6 +102,7 @@ type Question struct {
 	OpenedTime   time.Time
 	DeadlineTime time.Time
 	Cost         int
+	Active       bool
 
 	Tags         []QuestionTag `gorm:"many2many:question_tag;"`
 	Answers      []Answer      `gorm:"ForeignKey:QuestionID"`

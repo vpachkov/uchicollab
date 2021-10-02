@@ -228,6 +228,8 @@ func handleDetailedQuestion(request DetailedQuestionRequest) (response DetailedQ
 		response.Cost += upvoter.Coins
 	}
 
+	response.Acitve = question.Active
+
 	for _, answer := range question.Answers {
 		ans := Answer{
 			ID:              answer.ID,
@@ -435,6 +437,7 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 	}
 
 	question := &db.Question{
+		Active:       true,
 		Opener:       session.User,
 		Title:        request.Title,
 		Subject:      request.Subject,

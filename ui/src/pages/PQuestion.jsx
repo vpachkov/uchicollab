@@ -302,8 +302,7 @@ class PQuestion extends Component {
     }
 
     questionIsActive = () => {
-        // FIXME
-        return true
+        return this.state.question && this.state.question.active
     }
 
     getSubjectTextColor = () => {
@@ -315,11 +314,6 @@ class PQuestion extends Component {
     }
 
     renderDonate = () => {
-        if (!this.questionIsActive()) {
-            return (
-                <div></div>
-            )
-        }
         return (
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Поднять стоимость</BlockTitle>
@@ -375,11 +369,18 @@ class PQuestion extends Component {
     }
 
     renderSideBar = () => {
+        if (!this.questionIsActive()) {
+            return null
+        }
         return (
-            <div>
-                {this.renderDonate()}
-                {this.renderInformation()}
-            </div>
+            <Col xs={12} md={4}>
+                <Block color="white">
+                    <div>
+                        {this.renderDonate()}
+                        {this.renderInformation()}
+                    </div>
+                </Block>
+            </Col>
         )
     }
 
@@ -431,30 +432,38 @@ class PQuestion extends Component {
                                 })
                         }
                     </InfiniteScrollReverse>
-                    <input
-                        className="chatInput"
-                        placeholder="Ваше сообщение"
-                        onChange={(event) => {
-                            this.setState({
-                                myMessage: event.target.value,
-                            })
-                        }}
-                        value={this.state.myMessage}
-                    // value={}
-                    />
-                    <div onClick={() => {
-                        Post(
-                            questionsService + "sendmessage", {
-                            questionid: this.state.question.id,
-                            text: this.state.myMessage,
-                        }, () => {
-                            this.loadChatMessages()
-                            this.setState({
-                                myMessage: ""
-                            })
-                        }
-                        )
-                    }} className="sendInput"><FontAwesomeIcon icon={faPaperPlane} /></div>
+                    {
+                        !this.questionIsActive() ? null :
+                        <div>
+                            <input
+                                className="chatInput"
+                                placeholder="Ваше сообщение"
+                                onChange={(event) => {
+                                    this.setState({
+                                        myMessage: event.target.value,
+                                    })
+                                }}
+                                value={this.state.myMessage}
+                            />
+                            <div
+                                onClick={() => {
+                                    Post(
+                                        questionsService + "sendmessage", {
+                                            questionid: this.state.question.id,
+                                            text: this.state.myMessage,
+                                        }, () => {
+                                            this.loadChatMessages()
+                                            this.setState({
+                                                myMessage: ""
+                                            })
+                                        })
+                                }}
+                                className="sendInput"
+                            >
+                                <FontAwesomeIcon icon={faPaperPlane}/>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         )
@@ -533,11 +542,7 @@ class PQuestion extends Component {
                                 }} icon={faArrowLeft} title="Назад" />
                             </Navigation>
                             <Row>
-                                <Col xs={12} md={4}>
-                                    <Block color="white">
-                                        {this.renderSideBar()}
-                                    </Block>
-                                </Col>
+                                { this.renderSideBar() }
                                 <Col xs={12} md={8}>
                                     {this.renderQuestion(this.state.question)}
 
@@ -599,7 +604,9 @@ class PQuestion extends Component {
                                                             )
                                                         }} />
                                                     </div>
-                                                </div> : <div style={{ marginTop: "-42px", textAlign: "right" }}>
+                                                </div> :
+                                                !this.questionIsActive() ? null :
+                                                <div style={{ marginTop: "-42px", textAlign: "right" }}>
                                                     <ButtonGray title="Добавить ответ" onClick={() => {
                                                         this.setState({
                                                             addingAnswer: true

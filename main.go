@@ -131,6 +131,7 @@ func main() {
 		}
 
 		question1 := &db.Question{
+			Active:       true,
 			Title:        "Решение задачи по Алгебре",
 			Description:  "sin (П + х/3) = 1/2\nрешите пожалуйста и объясните как решать чтобы в следующий раз я смог это решить сам.",
 			Subject:      "Алгебра",
@@ -152,8 +153,10 @@ func main() {
 	// setup workers
 	sc := workers.SessionCollector{}
 	cc := workers.CostCalculator{}
+	qc := workers.QuestionsCollector{}
 	workers.StartWorker(sc)
 	workers.StartWorker(cc)
+	workers.StartWorker(qc)
 
 	// setup microservices routing
 	mux := http.NewServeMux()
