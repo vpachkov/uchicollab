@@ -23,7 +23,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faChartLine, faClock, faCoins, faComment, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
-import {Post, profileService, staticData, notificationService, questionsService} from "../config";
+import { Post, profileService, staticData, notificationService, questionsService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import history from "../history";
@@ -122,7 +122,7 @@ class PHome extends Component {
                             }} backgroundColor="#ddd6f3" icon={faPlus} title="новый вопрос" />
                         </Navigation>
                         <Row>
-                            <Col sm={12} md={6}>
+                            <Col sm={12} md={8}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
                                     {
@@ -133,10 +133,6 @@ class PHome extends Component {
                                                 )
                                             })
                                     }
-                                </Block>
-                            </Col>
-                            <Col sm={12} md={6}>
-                                <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Рекомендованные вопросы</BlockTitle>
                                     {
                                         this.state.recommendationsQuestions === undefined || this.state.recommendationsQuestions === null ? null :
@@ -148,7 +144,7 @@ class PHome extends Component {
                                     }
                                 </Block>
                             </Col>
-                            <Col sm={12} md={6}>
+                            <Col sm={12} md={4}>
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Уведомления</BlockTitle>
                                     {
@@ -156,7 +152,6 @@ class PHome extends Component {
                                             this.state.notifications.map(notification => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <Notification notification={notification} /></div>
-                                                    
                                                 )
                                             })
                                     }

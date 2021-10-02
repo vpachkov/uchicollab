@@ -72,7 +72,7 @@ class PCreate extends Component {
         tomorrow.setMinutes(0)
         document.getElementById('dateInput').value = tomorrow.toISOString().slice(0, -13) + "12:00:00.000"
         this.setState({
-            deadline: tomorrow
+            deadline: + tomorrow
         })
     }
 
@@ -116,7 +116,6 @@ class PCreate extends Component {
                 <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
                 <textarea
                     className="textBox"
-                    rows="4"
                     placeholder="Название"
                     onChange={(event) => {
                         this.setState({
@@ -128,7 +127,6 @@ class PCreate extends Component {
                 <input
                     className="inputBox"
                     type="number"
-                    rows="4"
                     placeholder="Стоимость"
                     min={0}
                     max={this.state.user.coins}
@@ -143,7 +141,6 @@ class PCreate extends Component {
                     id="dateInput"
                     className="inputBox"
                     type="datetime-local"
-                    rows="4"
                     onChange={(event) => {
                         this.setState({
                             deadline: + new Date(event.target.value)
@@ -193,6 +190,8 @@ class PCreate extends Component {
                                 return
                             }
 
+
+                            console.log(this.state.deadline)
                             Post(questionsService + "create", {
                                 title: this.state.title,
                                 text: this.state.text,

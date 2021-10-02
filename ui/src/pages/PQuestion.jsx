@@ -615,7 +615,7 @@ class PQuestion extends Component {
                                                         }} />
                                                     </div>
                                                 </div> :
-                                                !this.questionIsActive() ? null :
+                                                !this.questionIsActive() || (this.state.question !== null && this.state.question.askedbylogin === this.state.user.login) ? null :
                                                     <div style={{ marginTop: "-42px", textAlign: "right" }}>
                                                         <ButtonGray title="Добавить ответ" onClick={() => {
                                                             this.setState({
