@@ -323,7 +323,7 @@ class PQuestion extends Component {
         return (
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Поднять стоимость</BlockTitle>
-                <BlockLine color="rgb(39, 38, 49)">Ваши голоса за вопрос: {this.amountOfDonateToQuestion()}</BlockLine>
+                <BlockLine color="rgb(39, 38, 49)">Вы уже внесли голосов: {this.amountOfDonateToQuestion()}</BlockLine>
                 <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы
                     эксперты ответили быстрее. </BlockLine>
                 <input
@@ -365,9 +365,11 @@ class PQuestion extends Component {
                     }}
                 />
 
-                <Button title="Внести голоса" onClick={() => {
-                    this.calluserfunc()
-                }} />
+                <div style={{ textAlign: "right", marginTop: "16px" }}>
+                    <Button title="Пригласить" onClick={() => {
+                        this.calluserfunc()
+                    }} />
+                </div>
             </div>
         )
     }
@@ -459,20 +461,14 @@ class PQuestion extends Component {
     }
 
     formatTimestamp = (timestamp) => {
-        // Create a new JavaScript Date object based on the timestamp
-        // multiplied by 1000 so that the argument is in milliseconds, not seconds.
         var date = new Date(timestamp);
-        // Hours part from the timestamp
-        var date2 = date.getDate()
-        var hours = date.getHours();
-        // Minutes part from the timestamp
-        var minutes = "0" + date.getMinutes();
-        // Seconds part from the timestamp
-        var seconds = "0" + date.getSeconds();
-
-        // Will display time in 10:30:23 format
-        var formattedTime = date2 + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
+        var year = date.getFullYear()
+        var date2 = ("0" + date.getDate()).substr(-2)
+        var month = ("0" + date.getMonth()).substr(-2)
+        var hours = ("0" + date.getHours()).substr(-2)
+        var minutes = ("0" + date.getMinutes()).substr(-2)
+        var seconds = ("0" + date.getSeconds()).substr(-2)
+        var formattedTime = date2 + '/' + month + '/' + year + ' ' + hours + ':' + minutes
         return formattedTime
     }
 
@@ -488,8 +484,6 @@ class PQuestion extends Component {
                     <KeywordBlock subject={question.subject}><FontAwesomeIcon icon={faGraduationCap}
                         style={{ fontSize: ".9em" }} /><span
                             style={{ marginLeft: "4px" }}>{question.subject}</span></KeywordBlock>
-                    <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faClock} style={{ fontSize: ".9em" }} /><span
-                        style={{ marginLeft: "4px" }}>4 days</span></KeywordBlock>
                     <KeywordBlock><FontAwesomeIcon color="#aaaaaa" icon={faCoins} style={{ fontSize: ".9em" }} /><span
                         style={{ marginLeft: "4px" }}>{question.cost}</span></KeywordBlock>
                 </AbstractBlock>
@@ -507,7 +501,7 @@ class PQuestion extends Component {
                 </AbstractBlock>
                 <AuthorBlock
                     author={question.askedbyname}
-                    date={this.formatTimestamp(question.date / 1000)}
+                    date={this.formatTimestamp(question.date / 1000000)}
                     profilePic={staticData + question.askedbyimagepath}
                     authorid={question.askedbylogin} />
             </Block>
@@ -633,6 +627,7 @@ class PQuestion extends Component {
                 user: {
                     ...prevState.user,
                     name: response.data.name,
+                    login: response.data.login,
                     profilePic: staticData + response.data.imagepath,
                 }
             }))
@@ -640,12 +635,13 @@ class PQuestion extends Component {
     }
 
     calluserfunc() {
-        console.log("shit")
         Post(notificationService + "calluser", {
             questionid: this.state.question.id,
             login: this.state.calluser
         }, (response) => {
-            
+            this.setState(prevState => ({
+                calluser: ''
+            }))
         })
     }
 

@@ -2,6 +2,7 @@ package profile
 
 import (
 	"net/http"
+	"sort"
 	"uchicollab/db"
 )
 
@@ -13,8 +14,12 @@ func handleComments(request CommentsRequest) (response CommentsResponse, status 
 		return
 	}
 
-	println(session.User.ID, len(session.User.Comments))
-	for idx, comment := range session.User.Comments {
+	comments := session.User.Comments
+	sort.Slice(comments, func(i, j int) bool {
+		return comments[i].ID > comments[j].ID
+	})
+
+	for idx, comment := range comments {
 		if idx >= request.Number {
 			break
 		}
@@ -113,7 +118,12 @@ func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInf
 	response.Name = user.Name
 	response.ImagePath = user.ImagePath
 
-	for _, comment := range user.Comments {
+	comments := user.Comments
+	sort.Slice(comments, func(i, j int) bool {
+		return comments[i].ID > comments[j].ID
+	})
+
+	for _, comment := range comments {
 		response.Comments = append(response.Comments, Comment{
 			Text:      comment.Text,
 			Name:      comment.Commentator.Name,

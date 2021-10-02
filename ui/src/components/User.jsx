@@ -9,9 +9,9 @@ export class User extends Component {
                 {this.props.prefix}
             </div>
             <div className="greetingNameHandler">
-                <ProfileLogo height="56px" width="56px" src={this.props.user.profilePic}/>
+                <ProfileLogo height="56px" width="56px" src={this.props.profilePic}/>
                 <div className="greetingName">
-                    {this.props.user.name}
+                    {this.props.name}
                 </div>
             </div>
             </div>

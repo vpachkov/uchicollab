@@ -132,6 +132,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: right;
+  text-align: right;
   color: #45444f;
   font-size: 0.7em;
 }

@@ -17,7 +17,7 @@ import {
     HeaderSquareBlock
 } from "../components/Blocks";
 import { BriefQuestion } from "../components/Questions";
-import {Header, Navigation, ProfileHeader} from "../components/Header";
+import { Header, Navigation, ProfileHeader } from "../components/Header";
 import { ProgressBar } from "../components/ProgressBar";
 import { SubjectColor } from "../constants";
 import { BigButtonWithIcon, InlineBigButton, ButtonHandler } from "../components/Buttons";
@@ -107,6 +107,9 @@ class PProfile extends Component {
     }
 
     recalcRaiting = (allAnswers, bestAnswers) => {
+        if (allAnswers == 0) {
+            return 0
+        }
         return bestAnswers * 10 + (allAnswers / 4)
     }
 
@@ -117,7 +120,7 @@ class PProfile extends Component {
         }
         return (
             <div>
-                <ProfileHeader prefix="Пользователь" profileUser={ this.state.profileUser } user={ this.state.user }/>
+                <ProfileHeader prefix="Пользователь" profileUser={this.state.profileUser} user={this.state.user} />
                 <Container>
                     <main>
                         <Navigation />
@@ -158,7 +161,7 @@ class PProfile extends Component {
                                                         color="rgb(244, 222, 250)"><FontAwesomeIcon
                                                             color="rgb(213, 98, 234)"
                                                             icon={faFire} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.bestAnswers / this.state.user.answers}%</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)">{this.state.user.answers == 0 ? 0 : this.state.user.bestAnswers / this.state.user.answers}%</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(211, 239, 229)"><FontAwesomeIcon
                                                             color="rgb(105, 193, 153)"
@@ -255,6 +258,7 @@ class PProfile extends Component {
                 user: {
                     ...prevState.user,
                     name: response.data.name,
+                    login: response.data.login,
                     profilePic: staticData + response.data.imagepath,
                 }
             }))

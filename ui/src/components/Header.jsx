@@ -51,7 +51,10 @@ export class Header extends Component {
                     <Container>
                         <AbstractBetweenSpacingBlock>
                             <div>
-                                <User prefix={this.props.prefix} user={this.props.user} />
+                                <User 
+                                    prefix={this.props.prefix} 
+                                    name={ this.props.user.name }
+                                    profilePic={ this.props.user.profilePic }/>
                             </div>
                             <div>
                                 <HeaderSquareBlock color="white"><SquareBlockImage
@@ -104,7 +107,8 @@ export class ProfileHeader extends Component {
                             <div>
                                 <User
                                     prefix={ this.props.prefix }
-                                    user={ this.props.profileUser }
+                                    name={ this.props.profileUser.name }
+                                    profilePic={ staticData + this.props.profileUser.imagepath }
                                 />
                             </div>
                             <div>

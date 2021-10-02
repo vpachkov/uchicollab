@@ -212,6 +212,7 @@ class PCreate extends Component {
                 user: {
                     ...prevState.user,
                     name: response.data.name,
+                    login: response.data.login,
                     profilePic: staticData + response.data.imagepath,
                 }
             }))
