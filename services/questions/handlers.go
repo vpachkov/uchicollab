@@ -286,7 +286,7 @@ func handleUpvote(request UpvoteRequest) (status int) {
 		for _, upvoter := range question.Upvoters {
 			if upvoter.UserID == session.UserID {
 				upvoter.Coins += request.Coins
-				dbi.Updates(&upvoter)
+				dbi.Save(&upvoter)
 				exists = true
 				break
 			}
@@ -298,7 +298,7 @@ func handleUpvote(request UpvoteRequest) (status int) {
 				Coins: request.Coins,
 			})
 
-			dbi.Updates(&question)
+			dbi.Save(&question)
 		}
 	}
 
@@ -340,7 +340,7 @@ func handleConcern(request ConcernRequest) (status int) {
 						if donator.User.ID == session.User.ID {
 							wasDonator = true
 							donator.Coins = upvoter.Coins
-							dbi.Updates(&donator)
+							dbi.Save(&donator)
 						}
 					}
 					if !wasDonator {
@@ -348,7 +348,7 @@ func handleConcern(request ConcernRequest) (status int) {
 							User:  session.User,
 							Coins: upvoter.Coins,
 						})
-						dbi.Updates(&answer)
+						dbi.Save(&answer)
 					}
 					continue
 				}
@@ -413,7 +413,7 @@ func handleSendMessage(request SendMessageRequest) (status int) {
 		Time: time.Now(),
 	})
 
-	dbi.Updates(&question)
+	dbi.Save(&question)
 
 	status = http.StatusOK
 	return
@@ -433,7 +433,7 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 	}
 
 	session.User.Coins -= request.Cost
-	dbi.Updates(session.User)
+	dbi.Save(session.User)
 
 	upvoter := db.Upvoter{
 		User:  session.User,
