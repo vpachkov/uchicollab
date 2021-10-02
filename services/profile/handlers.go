@@ -96,6 +96,11 @@ func handleRegister(request RegisterRequest) (status int) {
 		Login:        request.Login,
 		PasswordHash: request.Password,
 		Name:         request.Name,
+		About:        request.About,
+		School:       request.School,
+	}
+	for _, subject := range request.Subjects {
+		newUser.Subjects = append(newUser.Subjects, db.UserSubject{Name: subject})
 	}
 	dbi.Create(newUser)
 	status = http.StatusOK
@@ -111,12 +116,36 @@ func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInf
 	}
 	var user db.User
 	dbi.
+		Preload("Subjects").
 		Preload("Comments").
 		Preload("Comments.Commentator").
 		First(&user, "login = ?", request.Login)
 
 	response.Name = user.Name
 	response.ImagePath = user.ImagePath
+	response.About = user.About
+	response.School = user.School
+
+	for _, subject := range user.Subjects {
+		response.Subjects = append(response.Subjects, subject.Name)
+	}
+
+	var count int64
+	dbi.Model(&db.Answer{}).Where("author_id = ?", user.ID).Count(&count)
+	response.Answers = int(count)
+
+	var answers []db.Answer
+	dbi.
+		Preload("Donators").
+		Find(&answers, "author_id = ?", user.ID)
+
+	for _, answer := range answers {
+		for _, donator := range answer.Donators {
+			response.Likes += donator.Coins
+		}
+	}
+
+	response.Rating = response.Likes/5 + response.Answers
 
 	comments := user.Comments
 	sort.Slice(comments, func(i, j int) bool {

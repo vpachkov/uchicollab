@@ -88,17 +88,17 @@ class PProfile extends Component {
     }
 
     renderSubscribedTags = () => {
-        if (this.state.user === undefined) {
+        if (this.state.profileUser === undefined) {
             return null
         }
 
         return (
             <div>
                 {
-                    this.state.user.subscribedTages === undefined ? null :
-                        this.state.user.subscribedTages.map(tag => {
+                    this.state.profileUser.subjects === undefined || this.state.profileUser.subjects === null ? null :
+                        this.state.profileUser.subjects.map(subject => {
                             return (
-                                <KeywordBlock><span>{tag}</span></KeywordBlock>
+                                <KeywordBlock><span>{subject}</span></KeywordBlock>
                             )
                         })
                 }
@@ -120,61 +120,50 @@ class PProfile extends Component {
         }
         return (
             <div>
-                <ProfileHeader prefix="Пользователь" profileUser={this.state.profileUser} user={this.state.user} />
+                <ProfileHeader prefix="Пользователь" profileUser={ this.state.profileUser } user={this.state.user} />
                 <Container>
                     <main>
                         <Navigation />
                         <Row>
-                            {this.isUserProfile() ? <Col xs={12} lg={12}><Block color="white">
-                                <AbstractBlock color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Настройки</BlockTitle>
-                                    <AbstractBlock color="white">
-                                        {this.renderSubscribedTags()}
-                                    </AbstractBlock>
-                                </AbstractBlock>
-                            </Block></Col> : null}
                             <Col sm={12} sm={12}>
                                 <Block color="white">
                                     <Row>
                                         <Col xs={12} lg={6}>
                                             <AbstractBlock color="white">
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Учебное заведение</BlockTitle>
+                                                <AbstractBlock color="white">
+                                                    <KeywordBlock><span>{ this.state.profileUser.school }</span></KeywordBlock>
+                                                </AbstractBlock>
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Любимые предметы</BlockTitle>
+                                                <AbstractBlock color="white">
+                                                    { this.renderSubscribedTags() }
+                                                </AbstractBlock>
                                                 <BlockTitle color="rgb(69, 68, 79)" text="bold">О себе</BlockTitle>
                                                 <AbstractBlock color="white">
-                                                    {this.state.userinfo.aboutUser}
-                                                </AbstractBlock>
-                                                <AbstractBlock color="white">
-                                                    <KeywordBlock><span>{this.state.userinfo.education}</span></KeywordBlock>
-                                                    <KeywordBlock><span>{this.state.userinfo.education}</span></KeywordBlock>
+                                                    { this.state.profileUser.about }
                                                 </AbstractBlock>
                                             </AbstractBlock>
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <AbstractBlock color="white">
-                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Рейтинг</BlockTitle>
+                                                <BlockTitle color="rgb(69, 68, 79)" text="bold">Активность</BlockTitle>
                                                 <AbstractBetweenSpacingBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(220, 222, 242)"><FontAwesomeIcon
                                                             color="rgb(74, 89, 183)"
                                                             icon={faChartLine} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.recalcRaiting(this.state.user.answers, this.state.user.bestAnswers)}</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)">{ this.state.profileUser.rating } Очков рейтинга</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(244, 222, 250)"><FontAwesomeIcon
                                                             color="rgb(213, 98, 234)"
                                                             icon={faFire} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.answers == 0 ? 0 : this.state.user.bestAnswers / this.state.user.answers}%</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)">{this.state.profileUser.likes} Монет было получено за ответы</SquareBlockText></SquareBlock>
                                                     <SquareBlock color="white"><SquareBlockImage
                                                         color="rgb(211, 239, 229)"><FontAwesomeIcon
                                                             color="rgb(105, 193, 153)"
                                                             icon={faComment} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)">{this.state.user.answers}</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)">{this.state.user.answers} Всего ответов дал пользователь</SquareBlockText></SquareBlock>
                                                 </AbstractBetweenSpacingBlock>
-                                                <AbstractBlock color="white">
-                                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные
-                                                        темы</BlockTitle>
-                                                    <AbstractBlock color="white">
-                                                        {this.renderSubscribedTags()}
-                                                    </AbstractBlock>
-                                                </AbstractBlock>
                                             </AbstractBlock>
                                         </Col>
                                     </Row>

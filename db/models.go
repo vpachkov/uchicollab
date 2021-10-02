@@ -41,12 +41,22 @@ type Comment struct {
 	Commentator *User `gorm:"foreignkey:GotFromUserid"`
 }
 
+type UserSubject struct {
+	ID     int
+	Name   string
+	UserID int
+}
+
 type User struct {
 	ID            int
 	Coins         int
 	Login         string
 	PasswordHash  string
 	Name          string
+	About         string
+	School        string
+	Subjects      []UserSubject `gorm:"ForeignKey:UserID"`
+	ImagePath     string
 	Comments      []Comment      `gorm:"ForeignKey:BelongsToUserID"`
 	Notifications []Notification `gorm:"ForeignKey:UserID"`
 }

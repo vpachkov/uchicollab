@@ -240,15 +240,6 @@ class PRegister extends Component {
             </div >
         )
     }
-
-    loadComments() {
-        Post(
-            profileService + "comments", {
-            number: 5
-        }, (response) => {
-            this.setState({ comments: response.data.comments })
-        })
-    }
 }
 
 export default withCookies(PRegister);

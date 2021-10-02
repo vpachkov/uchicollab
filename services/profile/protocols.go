@@ -60,7 +60,15 @@ type PublicUserInfoRequest struct {
 }
 
 type PublicUserInfoResponse struct {
-	Name      string    `json:"name"`
-	ImagePath string    `json:"imagepath"`
-	Comments  []Comment `json:"comments"`
+	Name      string   `json:"name"`
+	ImagePath string   `json:"imagepath"`
+	About     string   `json:"about"`
+	School    string   `json:"school"`
+	Subjects  []string `json:"subjects"`
+
+	Rating  int `json:"rating"`
+	Likes   int `json:"likes"`
+	Answers int `json:"answers"`
+
+	Comments []Comment `json:"comments"`
 }

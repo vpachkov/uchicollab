@@ -43,6 +43,9 @@ func main() {
 	if vass.ID == 0 {
 		vas := &db.User{
 			Name:         "Русс Молочков",
+			About:        "Я люблю учить алгебру это мой любимый предмет :)",
+			School:       "Школа номер 121212",
+			Subjects:     []db.UserSubject{{Name: "Алгебра"}, {Name: "Геометрия"}, {Name: "Английский язык"}},
 			Login:        "russcox",
 			PasswordHash: "fafa",
 			Coins:        40,
@@ -50,6 +53,9 @@ func main() {
 		}
 		dich := &db.User{
 			Name:         "Никита Коровкин",
+			About:        "Я не люблю учить алгебру но зато люблю очень Русский язык это мой самый любимый предмет!",
+			School:       "Лицей ВШЭ НИУ",
+			Subjects:     []db.UserSubject{{Name: "Русский язык"}, {Name: "Английский язык"}},
 			Login:        "nimelekhin",
 			PasswordHash: "fafa",
 			ImagePath:    "nimelekhin.png",
