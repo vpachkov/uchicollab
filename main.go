@@ -9,12 +9,27 @@ import (
 	"time"
 
 	"uchicollab/db"
+	"uchicollab/search"
 	"uchicollab/services/authorization"
 	"uchicollab/services/notifications"
 	"uchicollab/services/profile"
 	"uchicollab/services/questions"
 	"uchicollab/workers"
 )
+
+func initSearchFromDB() {
+	dbi := db.Get()
+	var questions []db.Question
+	dbi.Preload("Tags").
+		Preload("Opener").
+		Preload("Answers").
+		Preload("Upvoters").
+		Find(&questions).Order("cost")
+
+	for _, question := range questions {
+		search.Index(question.ID, question.Description)
+	}
+}
 
 func main() {
 	// setup database
@@ -176,6 +191,10 @@ func main() {
 			dbi.Updates(&user)
 		}
 	})
+
+	log.Println("Search engine init...")
+	search.Init()
+	initSearchFromDB()
 
 	// start the server
 	log.Println("Starting...")

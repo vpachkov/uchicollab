@@ -5,6 +5,7 @@ import (
 	"sort"
 	"time"
 	"uchicollab/db"
+	"uchicollab/search"
 	"uchicollab/services"
 )
 
@@ -121,6 +122,47 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 	sort.Slice(response.Questions, func(i, j int) bool {
 		return response.Questions[i].Cost > response.Questions[j].Cost
 	})
+
+	status = http.StatusOK
+	return
+}
+
+func handleSearchQuestions(request SearchQuestionsRequest) (response BriefQuestionsResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	datas := search.Search(request.Text)
+
+	var questions []db.Question
+	dbi.
+		Preload("Tags").
+		Preload("Opener").
+		Preload("Answers").
+		Preload("Upvoters").
+		Where("ID IN ?", datas).
+		Find(&questions)
+
+	for _, question := range questions {
+		cost := 0
+		for _, upvoter := range question.Upvoters {
+			cost += upvoter.Coins
+		}
+
+		response.Questions = append(response.Questions, BriefQuestion{
+			ID:               question.ID,
+			Answers:          len(question.Answers),
+			Cost:             cost,
+			Title:            question.Title,
+			Description:      question.Description,
+			AskedByName:      question.Opener.Name,
+			AskedByLogin:     question.Opener.Login,
+			AskedByImagePath: question.Opener.ImagePath,
+		})
+	}
 
 	status = http.StatusOK
 	return
@@ -399,6 +441,9 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 
 	dbi.Create(question)
 	response.ID = question.ID
+
+	go search.Index(question.ID, question.Description)
+
 	status = http.StatusOK
 	return
 }

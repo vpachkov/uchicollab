@@ -35,6 +35,12 @@ type BriefQuestionsRequest struct {
 	Deadline int64    `json:"deadline"`
 }
 
+type SearchQuestionsRequest struct {
+	services.SessionableRequest
+	Title string `json:"title"`
+	Text  string `json:"text"`
+}
+
 type BriefQuestion struct {
 	ID               int    `json:"id"`
 	Answers          int    `json:"answers"`

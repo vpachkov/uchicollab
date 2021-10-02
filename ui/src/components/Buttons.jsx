@@ -123,7 +123,7 @@ export class CustomSelect extends Component {
 
     render() {
         var tinycolor = require("tinycolor2");
-        
+
         return (
             <Select
                 styles={this.customStyles}
@@ -144,6 +144,25 @@ export class CustomSelect extends Component {
                     },
                 })}
             />
+        )
+    }
+}
+
+export class CustomInputFile extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            selectedTagsOption: null,
+            tags: new Set(),
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <label for="upload-photo">Browse...</label>
+                <input type="file" name="photo" id="upload-photo" />
+            </div>
         )
     }
 }

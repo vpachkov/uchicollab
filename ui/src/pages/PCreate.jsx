@@ -75,38 +75,38 @@ class PCreate extends Component {
                     onChange={(selectedOption) => {
                         this.setState({
                             selectedSubjectOption: selectedOption,
-                        }, this.loadBriefQuestions);
+                        });
                     }}
-                    options={ Subjects }
+                    options={Subjects}
                     placeholder="Выберите предмет"
                 />
                 <Tags
-                    onChange={ (tags) => {
-                        this.setState({ tags: tags }, this.loadBriefQuestions)
-                    } }
+                    onChange={(tags) => {
+                        this.setState({ tags: tags })
+                    }}
                 />
                 <BlockLine color="rgb(133, 133, 138)">Заголовок</BlockLine>
                 <input
                     className="inputBox"
                     rows="4"
                     placeholder="Опшите вопрос максимально кратко"
-                    maxLength={ 60 }
-                    onChange={ (event) => {
+                    maxLength={60}
+                    onChange={(event) => {
                         this.setState({
                             title: event.target.value
                         })
-                    } }
+                    }}
                 />
                 <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
                 <textarea
                     className="textBox"
                     rows="4"
                     placeholder="Название"
-                    onChange={ (event) => {
+                    onChange={(event) => {
                         this.setState({
                             text: event.target.value
-                        })
-                    } }
+                        }, this.loadBriefQuestions)
+                    }}
                 />
                 <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
                 <input
@@ -114,30 +114,30 @@ class PCreate extends Component {
                     type="number"
                     rows="4"
                     placeholder="Стоимость"
-                    min={ 0 }
-                    max={ this.state.user.coins }
-                    onChange={ (event) => {
+                    min={0}
+                    max={this.state.user.coins}
+                    onChange={(event) => {
                         this.setState({
                             cost: parseInt(event.target.value)
                         })
-                    } }
+                    }}
                 />
                 <BlockLine color="rgb(133, 133, 138)">Выполнить до</BlockLine>
                 <input
                     className="inputBox"
                     type="datetime-local"
                     rows="4"
-                    onChange={ (event) => {
+                    onChange={(event) => {
                         this.setState({
                             deadline: + new Date(event.target.value)
                         })
-                    } }
+                    }}
                 />
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
                     <Button
                         title="Создать"
-                        onClick={ () => {
-                            Post(questionsService+"create", {
+                        onClick={() => {
+                            Post(questionsService + "create", {
                                 title: this.state.title,
                                 text: this.state.text,
                                 cost: this.state.cost,
@@ -145,9 +145,9 @@ class PCreate extends Component {
                                 subject: this.state.selectedSubjectOption.label,
                                 tags: this.state.tags,
                             }, (response) => {
-                                history.push(`question/${response.data.id }`)
+                                history.push(`question/${response.data.id}`)
                             })
-                        } }
+                        }}
                     />
                 </div>
             </div>
@@ -176,10 +176,10 @@ class PCreate extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Похожие вопросы</BlockTitle>
                                     {
-                                        this.state.questions === undefined || this.state.questions === null ? null :
+                                        this.state.questions === undefined || this.state.questions === null ? <BlockLine>Начните писать вопрос и мы подберем похожие</BlockLine> :
                                             this.state.questions.map(question => {
                                                 return (
-                                                    <BriefQuestion question={ question } />
+                                                    <BriefQuestion question={question} />
                                                 )
                                             })
                                     }
@@ -194,10 +194,9 @@ class PCreate extends Component {
 
     loadBriefQuestions() {
         Post(
-            questionsService + "briefquestions",
+            questionsService + "searchquestions",
             {
-                subject: this.state.selectedSubjectOption !== undefined && this.state.selectedSubjectOption ? this.state.selectedSubjectOption.label : undefined,
-                tags: this.state.tags,
+                text: this.state.text !== undefined ? this.state.text : "",
             },
             (response) => {
                 this.setState({
