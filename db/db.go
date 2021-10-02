@@ -19,7 +19,7 @@ func Init() {
 		&User{}, &Session{}, &Comment{}, &QuestionTag{},
 		&QuestionSubject{}, &Donator{},
 		&Answer{}, &Question{}, &Upvoter{},
-		&ChatMessage{}); err != nil {
+		&ChatMessage{}, &Notification{}); err != nil {
 		panic(err)
 	}
 

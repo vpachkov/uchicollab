@@ -23,7 +23,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faChartLine, faClock, faCoins, faComment, faFire, faHeart, faPlus, faQuestion, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Post, profileService, staticData } from "../config";
+import { Post, profileService, staticData, notificationService } from "../config";
 import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import history from "../history";
@@ -82,6 +82,7 @@ class PHome extends Component {
         this.getInfo()
         this.getRaiting()
         this.loadComments()
+        this.getNotifications()
     }
 
     renderSubscribedTags = () => {
@@ -275,6 +276,16 @@ class PHome extends Component {
                     bestAnswers: response.data.bestAnswers,
                 }
             }))
+        })
+    }
+
+    getNotifications() {
+        Post(
+            notificationService + "list", {
+            number: 4
+        }, (response) => {
+            console.log(response.data.list)
+            this.setState({ notifications: response.data.list })
         })
     }
 }

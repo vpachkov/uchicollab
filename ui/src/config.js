@@ -7,6 +7,7 @@ export var serverAPI = "http://" + window.location.hostname + ":8080/api/"
 export var authorizationService = serverAPI + "Authorization."
 export var profileService = serverAPI + "Profile."
 export var questionsService = serverAPI + "Questions."
+export var notificationService = serverAPI + "Notification."
 
 export var staticData = "http://" + window.location.hostname + ":8080/static/"
 
@@ -17,7 +18,7 @@ function post(url, body, onResponse, onError, session) {
             ...body,
             session
         })
-    ).then(onResponse).catch((error)=> {
+    ).then(onResponse).catch((error) => {
         if (error.response !== undefined && error.response.status === 401) {
             Cookies.remove('session')
             Post(url, body, onResponse, onError)
@@ -38,8 +39,9 @@ export function Post(url, body, onResponse, onError) {
     let session = Cookies.get('session')
 
     if (session === undefined) {
-        axios.post(authorizationService+"authorize", JSON.stringify({
-            login: login, password: password
+        axios.post(authorizationService + "authorize", JSON.stringify({
+            login: login,
+            password: password
         })).then((response) => {
             Cookies.set('session', response.data.session)
             post(url, body, onResponse, onError, response.data.session)

@@ -89,8 +89,8 @@ export class Notification extends Component {
                 <Row>
                     <Col>
                         <QuestionTitle>{notification.title}</QuestionTitle>
-                        <QuestionBody max={-1} text={notification.description} />
-                        <div style={{float: "right", marginTop: "8px"}}><ButtonGray title="открыть" onClick={() => {history.push(notification.action)}} /></div>
+                        <QuestionBody max={-1} text={notification.text} />
+                        <div style={{float: "right", marginTop: "8px"}}><ButtonGray title="открыть" onClick={() => {history.push(notification.link)}} /></div>
                     </Col>
                 </Row>
             </MiniQuestion>

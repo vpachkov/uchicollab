@@ -4,8 +4,10 @@ import (
 	"log"
 	"net/http"
 	"time"
+
 	"uchicollab/db"
 	"uchicollab/services/authorization"
+	"uchicollab/services/notifications"
 	"uchicollab/services/profile"
 	"uchicollab/services/questions"
 	"uchicollab/workers"
@@ -36,6 +38,9 @@ func main() {
 	comm := db.Comment{Text: "very good thanks", Score: 5, Commentator: dich}
 	comm2 := db.Comment{Text: "temporary -2 thanks", Score: 2, Commentator: dich}
 	vas.Comments = append(vas.Comments, comm, comm2)
+
+	notific := db.Notification{Text: "Гайд №1", Time: time.Now()}
+	vas.Notifications = append(vas.Notifications, notific)
 
 	var tag db.QuestionTag
 	dbi.First(&tag)
@@ -106,7 +111,7 @@ func main() {
 		dbi.Create(question1)
 	}
 
-	//dbi.Updates(vas)
+	// dbi.Updates(vas)
 
 	// setup workers
 	sc := workers.SessionCollector{}
@@ -117,6 +122,7 @@ func main() {
 	authorization.SetupRoutes(mux)
 	profile.SetupRoutes(mux)
 	questions.SetupRoutes(mux)
+	notifications.SetupRoutes(mux)
 
 	// setup statics
 	fs := http.FileServer(http.Dir("static"))

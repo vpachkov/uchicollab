@@ -42,12 +42,13 @@ type Comment struct {
 }
 
 type User struct {
-	ID           int
-	Coins        int
-	Login        string
-	PasswordHash string
-	Name         string
-	Comments     []Comment `gorm:"ForeignKey:BelongsToUserID"`
+	ID            int
+	Coins         int
+	Login         string
+	PasswordHash  string
+	Name          string
+	Comments      []Comment      `gorm:"ForeignKey:BelongsToUserID"`
+	Notifications []Notification `gorm:"ForeignKey:UserID"`
 }
 
 type Donator struct {
@@ -115,4 +116,16 @@ type ChatMessage struct {
 	User       *User `gorm:"foreignkey:UserID"`
 	Text       string
 	Time       time.Time
+}
+
+type Notification struct {
+	ID int
+
+	UserID int
+	User   *User `gorm:"foreignkey:UserID"`
+
+	Title string
+	Text  string
+	Link  string
+	Time  time.Time
 }
