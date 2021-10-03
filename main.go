@@ -200,7 +200,7 @@ func main() {
 		dbi.First(&user, "login = ?", login)
 		if user.ID != 0 {
 			user.ImagePath = imagePath
-			dbi.Updates(&user)
+			dbi.Save(&user)
 		}
 	})
 
@@ -237,7 +237,7 @@ func main() {
 		dbi.First(&answer, "id = ?", answerID)
 		if answer.ID != 0 {
 			answer.ImagePath = "answer/" + imagePath
-			dbi.Updates(&answer)
+			dbi.Save(&answer)
 		}
 	})
 
