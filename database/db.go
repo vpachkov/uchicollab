@@ -20,7 +20,7 @@ func Init() {
 	var err error
 	for att := 0 ; att < 5 ; att++ {
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-		if err != nil {
+		if err == nil {
 			break
 		}
 		time.Sleep(2 * time.Second)
