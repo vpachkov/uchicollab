@@ -172,7 +172,7 @@ class PProfile extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
                                     {
-                                        this.state.popularQuestions === undefined || this.state.popularQuestions === null ? null :
+                                        this.state.popularQuestions === undefined || this.state.popularQuestions === null ? <BlockLine>Как только этот пользователь задаст свой первый вопрос, тут будут отображаться наиболее популярные из всех.</BlockLine> :
                                             this.state.popularQuestions.map(question => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
@@ -185,7 +185,7 @@ class PProfile extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные ответы</BlockTitle>
                                     {
-                                        this.state.popularAnswers === undefined || this.state.popularAnswers === null ? null :
+                                        this.state.popularAnswers === undefined || this.state.popularAnswers === null ? <BlockLine>Как только этот пользователь даст свой первый ответ, тут будут отображаться наиболее популярные из всех.</BlockLine> :
                                             this.state.popularAnswers.map(answer => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefAnswer answer={answer} /></div>
