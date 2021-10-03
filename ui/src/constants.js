@@ -31,4 +31,5 @@ export const SubjectColor = {
     philosophy: "rgb(232, 224, 208)",
     ecology: "rgb(170, 231, 187)",
     astronomy: "rgb(250, 228, 222)",
+    chemestry: "#fbe4ff",
 };
