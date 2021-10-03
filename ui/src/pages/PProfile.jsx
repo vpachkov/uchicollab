@@ -161,7 +161,7 @@ class PProfile extends Component {
                                                         color="rgb(211, 239, 229)"><FontAwesomeIcon
                                                             color="rgb(105, 193, 153)"
                                                             icon={faComment} /></SquareBlockImage><SquareBlockText
-                                                                color="rgb(133, 133, 138)"><span style={{ color: "rgb(69, 68, 79)" }}>{this.state.user.answers}</span> Всего ответов</SquareBlockText></SquareBlock>
+                                                                color="rgb(133, 133, 138)"><span style={{ color: "rgb(69, 68, 79)" }}>{this.state.profileUser.answers}</span> Всего ответов</SquareBlockText></SquareBlock>
                                                 </AbstractBetweenSpacingBlock>
                                             </AbstractBlock>
                                         </Col>
