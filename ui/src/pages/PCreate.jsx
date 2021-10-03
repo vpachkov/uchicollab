@@ -123,11 +123,11 @@ class PCreate extends Component {
                         }, this.loadBriefQuestions)
                     }}
                 />
-                <BlockLine color="rgb(133, 133, 138)">Вознагрждение</BlockLine>
+                <BlockLine color="rgb(133, 133, 138)">Стоимость вопроса</BlockLine>
                 <input
                     className="inputBox"
                     type="number"
-                    placeholder="Введите сумму, которое получит эксперт за лучший ответ"
+                    placeholder="Введите стоимость вопрсоа"
                     min={0}
                     max={this.state.user.coins}
                     onChange={(event) => {
