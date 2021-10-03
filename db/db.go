@@ -3,12 +3,16 @@ package db
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"os"
 )
 
 var dataBase *gorm.DB
 
 func Init() {
 	host := "localhost"
+	if env, exists := os.LookupEnv("DB_HOST"); exists {
+		host = env
+	}
 	dsn := "host=" + host + " user=uuser password=ppassword dbname=uchicollab port=5432"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
