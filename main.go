@@ -42,9 +42,9 @@ func main() {
 	dbi.First(&vass)
 	if vass.ID == 0 {
 		vas := &database.User{
-			Name:         "Русс Молочков",
-			About:        "Я люблю учить алгебру это мой любимый предмет :)",
-			School:       "Школа номер 121212",
+			Name:         "Вячеслав Пачков",
+			About:        "Всем привет! Сегодня я участвую в хакатоне uchihack!",
+			School:       "НИТУ МИСиС",
 			Subjects:     []database.UserSubject{{Name: "Алгебра"}, {Name: "Геометрия"}, {Name: "Английский язык"}},
 			Login:        "russcox",
 			PasswordHash: "fafa",
@@ -52,9 +52,9 @@ func main() {
 			ImagePath:    "russcox.png",
 		}
 		dich := &database.User{
-			Name:         "Никита Коровкин",
-			About:        "Я не люблю учить алгебру но зато люблю очень Русский язык это мой самый любимый предмет!",
-			School:       "Лицей ВШЭ НИУ",
+			Name:         "Никита Мелехин",
+			About:        "Добрый день. Спасибо что зашли на мою страницу. Я сегодня тоже участвую в хакатоне uchihack!",
+			School:       "НИТУ МИСиС",
 			Subjects:     []database.UserSubject{{Name: "Русский язык"}, {Name: "Английский язык"}},
 			Login:        "nimelekhin",
 			PasswordHash: "fafa",
