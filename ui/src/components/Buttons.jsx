@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Buttons.css';
 import Select from 'react-select';
+import Creatable from 'react-select/creatable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons';
 
@@ -127,6 +128,42 @@ export class CustomSelect extends Component {
 
         return (
             <Select
+                id={this.props.id}
+                styles={this.customStyles}
+                className="textSelector"
+                value={this.props.value}
+                onChange={this.props.onChange}
+                options={this.props.options}
+                placeholder={this.props.placeholder}
+                theme={(theme) => ({
+                    ...theme,
+                    borderRadius: 8,
+                    colors: {
+                        ...theme.colors,
+                        primary25: '#d7f4d2',
+                        primary50: tinycolor('#d7f4d2').darken(6).toString(),
+                        primary75: tinycolor('#d7f4d2').darken(20).toString(),
+                        primary: tinycolor('#d7f4d2').darken(50).toString(),
+                    },
+                })}
+            />
+        )
+    }
+}
+
+export class CustomAddableSelect extends Component {
+    customStyles = {
+        menu: (provided, state) => ({
+            ...provided,
+            color: "rgb(69, 68, 79)",
+        }),
+    }
+
+    render() {
+        var tinycolor = require("tinycolor2");
+
+        return (
+            <Creatable
                 id={this.props.id}
                 styles={this.customStyles}
                 className="textSelector"

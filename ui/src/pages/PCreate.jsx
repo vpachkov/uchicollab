@@ -17,7 +17,7 @@ import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
 import { Header, Navigation } from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tags } from "../components/Tags";
+import { AddableTags, Tags } from "../components/Tags";
 import { SubjectColor, Subjects } from "../constants";
 
 class PCreate extends Component {
@@ -96,7 +96,7 @@ class PCreate extends Component {
                     options={Subjects}
                     placeholder="Выберите предмет"
                 />
-                <Tags
+                <AddableTags
                     onChange={(tags) => {
                         this.setState({ tags: tags })
                     }}
