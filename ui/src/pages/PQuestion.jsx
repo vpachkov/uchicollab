@@ -636,7 +636,7 @@ class PQuestion extends Component {
                                         {
                                             this.state.question === undefined ||
                                                 this.state.question.answers === undefined ||
-                                                this.state.question.answers === null ? null :
+                                                this.state.question.answers === null ? <BlockLine>Эксперты пока не оставили ни одного ответа.</BlockLine> :
                                                 this.state.question.answers.map(answer => {
                                                     return (
                                                         this.renderAnswer(answer)

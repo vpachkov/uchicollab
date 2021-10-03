@@ -13,6 +13,21 @@ var (
 	searcher = riot.Engine{}
 )
 
+func removeUselessWords(title string, text string) string {
+	text = strings.TrimSpace(title + " " + text)
+	text = strings.ToLower(text)
+	text = strings.Replace(text, "пожалуйста", "", -1)
+	text = strings.Replace(text, "спасибо", "", -1)
+	text = strings.Replace(text, "помогите", "", -1)
+	text = strings.Replace(text, "решить", "", -1)
+	text = strings.Replace(text, "решите", "", -1)
+	text = strings.Replace(text, "быстрее", "", -1)
+	text = strings.Replace(text, "срочно", "", -1)
+	text = strings.Replace(text, "быстро", "", -1)
+	text = strings.Replace(text, "быстро", "", -1)
+	return text
+}
+
 func Init() {
 	searcher.Init(types.EngineOpts{
 		// Using:             4,
@@ -21,13 +36,13 @@ func Init() {
 }
 
 func Index(id int, title string, text string) {
-	text = strings.TrimSpace(title + " " + text)
+	text = removeUselessWords(title, text)
 	searcher.Index(strconv.Itoa(id), types.DocData{Content: text})
 	searcher.Flush()
 }
 
 func Search(title string, text string) []int {
-	text = strings.TrimSpace(title + " " + text)
+	text = removeUselessWords(title, text)
 
 	res := searcher.Search(types.SearchReq{Text: text, RankOpts: &types.RankOpts{
 		OutputOffset: 0,

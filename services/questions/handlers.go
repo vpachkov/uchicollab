@@ -76,6 +76,9 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 	}
 
 	for _, question := range questions {
+		if request.HideClosedQuestions && !question.Active {
+			continue
+		}
 		if request.Subject != "" {
 			if question.Subject != request.Subject {
 				continue

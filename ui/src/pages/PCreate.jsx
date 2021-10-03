@@ -105,7 +105,7 @@ class PCreate extends Component {
                 <input
                     className="inputBox"
                     rows="4"
-                    placeholder="Опшите вопрос максимально кратко"
+                    placeholder="Кратко опишите вопрос..."
                     maxLength={60}
                     onChange={(event) => {
                         this.setState({
@@ -116,18 +116,18 @@ class PCreate extends Component {
                 <BlockLine color="rgb(133, 133, 138)">Вопрос</BlockLine>
                 <textarea
                     className="textBox"
-                    placeholder="Название"
+                    placeholder="Сформулируйте свой вопрос..."
                     onChange={(event) => {
                         this.setState({
                             text: event.target.value
                         }, this.loadBriefQuestions)
                     }}
                 />
-                <BlockLine color="rgb(133, 133, 138)">Стоимость</BlockLine>
+                <BlockLine color="rgb(133, 133, 138)">Вознагрждение</BlockLine>
                 <input
                     className="inputBox"
                     type="number"
-                    placeholder="Стоимость"
+                    placeholder="Введите сумму, которое получит эксперт за лучший ответ"
                     min={0}
                     max={this.state.user.coins}
                     onChange={(event) => {

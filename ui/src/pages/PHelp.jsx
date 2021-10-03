@@ -15,8 +15,9 @@ import { Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { ProfileLogo } from "../components/ProfileLogo";
 import history from "../history";
-import { Switch } from 'react-switch-input';
 import { Tags } from '../components/Tags'
+import { Checkbox, Switch } from 'pretty-checkbox-react';
+import '@djthoms/pretty-checkbox';
 
 import { utc } from 'moment'
 
@@ -51,6 +52,7 @@ class PHelp extends Component {
             tags: [],
 
             searchLine: "",
+            hideClosedQuestions: false,
         };
     }
 
@@ -64,11 +66,11 @@ class PHelp extends Component {
     }
 
     resetFilters = () => {
-        document.getElementById('costfrom').value=''
-        document.getElementById('costtop').value=''
-        document.getElementById('until').value=''
-        document.getElementById('tags').value=''
-        
+        document.getElementById('costfrom').value = ''
+        document.getElementById('costtop').value = ''
+        document.getElementById('until').value = ''
+        document.getElementById('tags').value = ''
+
         this.setState({
             costFrom: 0,
             costTo: 0,
@@ -83,6 +85,9 @@ class PHelp extends Component {
 
         return (
             <div>
+                <Switch shape="slim" style={{color: "rgb(133, 133, 138)", marginBottom: "12px"}} onChange={(event) => {
+                    this.setState({ hideClosedQuestions: event.target.ariaChecked !== "true" }, this.loadBriefQuestions)
+                }}>Скрыть завершеные вопросы</Switch>
                 <CustomSelect
                     id="select"
                     value={selectedSubjectOption}
@@ -133,10 +138,10 @@ class PHelp extends Component {
                     }}
                     className="inputBox" type="datetime-local" rows="4"
                 />
-                <div style={{marginTop: "8px"}}>
+                <div style={{ marginTop: "16px" }}>
                     <ButtonGray title="Сбросить" onClick={this.resetFilters}></ButtonGray>
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -218,6 +223,7 @@ class PHelp extends Component {
                 costto: this.state.costTo,
                 deadline: this.state.deadline,
                 text: this.state.searchLine !== undefined ? this.state.searchLine : "",
+                hideClosedQuestions: this.state.hideClosedQuestions
             },
             (response) => {
                 console.log(response.data.questions)

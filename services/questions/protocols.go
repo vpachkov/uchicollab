@@ -28,11 +28,12 @@ type QuestionSubjectsResponse struct {
 
 type BriefQuestionsRequest struct {
 	services.SessionableRequest
-	Subject  string   `json:"subject"`
-	Tags     []string `json:"tags"`
-	CostFrom int      `json:"costfrom"`
-	CostTo   int      `json:"costto"`
-	Deadline int64    `json:"deadline"`
+	Subject             string   `json:"subject"`
+	Tags                []string `json:"tags"`
+	CostFrom            int      `json:"costfrom"`
+	CostTo              int      `json:"costto"`
+	Deadline            int64    `json:"deadline"`
+	HideClosedQuestions bool     `json:"hideClosedQuestions"`
 
 	// Search is applied if any of these fields is not NULL
 	Title string `json:"title"`
@@ -192,10 +193,10 @@ type PopularAnswersRequest struct {
 }
 
 type PopularAnswer struct {
-	QuestionID int `json:"questionid"`
+	QuestionID    int    `json:"questionid"`
 	QuestionTitle string `json:"questiontitle"`
-	Text string `json:"text"`
-	Likes int `json:"likes"`
+	Text          string `json:"text"`
+	Likes         int    `json:"likes"`
 }
 
 type PopularAnswersResponse struct {

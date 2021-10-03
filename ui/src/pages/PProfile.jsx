@@ -73,7 +73,6 @@ class PProfile extends Component {
 
     componentDidMount() {
         this.getInfo()
-        this.getRaiting()
         this.loadPublicUserInfo()
         this.loadPopularAnswers()
         this.loadPopularQuestions()

@@ -54,7 +54,6 @@ class PRaiting extends Component {
 
     componentDidMount() {
         this.getInfo()
-        this.getRaiting()
         this.loadComments()
         this.getRaitings()
     }
@@ -180,18 +179,6 @@ class PRaiting extends Component {
                 user: {
                     ...prevState.user,
                     coins: response.data.coin,
-                }
-            }))
-        })
-    }
-
-    getRaiting() {
-        Post(profileService + "userraiting", {}, (response) => {
-            this.setState(prevState => ({
-                user: {
-                    ...prevState.user,
-                    answers: response.data.answers,
-                    bestAnswers: response.data.bestAnswers,
                 }
             }))
         })

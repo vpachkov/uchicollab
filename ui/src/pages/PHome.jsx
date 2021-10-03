@@ -75,7 +75,6 @@ class PHome extends Component {
 
     componentDidMount() {
         this.getInfo()
-        this.getRaiting()
         this.getNotifications()
         this.loadPopularQuestions()
         this.loadRecommendations()
@@ -126,7 +125,7 @@ class PHome extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
                                     {
-                                        this.state.popularQuestions === undefined || this.state.popularQuestions === null ? null :
+                                        this.state.popularQuestions === undefined || this.state.popularQuestions === null ? <BlockLine>Как-то пусто тут :(</BlockLine> :
                                             this.state.popularQuestions.map(question => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
@@ -135,7 +134,7 @@ class PHome extends Component {
                                     }
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Рекомендованные вопросы</BlockTitle>
                                     {
-                                        this.state.recommendationsQuestions === undefined || this.state.recommendationsQuestions === null ? null :
+                                        this.state.recommendationsQuestions === undefined || this.state.recommendationsQuestions === null ? <BlockLine>Ох, кажется нам нечего вам порекомендовать :(</BlockLine> :
                                             this.state.recommendationsQuestions.map(question => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <BriefQuestion question={question} /></div>
@@ -148,7 +147,7 @@ class PHome extends Component {
                                 <Block color="white">
                                     <BlockTitle color="rgb(69, 68, 79)" text="bold">Уведомления</BlockTitle>
                                     {
-                                        this.state.notifications === undefined || this.state.notifications === null ? null :
+                                        this.state.notifications === undefined || this.state.notifications === null ? <BlockLine>Тут отобразятся Ваши уведомления</BlockLine> :
                                             this.state.notifications.map(notification => {
                                                 return (
                                                     <div style={{ marginBottom: "8px" }}> <Notification notification={notification} /></div>
