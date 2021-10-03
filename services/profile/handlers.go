@@ -3,12 +3,12 @@ package profile
 import (
 	"net/http"
 	"sort"
-	"uchicollab/db"
+	"uchicollab/database"
 )
 
 func handleComments(request CommentsRequest) (response CommentsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").Preload("User.Comments").Preload("User.Comments.Commentator").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -37,8 +37,8 @@ func handleComments(request CommentsRequest) (response CommentsResponse, status 
 }
 
 func handleUserInfo(request SessionableRequest) (response UserInfoResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -53,8 +53,8 @@ func handleUserInfo(request SessionableRequest) (response UserInfoResponse, stat
 }
 
 func handleUserCoins(request SessionableRequest) (response UserCoinsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -65,8 +65,8 @@ func handleUserCoins(request SessionableRequest) (response UserCoinsResponse, st
 }
 
 func handleUserRaiting(request SessionableRequest) (response UserRaitingResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -84,14 +84,14 @@ func handleUserRaiting(request SessionableRequest) (response UserRaitingResponse
 }
 
 func handleRegister(request RegisterRequest) (status int) {
-	dbi := db.Get()
-	var user db.User
+	dbi := database.Get()
+	var user database.User
 	dbi.First(&user, "login = ?", request.Login)
 	if user.ID != 0 {
 		status = http.StatusUnauthorized
 		return
 	}
-	newUser := &db.User{
+	newUser := &database.User{
 		Coins:        10,
 		Login:        request.Login,
 		PasswordHash: request.Password,
@@ -100,7 +100,7 @@ func handleRegister(request RegisterRequest) (status int) {
 		School:       request.School,
 	}
 	for _, subject := range request.Subjects {
-		newUser.Subjects = append(newUser.Subjects, db.UserSubject{Name: subject})
+		newUser.Subjects = append(newUser.Subjects, database.UserSubject{Name: subject})
 	}
 	dbi.Create(newUser)
 	status = http.StatusOK
@@ -108,13 +108,13 @@ func handleRegister(request RegisterRequest) (status int) {
 }
 
 func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInfoResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
-	var user db.User
+	var user database.User
 	dbi.
 		Preload("Subjects").
 		Preload("Comments").
@@ -131,10 +131,10 @@ func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInf
 	}
 
 	var count int64
-	dbi.Model(&db.Answer{}).Where("author_id = ?", user.ID).Count(&count)
+	dbi.Model(&database.Answer{}).Where("author_id = ?", user.ID).Count(&count)
 	response.Answers = int(count)
 
-	var answers []db.Answer
+	var answers []database.Answer
 	dbi.
 		Preload("Donators").
 		Find(&answers, "author_id = ?", user.ID)
@@ -166,20 +166,20 @@ func handlePublicUserInfo(request PublicUserInfoRequest) (response PublicUserInf
 }
 
 func handleUserRaitingList(request SessionableRequest) (response UserRaitingListResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
-	var users []db.User
+	var users []database.User
 	dbi.Find(&users)
 
 	for _, user := range users {
 		var count int64
-		dbi.Model(&db.Answer{}).Where("author_id = ?", user.ID).Count(&count)
+		dbi.Model(&database.Answer{}).Where("author_id = ?", user.ID).Count(&count)
 
-		var answers []db.Answer
+		var answers []database.Answer
 		dbi.Preload("Donators").
 			Find(&answers, "author_id = ?", user.ID)
 

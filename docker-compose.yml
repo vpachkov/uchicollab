@@ -16,7 +16,7 @@ services:
       - APP_DB_PASS=ppassword
       - APP_DB_NAME=uchicollab
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/
+      - ./database:/docker-entrypoint-initdb.d/
     ports:
       - 5432:5432
 

@@ -11,7 +11,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"uchicollab/db"
+	"uchicollab/database"
 	"uchicollab/search"
 	"uchicollab/services/authorization"
 	"uchicollab/services/notifications"
@@ -21,8 +21,8 @@ import (
 )
 
 func initSearchFromDB() {
-	dbi := db.Get()
-	var questions []db.Question
+	dbi := database.Get()
+	var questions []database.Question
 	dbi.Preload("Tags").
 		Preload("Opener").
 		Preload("Answers").
@@ -36,101 +36,101 @@ func initSearchFromDB() {
 
 func main() {
 	// setup database
-	db.Init()
-	dbi := db.Get()
-	var vass db.User
+	database.Init()
+	dbi := database.Get()
+	var vass database.User
 	dbi.First(&vass)
 	if vass.ID == 0 {
-		vas := &db.User{
+		vas := &database.User{
 			Name:         "Русс Молочков",
 			About:        "Я люблю учить алгебру это мой любимый предмет :)",
 			School:       "Школа номер 121212",
-			Subjects:     []db.UserSubject{{Name: "Алгебра"}, {Name: "Геометрия"}, {Name: "Английский язык"}},
+			Subjects:     []database.UserSubject{{Name: "Алгебра"}, {Name: "Геометрия"}, {Name: "Английский язык"}},
 			Login:        "russcox",
 			PasswordHash: "fafa",
 			Coins:        40,
 			ImagePath:    "russcox.png",
 		}
-		dich := &db.User{
+		dich := &database.User{
 			Name:         "Никита Коровкин",
 			About:        "Я не люблю учить алгебру но зато люблю очень Русский язык это мой самый любимый предмет!",
 			School:       "Лицей ВШЭ НИУ",
-			Subjects:     []db.UserSubject{{Name: "Русский язык"}, {Name: "Английский язык"}},
+			Subjects:     []database.UserSubject{{Name: "Русский язык"}, {Name: "Английский язык"}},
 			Login:        "nimelekhin",
 			PasswordHash: "fafa",
 			ImagePath:    "nimelekhin.png",
 		}
-		sess := &db.Session{User: vas}
+		sess := &database.Session{User: vas}
 		dbi.Create(dich)
 		dbi.Create(sess)
 	} else {
-		sess := &db.Session{User: &vass}
+		sess := &database.Session{User: &vass}
 		dbi.Create(sess)
 	}
 
-	vas := &db.User{}
-	dich := &db.User{}
+	vas := &database.User{}
+	dich := &database.User{}
 	dbi.First(&vas, "login = ?", "russcox")
 	dbi.First(&dich, "login = ?", "nimelekhin")
 
-	comm := db.Comment{Text: "very good thanks", Score: 5, Commentator: dich}
-	comm2 := db.Comment{Text: "temporary -2 thanks", Score: 2, Commentator: dich}
+	comm := database.Comment{Text: "very good thanks", Score: 5, Commentator: dich}
+	comm2 := database.Comment{Text: "temporary -2 thanks", Score: 2, Commentator: dich}
 	vas.Comments = append(vas.Comments, comm, comm2)
 
-	notific := db.Notification{Text: "Гайд №1", Time: time.Now()}
+	notific := database.Notification{Text: "Гайд №1", Time: time.Now()}
 	vas.Notifications = append(vas.Notifications, notific)
 
-	var tag db.QuestionTag
+	var tag database.QuestionTag
 	dbi.First(&tag)
 	if tag.ID == "" {
-		tag1 := &db.QuestionTag{ID: "Из учебника"}
-		tag2 := &db.QuestionTag{ID: "Со звездочкой"}
-		tag3 := &db.QuestionTag{ID: "С олимпиады"}
+		tag1 := &database.QuestionTag{ID: "Из учебника"}
+		tag2 := &database.QuestionTag{ID: "Со звездочкой"}
+		tag3 := &database.QuestionTag{ID: "С олимпиады"}
 
 		dbi.Create(tag1)
 		dbi.Create(tag2)
 		dbi.Create(tag3)
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.First(&question)
 	if question.ID == 0 {
-		var tag1 db.QuestionTag
-		var tag2 db.QuestionTag
+		var tag1 database.QuestionTag
+		var tag2 database.QuestionTag
 		dbi.First(&tag1, "id = ?", "Из учебника")
 		dbi.First(&tag2, "id = ?", "Со звездочкой")
 
-		donator1 := db.Donator{User: vas, Coins: 15}
-		donator2 := db.Donator{User: dich, Coins: 10}
+		donator1 := database.Donator{User: vas, Coins: 15}
+		donator2 := database.Donator{User: dich, Coins: 10}
 
-		answer1 := db.Answer{
+		answer1 := database.Answer{
 			Text:     "Вообще-то есть компиляторы Itell, MS.\nА на каком железе? А для каких задач?\nУ оптимизации очень много аспектов и вот так выдавать \"общие рецепты\" довольно странное занятие.",
 			Date:     time.Now(),
 			Author:   vas,
-			Donators: []db.Donator{donator1, donator2},
+			Donators: []database.Donator{donator1, donator2},
 		}
-		answer2 := db.Answer{
+		answer2 := database.Answer{
 			Text:   "Просто без обсуждения замеров/профилирования, специфики задачи и алгоритмов обсуждать оптимизации довольно странное занятие - разгонять неправильно выбранный алгоритм и без понимания железа в корне неверно.",
 			Date:   time.Now(),
 			Author: vas,
 		}
 
-		upvoter1 := db.Upvoter{User: vas, Coins: 20}
-		upvoter2 := db.Upvoter{User: dich, Coins: 10}
+		upvoter1 := database.Upvoter{User: vas, Coins: 20}
+		upvoter2 := database.Upvoter{User: dich, Coins: 10}
 
-		m1 := db.ChatMessage{
+		m1 := database.ChatMessage{
 			User: vas,
 			Text: "Привет, есть вопросы?",
 			Time: time.Now(),
 		}
 
-		m2 := db.ChatMessage{
+		m2 := database.ChatMessage{
 			User: dich,
 			Text: "Прив!, неа, пока",
 			Time: time.Now(),
 		}
 
-		question1 := &db.Question{
+		question1 := &database.Question{
 			Active:       true,
 			Title:        "Решение задачи по Алгебре",
 			Description:  "sin (П + х/3) = 1/2\nрешите пожалуйста и объясните как решать чтобы в следующий раз я смог это решить сам.",
@@ -139,10 +139,10 @@ func main() {
 			OpenedTime:   time.Now(),
 			DeadlineTime: time.Now().Add(48 * time.Hour),
 			Cost:         5,
-			Tags:         []db.QuestionTag{tag1, tag2},
-			Answers:      []db.Answer{answer1, answer2},
-			Upvoters:     []db.Upvoter{upvoter1, upvoter2},
-			ChatMessages: []db.ChatMessage{m1, m2},
+			Tags:         []database.QuestionTag{tag1, tag2},
+			Answers:      []database.Answer{answer1, answer2},
+			Upvoters:     []database.Upvoter{upvoter1, upvoter2},
+			ChatMessages: []database.ChatMessage{m1, m2},
 		}
 
 		dbi.Create(question1)
@@ -196,7 +196,7 @@ func main() {
 
 		io.Copy(f, file)
 
-		var user db.User
+		var user database.User
 		dbi.First(&user, "login = ?", login)
 		if user.ID != 0 {
 			user.ImagePath = imagePath
@@ -233,7 +233,7 @@ func main() {
 		io.Copy(f, file)
 
 		answerID, _ := strconv.Atoi(r.FormValue("answerID"))
-		var answer db.Answer
+		var answer database.Answer
 		dbi.First(&answer, "id = ?", answerID)
 		if answer.ID != 0 {
 			answer.ImagePath = "answer/" + imagePath

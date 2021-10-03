@@ -3,7 +3,7 @@ package workers
 import (
 	"log"
 	"time"
-	"uchicollab/db"
+	"uchicollab/database"
 )
 
 type SessionCollector struct{}
@@ -11,8 +11,8 @@ type SessionCollector struct{}
 func (SessionCollector) Callback() {
 	log.Println("Session collector callback")
 
-	dbi := db.Get()
-	var sessions []db.Session
+	dbi := database.Get()
+	var sessions []database.Session
 	dbi.Find(&sessions)
 	for _, session := range sessions {
 		if session.Expired() {

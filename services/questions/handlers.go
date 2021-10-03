@@ -5,20 +5,20 @@ import (
 	"net/http"
 	"sort"
 	"time"
-	"uchicollab/db"
+	"uchicollab/database"
 	"uchicollab/search"
 	"uchicollab/services"
 )
 
 func handleTags(request services.SessionableRequest) (response QuestionTagsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var tags []db.QuestionTag
+	var tags []database.QuestionTag
 	dbi.Order("ID").Find(&tags)
 	for _, tag := range tags {
 		response.Tags = append(response.Tags, QuestionTag{Value: tag.ID, Label: tag.ID})
@@ -28,14 +28,14 @@ func handleTags(request services.SessionableRequest) (response QuestionTagsRespo
 }
 
 func handleSubjects(request services.SessionableRequest) (response QuestionSubjectsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var subjects []db.QuestionSubject
+	var subjects []database.QuestionSubject
 	dbi.Order("ID").Find(&subjects)
 	for _, subject := range subjects {
 		response.Subjects = append(response.Subjects, QuestionSubject{ID: subject.ID, Title: subject.Title})
@@ -45,8 +45,8 @@ func handleSubjects(request services.SessionableRequest) (response QuestionSubje
 }
 
 func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestionsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -54,7 +54,7 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 
 	deadline := time.Unix(request.Deadline/1000, 0)
 
-	var questions []db.Question
+	var questions []database.Question
 
 	if request.Text != "" {
 		// If there is a Text, do the search
@@ -147,8 +147,8 @@ func handleBriefQuestions(request BriefQuestionsRequest) (response BriefQuestion
 }
 
 func handleSearchQuestions(request SearchQuestionsRequest) (response BriefQuestionsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -156,7 +156,7 @@ func handleSearchQuestions(request SearchQuestionsRequest) (response BriefQuesti
 
 	datas := search.Search(request.Title, request.Text)
 
-	var questions []db.Question
+	var questions []database.Question
 	dbi.
 		Preload("Tags").
 		Preload("Opener").
@@ -188,14 +188,14 @@ func handleSearchQuestions(request SearchQuestionsRequest) (response BriefQuesti
 }
 
 func handleDetailedQuestion(request DetailedQuestionRequest) (response DetailedQuestionResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("Opener").
 		Preload("Tags").
@@ -268,8 +268,8 @@ func handleDetailedQuestion(request DetailedQuestionRequest) (response DetailedQ
 }
 
 func handleUpvote(request UpvoteRequest) (status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -279,7 +279,7 @@ func handleUpvote(request UpvoteRequest) (status int) {
 		session.User.Coins -= request.Coins
 		dbi.Save(session.User)
 
-		var question db.Question
+		var question database.Question
 		dbi.
 			Preload("Upvoters").
 			Preload("Upvoters.User").
@@ -296,7 +296,7 @@ func handleUpvote(request UpvoteRequest) (status int) {
 		}
 
 		if !exists {
-			question.Upvoters = append(question.Upvoters, db.Upvoter{
+			question.Upvoters = append(question.Upvoters, database.Upvoter{
 				User:  session.User,
 				Coins: request.Coins,
 			})
@@ -310,14 +310,14 @@ func handleUpvote(request UpvoteRequest) (status int) {
 }
 
 func handleConcern(request ConcernRequest) (status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("Opener").
 		Preload("Tags").
@@ -347,7 +347,7 @@ func handleConcern(request ConcernRequest) (status int) {
 						}
 					}
 					if !wasDonator {
-						answer.Donators = append(answer.Donators, db.Donator{
+						answer.Donators = append(answer.Donators, database.Donator{
 							User:  session.User,
 							Coins: upvoter.Coins,
 						})
@@ -370,14 +370,14 @@ func handleConcern(request ConcernRequest) (status int) {
 }
 
 func handleChatMessages(request ChatMessagesRequest) (response ChatMessagesResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("ChatMessages").
 		Preload("ChatMessages.User").
@@ -398,19 +398,19 @@ func handleChatMessages(request ChatMessagesRequest) (response ChatMessagesRespo
 }
 
 func handleSendMessage(request SendMessageRequest) (status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("ChatMessages").
 		First(&question, "id = ?", request.QuestionID)
 
-	question.ChatMessages = append(question.ChatMessages, db.ChatMessage{
+	question.ChatMessages = append(question.ChatMessages, database.ChatMessage{
 		User: session.User,
 		Text: request.Text,
 		Time: time.Now(),
@@ -423,8 +423,8 @@ func handleSendMessage(request SendMessageRequest) (status int) {
 }
 
 func handleCreate(request CreateRequest) (response CreateResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -438,12 +438,12 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 	session.User.Coins -= request.Cost
 	dbi.Save(session.User)
 
-	upvoter := db.Upvoter{
+	upvoter := database.Upvoter{
 		User:  session.User,
 		Coins: request.Cost,
 	}
 
-	question := &db.Question{
+	question := &database.Question{
 		Active:       true,
 		Opener:       session.User,
 		Title:        request.Title,
@@ -451,10 +451,10 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 		Description:  request.Text,
 		DeadlineTime: time.Unix(request.Deadline/1000, 0),
 		OpenedTime:   time.Now(),
-		Upvoters:     []db.Upvoter{upvoter},
+		Upvoters:     []database.Upvoter{upvoter},
 	}
 
-	var tags []db.QuestionTag
+	var tags []database.QuestionTag
 	dbi.Find(&tags)
 
 	for _, requestTag := range request.Tags {
@@ -476,14 +476,14 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 }
 
 func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("Opener").
 		Preload("Tags").
@@ -495,7 +495,7 @@ func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
 		Preload("Answers.Donators.User").
 		First(&question, "id = ?", request.QuestionID)
 
-	question.Answers = append(question.Answers, db.Answer{
+	question.Answers = append(question.Answers, database.Answer{
 		Text:   request.Text,
 		Date:   time.Now(),
 		Author: session.User,
@@ -506,7 +506,7 @@ func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
 
 	notificMessage := fmt.Sprintf("Новый ответ на вопрос «%v» от пользователя %v", question.Title, session.User.Name)
 	notificLink := fmt.Sprintf("/question/%v#%v", question.ID, response.AnswerID)
-	notific := db.Notification{Title: "Новый ответ на вопрос", Text: notificMessage, Link: notificLink, Time: time.Now()}
+	notific := database.Notification{Title: "Новый ответ на вопрос", Text: notificMessage, Link: notificLink, Time: time.Now()}
 	question.Opener.Notifications = append(question.Opener.Notifications, notific)
 	dbi.Save(&question.Opener)
 
@@ -515,14 +515,14 @@ func handleAnswer(request AnswerRequest) (response AnswerResponse, status int) {
 }
 
 func handlePopular(request PopularRequest) (response PopularResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var questions []db.Question
+	var questions []database.Question
 	dbi.
 		Preload("Tags").
 		Preload("Opener").
@@ -550,14 +550,14 @@ func handlePopular(request PopularRequest) (response PopularResponse, status int
 }
 
 func handleRecommendations(request RecommendationsRequest) (response RecommendationsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").Preload("User.Subjects").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var questions []db.Question
+	var questions []database.Question
 	dbi.
 		Preload("Tags").
 		Preload("Opener").
@@ -593,27 +593,27 @@ func handleRecommendations(request RecommendationsRequest) (response Recommendat
 }
 
 func handlePopularAnswers(request PopularAnswersRequest) (response PopularAnswersResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var user db.User
+	var user database.User
 	dbi.First(&user, "login = ?", request.Login)
 	if user.ID == 0 {
 		status = http.StatusOK
 		return
 	}
 
-	var answers []db.Answer
+	var answers []database.Answer
 	dbi.
 		Preload("Donators").
 		Find(&answers, "author_id = ?", user.ID)
 
 	for _, answer := range answers {
-		var question db.Question
+		var question database.Question
 		dbi.First(&question, "id = ?", answer.QuestionID)
 		if question.ID == 0 {
 			continue
@@ -645,21 +645,21 @@ func handlePopularAnswers(request PopularAnswersRequest) (response PopularAnswer
 }
 
 func handlePopularQuestions(request PopularQuestionsRequest) (response PopularQuestionsResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var user db.User
+	var user database.User
 	dbi.First(&user, "login = ?", request.Login)
 	if user.ID == 0 {
 		status = http.StatusOK
 		return
 	}
 
-	var questions []db.Question
+	var questions []database.Question
 	dbi.
 		Preload("Tags").
 		Preload("Opener").
@@ -687,14 +687,14 @@ func handlePopularQuestions(request PopularQuestionsRequest) (response PopularQu
 }
 
 func handlePrivateChatMessages(request PrivateChatMessagesRequest) (response PrivateChatMessagesResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("PrivateChats").
 		Preload("PrivateChats.WithUser").
@@ -722,14 +722,14 @@ func handlePrivateChatMessages(request PrivateChatMessagesRequest) (response Pri
 }
 
 func handleSendPrivateMessage(request SendPrivateMessageRequest) (status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.
 		Preload("PrivateChats").
 		Preload("PrivateChats.WithUser").
@@ -740,7 +740,7 @@ func handleSendPrivateMessage(request SendPrivateMessageRequest) (status int) {
 	found := false
 	for _, privateChat := range question.PrivateChats {
 		if privateChat.WithUser.Login == request.WithLogin {
-			privateChat.Messages = append(privateChat.Messages, db.PrivateChatMessage{
+			privateChat.Messages = append(privateChat.Messages, database.PrivateChatMessage{
 				User: session.User,
 				Text: request.Text,
 				Time: time.Now(),
@@ -752,12 +752,12 @@ func handleSendPrivateMessage(request SendPrivateMessageRequest) (status int) {
 	}
 
 	if !found {
-		var user db.User
+		var user database.User
 		dbi.First(&user, "login = ?", request.WithLogin)
 		if user.ID != 0 {
-			question.PrivateChats = append(question.PrivateChats, db.PrivateChat{
+			question.PrivateChats = append(question.PrivateChats, database.PrivateChat{
 				WithUser: &user,
-				Messages: []db.PrivateChatMessage{{
+				Messages: []database.PrivateChatMessage{{
 					User: session.User,
 					Text: request.Text,
 					Time: time.Now(),

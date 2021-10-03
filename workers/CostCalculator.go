@@ -3,7 +3,7 @@ package workers
 import (
 	"log"
 	"time"
-	"uchicollab/db"
+	"uchicollab/database"
 )
 
 type CostCalculator struct{}
@@ -11,9 +11,9 @@ type CostCalculator struct{}
 func (CostCalculator) Callback() {
 	log.Println("CostCalculator callback")
 
-	dbi := db.Get()
+	dbi := database.Get()
 
-	var questions []db.Question
+	var questions []database.Question
 	dbi.
 		Preload("Upvoters").
 		Find(&questions)

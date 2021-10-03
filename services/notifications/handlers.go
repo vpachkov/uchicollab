@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"sort"
 	"time"
-	"uchicollab/db"
+	"uchicollab/database"
 )
 
 func handleList(request NotificationListRequest) (response NotificationListResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").Preload("User.Notifications").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
@@ -39,21 +39,21 @@ func handleList(request NotificationListRequest) (response NotificationListRespo
 }
 
 func handleCallUser(request CallUserRequest) (response CallUserResponse, status int) {
-	dbi := db.Get()
-	var session db.Session
+	dbi := database.Get()
+	var session database.Session
 	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
 		status = http.StatusUnauthorized
 		return
 	}
 
-	var user db.User
+	var user database.User
 	dbi.First(&user, "login = ?", request.Login)
 	if user.ID == 0 {
 		status = http.StatusForbidden
 		return
 	}
 
-	var question db.Question
+	var question database.Question
 	dbi.First(&question, "id = ?", request.QuestionID)
 	if question.ID == 0 {
 		status = http.StatusForbidden
@@ -62,7 +62,7 @@ func handleCallUser(request CallUserRequest) (response CallUserResponse, status 
 
 	notificMessage := fmt.Sprintf("Пользователь %v обратил Ваше внимание на вопрос «%v»", session.User.Name, question.Title)
 	notificLink := fmt.Sprintf("/question/%v", question.ID)
-	notific := db.Notification{Title: "Новое приглашение", Text: notificMessage, Link: notificLink, Time: time.Now()}
+	notific := database.Notification{Title: "Новое приглашение", Text: notificMessage, Link: notificLink, Time: time.Now()}
 	user.Notifications = append(user.Notifications, notific)
 	dbi.Save(&user)
 

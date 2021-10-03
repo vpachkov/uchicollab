@@ -3,7 +3,7 @@ package workers
 import (
 	"log"
 	"time"
-	"uchicollab/db"
+	"uchicollab/database"
 )
 
 type QuestionsCollector struct{}
@@ -11,9 +11,9 @@ type QuestionsCollector struct{}
 func (QuestionsCollector) Callback() {
 	log.Println("QuestionsCollector callback")
 
-	dbi := db.Get()
+	dbi := database.Get()
 
-	var questions []db.Question
+	var questions []database.Question
 	dbi.
 		Preload("Answers").
 		Preload("Answers.Donators").
