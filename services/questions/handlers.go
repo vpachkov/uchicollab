@@ -176,6 +176,7 @@ func handleSearchQuestions(request SearchQuestionsRequest) (response BriefQuesti
 			Answers:          len(question.Answers),
 			Cost:             cost,
 			Title:            question.Title,
+			Date:             question.OpenedTime.UnixNano(),
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
 			AskedByLogin:     question.Opener.Login,
@@ -458,10 +459,25 @@ func handleCreate(request CreateRequest) (response CreateResponse, status int) {
 	dbi.Find(&tags)
 
 	for _, requestTag := range request.Tags {
+		found := false
 		for _, tag := range tags {
 			if tag.ID == requestTag {
 				question.Tags = append(question.Tags, tag)
+				found = true
 				break
+			}
+		}
+
+		if !found {
+			tagnew := &database.QuestionTag{ID: requestTag}
+			dbi.Create(tagnew)
+			dbi.Find(&tags)
+			for _, tag := range tags {
+				if tag.ID == requestTag {
+					question.Tags = append(question.Tags, tag)
+					found = true
+					break
+				}
 			}
 		}
 	}
@@ -538,6 +554,7 @@ func handlePopular(request PopularRequest) (response PopularResponse, status int
 			Answers:          len(question.Answers),
 			Cost:             question.Cost,
 			Title:            question.Title,
+			Date:             question.OpenedTime.UnixNano(),
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
 			AskedByLogin:     question.Opener.Login,
@@ -574,6 +591,7 @@ func handleRecommendations(request RecommendationsRequest) (response Recommendat
 					Answers:          len(question.Answers),
 					Cost:             question.Cost,
 					Title:            question.Title,
+					Date:             question.OpenedTime.UnixNano(),
 					Description:      question.Description,
 					AskedByName:      question.Opener.Name,
 					AskedByLogin:     question.Opener.Login,
@@ -675,6 +693,7 @@ func handlePopularQuestions(request PopularQuestionsRequest) (response PopularQu
 			Answers:          len(question.Answers),
 			Cost:             question.Cost,
 			Title:            question.Title,
+			Date:             question.OpenedTime.UnixNano(),
 			Description:      question.Description,
 			AskedByName:      question.Opener.Name,
 			AskedByLogin:     question.Opener.Login,

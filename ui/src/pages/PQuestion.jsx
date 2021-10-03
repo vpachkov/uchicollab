@@ -100,6 +100,10 @@ class PQuestion extends Component {
     }
 
     onLikeAnswer = (answer) => {
+        if (answer.authorlogin === this.state.login) {
+            return
+        }
+
         Post(questionsService + "concern", {
             questionid: this.state.question.id,
             answerid: answer.id
@@ -245,7 +249,7 @@ class PQuestion extends Component {
                             author={answer.authorname}
                             date={answer.date}
                             profilePic={staticData + answer.authorimagepath}
-                            authorid={answer.authologin}
+                            authorid={answer.authorlogin}
                         />
                     </AbstractBetweenSpacingBlock>
                 </MiniQuestion>
@@ -256,6 +260,20 @@ class PQuestion extends Component {
 
     questionIsActive = () => {
         return this.state.question && this.state.question.active
+    }
+
+    hasAnswerByUser = () => {
+        if (this.state.question === undefined || this.state.question.answers === undefined || this.state.question.answers === null) {
+            return false
+        }
+        
+        for (const ans of this.state.question.answers) {
+            console.log(ans)
+            if (ans.authorlogin === this.state.user.login) {
+                return true
+            }
+        }
+        return false
     }
 
     getSubjectTextColor = () => {
@@ -270,7 +288,7 @@ class PQuestion extends Component {
         return (
             <div>
                 <BlockTitle color="rgb(69, 68, 79)" text="bold">Поднять стоимость</BlockTitle>
-                <BlockLine color="rgb(39, 38, 49)">Вы уже внесли голосов: {this.amountOfDonateToQuestion()}</BlockLine>
+                <BlockLine color="rgb(39, 38, 49)">Вы внесли голосов: {this.amountOfDonateToQuestion()}</BlockLine>
                 <BlockLine color="rgb(133, 133, 138)">Если вопрос вам интересен, Вы можете поднять стоимость, что бы
                     эксперты ответили быстрее. </BlockLine>
                 <input
@@ -624,7 +642,7 @@ class PQuestion extends Component {
                                                         }} />
                                                     </div>
                                                 </div> :
-                                                !this.questionIsActive() || (this.state.question !== null && this.state.question.askedbylogin === this.state.user.login) ? null :
+                                                !this.questionIsActive() || this.hasAnswerByUser() || (this.state.question !== null && this.state.question.askedbylogin === this.state.user.login) ? null :
                                                     <div style={{ marginTop: "-42px", textAlign: "right" }}>
                                                         <ButtonGray title="Добавить ответ" onClick={() => {
                                                             this.setState({
