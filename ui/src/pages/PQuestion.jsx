@@ -551,7 +551,7 @@ class PQuestion extends Component {
             <div>
                 {this.state.chatWithUser === undefined ? null : this.renderChatPopup()}
                 <div id="mainScroll">
-                    <Header prefix="Вопрос от" user={this.state.user} />
+                    <Header prefix="Посмотрите вопрос," user={this.state.user} />
                     <Container>
                         <main>
                             <Navigation>

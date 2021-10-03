@@ -46,7 +46,7 @@ header {
 .greetingMsg {
   opacity: 0.7;
   display: block;
-  font-size: 2em;
+  font-size: 1.6em;
   font-weight: bold;
   margin: 0px 16px 0px 0px;
   color: white;
@@ -54,7 +54,7 @@ header {
 
 .greetingName {
   display: inline;
-  font-size: 2em;
+  font-size: 1.6em;
   font-weight: bold;
   margin: 0px 16px 0px 16px;
   color: white;
