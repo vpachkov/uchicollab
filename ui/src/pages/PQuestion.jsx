@@ -65,40 +65,6 @@ class PQuestion extends Component {
 
             calluser: "",
             userid: 0,
-            // question: {
-            //     id: 0,
-            //     title: "Uncaught (in promise): FirebaseError",
-            //     subject: "Алгебра",
-            //     text: "I'm getting the error below. My problem is NOT with the actual error but the fact that it is saying that the error was Uncaught. If you take a look at my auth.service.ts and sign-in.component.ts files I am catching the error. I'm getting the error below. My problem is NOT with the actual error but the fact that it is saying that the error was Uncaught. If you take a look at my auth.service.ts and sign-in.component.ts files I am catching the error.",
-            //     tags: ["Book", "School program"],
-            //     date: "28 may 2020",
-            //     until: "28-10-2021",
-            //     cost: 335,
-            //
-            //     author: "Russ Cox",
-            //     authorid: 0,
-            //     profilePic: "https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png",
-            // },
-            //
-            // answers: [{
-            //     id: 1,
-            //     text: "The answer is good, but not complete, this will not work properly if you will not add the focus modifier, such as textarea:focus { border: none; overflow: auto; outline: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; resize: none; } Then it will work",
-            //     best: true,
-            //     likes: 130,
-            //     date: "28 may 2020",
-            //     author: "Russ Cox",
-            //     authorid: 0,
-            //     profilePic: "https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png",
-            // }, {
-            //     id: 2,
-            //     text: "Tried your jsbin and that works, but not for me in my code. I wonder if it has something to do with Twitter Bootstrap maybe? When I put !important after every line a lot of styling was removed but there is still a small, light border in the top, on the left and on the right (the bottom is white). Strange",
-            //     best: false,
-            //     likes: 10,
-            //     date: "28 may 2020",
-            //     author: "Russ Cox",
-            //     authorid: 0,
-            //     profilePic: "https://pbs.twimg.com/profile_images/1137178645880037377/aeaRCnJV.png",
-            // }],
 
             likedAnswer: undefined,
             donatedToQuestion: [{
@@ -168,33 +134,6 @@ class PQuestion extends Component {
             this.loadUserCoins()
             this.loadDetailedQuestion()
         })
-        // // FIXME get amount from form
-        // var amount = 10
-        // var answers = this.state.question.answers
-        // var currnet_power = this.amountOfDonateToQuestion()
-        // var new_power = (amount + this.amountOfDonateToQuestion())
-        // // Checked all liked and update like count
-        // for (var i = 0; i < answers.length; i++) {
-        //     if (this.isLikedAnswer(answers[i])) {
-        //         this.addLikesToAnswer(answers[i], new_power - currnet_power)
-        //     }
-        // }
-        //
-        // var qss = this.state.question
-        // qss.cost += amount
-        //
-        // var dons = this.state.donatedToQuestion
-        // for (var i = 0; i < dons.length; i++) {
-        //     if (dons[i].userid == this.state.userid) {
-        //         dons[i].amount += amount
-        //     }
-        // }
-        //
-        // this.setState({ donatedToQuestion: dons, question: qss })
-    }
-
-    openChat = () => {
-
     }
 
     renderAnswer = (answer) => {
@@ -224,10 +163,22 @@ class PQuestion extends Component {
                                 />
                             </Span>
                             {
-                                this.state.login === this.state.question.askedbylogin ?
-                                    <div className="privateChat">
-                                        <FontAwesomeIcon style={{ marginRight: "4px" }} icon={faComments} onClick={() => {
-                                        }} />
+                                this.state.login === this.state.question.askedbylogin || this.state.login === answer.authorlogin ?
+                                    <div
+                                        className="privateChat"
+                                        onClick={ () => {
+                                            this.setState({
+                                                chatWithUser: answer.authorlogin,
+                                            }, () => {
+                                                this.loadChatMessages()
+                                                this.chatInterval = setInterval(() => this.loadChatMessages(), 2000);
+                                            })
+                                        }}
+                                    >
+                                        <FontAwesomeIcon
+                                            style={{ marginRight: "4px" }}
+                                            icon={ faComments }
+                                        />
                                         Личный чат
                                     </div>
                                     : null
@@ -249,7 +200,7 @@ class PQuestion extends Component {
                                     >
                                         <FontAwesomeIcon
                                             style={{ marginRight: "4px" }}
-                                            icon={faImage}
+                                            icon={ faImage }
                                         />
                                         Открыть вложения
                                     </div>
@@ -405,7 +356,6 @@ class PQuestion extends Component {
     }
 
     renderChatPopup = () => {
-        // console.log(this.state.chatMessages)
         var tinycolor = require("tinycolor2");
         return (
             <div>
@@ -459,16 +409,33 @@ class PQuestion extends Component {
                                 />
                                 <div
                                     onClick={() => {
-                                        Post(
-                                            questionsService + "sendmessage", {
-                                            questionid: this.state.question.id,
-                                            text: this.state.myMessage,
-                                        }, () => {
-                                            this.loadChatMessages()
-                                            this.setState({
-                                                myMessage: ""
-                                            })
-                                        })
+                                        if (this.state.chatWithUser === undefined) {
+                                            return
+                                        }
+                                        if (this.state.chatWithUser !== "all") {
+                                            Post(
+                                                questionsService + "privatesendmessage", {
+                                                    questionid: this.state.question.id,
+                                                    text: this.state.myMessage,
+                                                    withlogin: this.state.chatWithUser,
+                                                }, () => {
+                                                    this.loadChatMessages()
+                                                    this.setState({
+                                                        myMessage: ""
+                                                    })
+                                                })
+                                        } else {
+                                            Post(
+                                                questionsService + "sendmessage", {
+                                                    questionid: this.state.question.id,
+                                                    text: this.state.myMessage,
+                                                }, () => {
+                                                    this.loadChatMessages()
+                                                    this.setState({
+                                                        myMessage: ""
+                                                    })
+                                                })
+                                        }
                                     }}
                                     className="sendInput"
                                 >
@@ -536,6 +503,32 @@ class PQuestion extends Component {
     }
 
     render() {
+        if (this.state.question === undefined) {
+            return null
+        }
+
+        let renderGeneralChat = (this.state.login === this.state.question.askedbylogin)
+        if (!renderGeneralChat) {
+            if (this.state.question.upvoters !== undefined && this.state.question.upvoters !== null) {
+                for (const upvoter of this.state.question.upvoters) {
+                    if (upvoter.login === this.state.user.login) {
+                        renderGeneralChat = true
+                        break
+                    }
+                }
+            }
+        }
+        if (!renderGeneralChat) {
+            if (this.state.question.answers !== undefined && this.state.question.answers !== null) {
+                for (const answer of this.state.question.answers) {
+                    if (answer.authorlogin === this.state.user.login) {
+                        renderGeneralChat = true
+                        break
+                    }
+                }
+            }
+        }
+
         return (
             <div>
                 {this.state.chatWithUser === undefined ? null : this.renderChatPopup()}
@@ -544,11 +537,18 @@ class PQuestion extends Component {
                     <Container>
                         <main>
                             <Navigation>
-                                <BigButtonWithIcon onClick={() => {
-                                    disableBodyScroll(document.querySelector('#mainScroll'))
-                                    this.loadChatMessages()
-                                    this.chatInterval = setInterval(() => this.loadChatMessages(), 2000);
-                                }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат" />
+                                { !renderGeneralChat ? null :
+                                    <BigButtonWithIcon onClick={() => {
+                                        disableBodyScroll(document.querySelector('#mainScroll'))
+                                        this.setState({
+                                            chatWithUser: "all"
+                                        }, () => {
+                                            this.loadChatMessages()
+                                            this.chatInterval = setInterval(() => this.loadChatMessages(), 2000);
+                                        })
+                                    }} backgroundColor="rgb(194,226,230)" icon={faComments} title="Общий чат"/>
+                                }
+
                                 <InlineBigButtonWithIcon onClick={() => {
                                     history.goBack()
                                 }} icon={faArrowLeft} title="Назад" />
@@ -678,15 +678,29 @@ class PQuestion extends Component {
     }
 
     loadChatMessages() {
-        Post(questionsService + "chatmessages", {
-            questionid: this.state.question.id
-        }, (response) => {
-            this.setState({
-                chatMessages: response.data.messages,
-                chatWithUser: "all",
+        if (this.state.chatWithUser === undefined) {
+            return
+        }
+        if (this.state.chatWithUser !== "all") {
+            console.log(this.state.question.id)
+            Post(questionsService+"privatechatmessages", {
+                questionid: this.state.question.id,
+                withlogin: this.state.chatWithUser,
+            }, (response) => {
+                this.setState({
+                    chatMessages: response.data.messages,
+                })
             })
-            console.log(response.data.messages)
-        })
+        } else {
+            Post(questionsService + "chatmessages", {
+                questionid: this.state.question.id
+            }, (response) => {
+                this.setState({
+                    chatMessages: response.data.messages,
+                })
+                console.log(response.data.messages)
+            })
+        }
     }
 
     loadLogin() {

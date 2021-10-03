@@ -170,7 +170,7 @@ class PProfile extends Component {
                             </Col>
                             <Col sm={12} md={6}>
                                 <Block color="white">
-                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Новые вопросы</BlockTitle>
+                                    <BlockTitle color="rgb(69, 68, 79)" text="bold">Популярные вопросы</BlockTitle>
                                     {
                                         this.state.popularQuestions === undefined || this.state.popularQuestions === null ? null :
                                             this.state.popularQuestions.map(question => {

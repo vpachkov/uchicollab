@@ -20,4 +20,6 @@ func SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/"+Service+".recommendations", _handleRecommendations)
 	mux.HandleFunc("/api/"+Service+".popularanswers", _handlePopularAnswers)
 	mux.HandleFunc("/api/"+Service+".popularquestions", _handlePopularQuestions)
+	mux.HandleFunc("/api/"+Service+".privatechatmessages", _handlePrivateChatMessages)
+	mux.HandleFunc("/api/"+Service+".privatesendmessage", _handleSendPrivateMessage)
 }

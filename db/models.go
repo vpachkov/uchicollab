@@ -104,10 +104,13 @@ type Question struct {
 	Cost         int
 	Active       bool
 
-	Tags         []QuestionTag `gorm:"many2many:question_tag;"`
-	Answers      []Answer      `gorm:"ForeignKey:QuestionID"`
-	Upvoters     []Upvoter     `gorm:"ForeignKey:QuestionID"`
+	Tags     []QuestionTag `gorm:"many2many:question_tag;"`
+	Answers  []Answer      `gorm:"ForeignKey:QuestionID"`
+	Upvoters []Upvoter     `gorm:"ForeignKey:QuestionID"`
+	// shared chat room
 	ChatMessages []ChatMessage `gorm:"ForeignKey:QuestionID"`
+	// private chat rooms
+	PrivateChats []PrivateChat `gorm:"ForeignKey:QuestionID"`
 }
 
 type QuestionTag struct {
@@ -139,4 +142,21 @@ type Notification struct {
 	Text  string
 	Link  string
 	Time  time.Time
+}
+
+type PrivateChatMessage struct {
+	ID            int
+	PrivateChatID int
+	UserID        int
+	User          *User `gorm:"foreignkey:UserID"`
+	Text          string
+	Time          time.Time
+}
+
+type PrivateChat struct {
+	ID         int
+	QuestionID int
+	Messages   []PrivateChatMessage `gorm:"ForeignKey:PrivateChatID"`
+	WithUserID int
+	WithUser   *User `gorm:"foreignkey:WithUserID"`
 }

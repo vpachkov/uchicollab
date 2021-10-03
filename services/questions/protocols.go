@@ -211,3 +211,20 @@ type PopularQuestionsRequest struct {
 type PopularQuestionsResponse struct {
 	Questions []BriefQuestion `json:"questions"`
 }
+
+type PrivateChatMessagesRequest struct {
+	services.SessionableRequest
+	QuestionID int    `json:"questionid"`
+	WithLogin  string `json:"withlogin"`
+}
+
+type PrivateChatMessagesResponse struct {
+	Messages []ChatMessage `json:"messages"`
+}
+
+type SendPrivateMessageRequest struct {
+	services.SessionableRequest
+	QuestionID int    `json:"questionid"`
+	WithLogin  string `json:"withlogin"`
+	Text       string `json:"text"`
+}

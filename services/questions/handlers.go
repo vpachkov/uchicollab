@@ -685,3 +685,88 @@ func handlePopularQuestions(request PopularQuestionsRequest) (response PopularQu
 	status = http.StatusOK
 	return
 }
+
+func handlePrivateChatMessages(request PrivateChatMessagesRequest) (response PrivateChatMessagesResponse, status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var question db.Question
+	dbi.
+		Preload("PrivateChats").
+		Preload("PrivateChats.WithUser").
+		Preload("PrivateChats.Messages").
+		Preload("PrivateChats.Messages.User").
+		First(&question, "id = ?", request.QuestionID)
+
+	for _, privateChat := range question.PrivateChats {
+		if privateChat.WithUser.Login == request.WithLogin {
+			for _, message := range privateChat.Messages {
+				response.Messages = append(response.Messages, ChatMessage{
+					UserName:      message.User.Name,
+					UserLogin:     message.User.Login,
+					UserImagePath: message.User.ImagePath,
+					Time:          message.Time.UnixNano(),
+					Text:          message.Text,
+				})
+			}
+			break
+		}
+	}
+
+	status = http.StatusOK
+	return
+}
+
+func handleSendPrivateMessage(request SendPrivateMessageRequest) (status int) {
+	dbi := db.Get()
+	var session db.Session
+	if result := dbi.Preload("User").First(&session, "id = ?", request.Session); result.Error != nil {
+		status = http.StatusUnauthorized
+		return
+	}
+
+	var question db.Question
+	dbi.
+		Preload("PrivateChats").
+		Preload("PrivateChats.WithUser").
+		Preload("PrivateChats.Messages").
+		Preload("PrivateChats.Messages.User").
+		First(&question, "id = ?", request.QuestionID)
+
+	found := false
+	for _, privateChat := range question.PrivateChats {
+		if privateChat.WithUser.Login == request.WithLogin {
+			privateChat.Messages = append(privateChat.Messages, db.PrivateChatMessage{
+				User: session.User,
+				Text: request.Text,
+				Time: time.Now(),
+			})
+			dbi.Updates(&privateChat)
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		var user db.User
+		dbi.First(&user, "login = ?", request.WithLogin)
+		if user.ID != 0 {
+			question.PrivateChats = append(question.PrivateChats, db.PrivateChat{
+				WithUser: &user,
+				Messages: []db.PrivateChatMessage{{
+					User: session.User,
+					Text: request.Text,
+					Time: time.Now(),
+				}},
+			})
+			dbi.Updates(&question)
+		}
+	}
+
+	status = http.StatusOK
+	return
+}
