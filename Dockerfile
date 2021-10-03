@@ -10,6 +10,6 @@ RUN go build
 
 FROM ubuntu:latest
 COPY --from=golang_builder /go/src/uchicollab/uchicollab /
-COPY --from=golang_builder /go/src/uchicollab/static /
+COPY --from=golang_builder /go/src/uchicollab/static /static
 WORKDIR /
 CMD ["./uchicollab"]
